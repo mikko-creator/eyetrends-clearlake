@@ -1,0 +1,1205 @@
+/* =============================================================================
+   AURORA GLASS — Eye Trends design system
+   =============================================================================
+
+   This file is the ENTIRE visual language of the site. layout.css positions the
+   boxes and contains no colour, type, surface or motion; everything you can see
+   is defined here.
+
+   Direction: a luminous aurora ground, frosted glass surfaces floating on it,
+   one deep-teal brand accent lit by a gold counterpoint, oversized tight display
+   type, and motion that depends on depth rather than decoration.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- 1 · TOKENS */
+:root {
+  /* brand — anchored to the MEASURED palette in tokens.css, so changing a
+     value there restyles the site instead of drifting from it. --c-2 is the
+     client's teal, --c-9 their gold-light, --c-3 their deep ink. The two
+     additions (--g-teal-lit, --g-gold) are new to this design and have no
+     measured equivalent, so they are declared once, here, and nowhere else. */
+  --g-teal:        var(--c-2);
+  --g-teal-lit:    #16B393;
+  --g-teal-deep:   #064A3E;
+  --g-gold:        #E0A44C;
+  --g-gold-lit:    var(--c-9);
+
+  /* ground */
+  --g-ink:         var(--c-3);
+  --g-ink-2:       #0D2428;
+  --g-paper:       var(--c-5);
+  --g-cream:       #FBF7F0;
+  --g-mint:        var(--c-4);
+
+  /* text */
+  --g-fg:          var(--c-6);
+  --g-fg-soft:     var(--c-8);
+  --g-fg-faint:    #7C949B;
+  --g-on-dark:     var(--c-7);
+  --g-on-dark-soft: color-mix(in srgb, var(--c-7) 72%, transparent);
+
+  /* light glass */
+  --glass-bg:      color-mix(in srgb, var(--c-1) 58%, transparent);
+  --glass-bg-2:    color-mix(in srgb, var(--c-1) 74%, transparent);
+  --glass-brd:     color-mix(in srgb, var(--c-1) 80%, transparent);
+  --glass-edge:    inset 0 1px 0 color-mix(in srgb, var(--c-1) 90%, transparent), inset 0 -1px 0 color-mix(in srgb, var(--c-3) 5%, transparent);
+  --glass-blur:    blur(22px) saturate(175%);
+  --glass-shadow:  0 24px 56px -24px color-mix(in srgb, var(--c-3) 30%, transparent), 0 2px 10px color-mix(in srgb, var(--c-3) 5%, transparent);
+  --glass-lift:    0 44px 90px -32px color-mix(in srgb, var(--c-3) 40%, transparent), 0 4px 16px color-mix(in srgb, var(--c-3) 8%, transparent);
+
+  /* dark glass */
+  --glassd-bg:     color-mix(in srgb, var(--c-3) 58%, transparent);
+  --glassd-brd:    color-mix(in srgb, var(--c-1) 14%, transparent);
+  --glassd-edge:   inset 0 1px 0 color-mix(in srgb, var(--c-1) 14%, transparent);
+
+  /* accents */
+  --grad-brand:    linear-gradient(112deg, var(--g-teal) 0%, var(--g-teal-lit) 52%, var(--g-gold) 120%);
+  --grad-text:     linear-gradient(100deg, var(--g-teal-lit), var(--g-teal) 45%, var(--g-gold));
+  --grad-gold:     linear-gradient(112deg, var(--g-gold), var(--g-gold-lit));
+  --grad-hair:     linear-gradient(90deg, transparent, color-mix(in srgb, var(--c-2) 35%, transparent) 20%, color-mix(in srgb, var(--g-gold) 45%, transparent) 80%, transparent);
+  --glow-teal:     0 0 0 1px color-mix(in srgb, var(--g-teal-lit) 20%, transparent), 0 12px 40px -8px color-mix(in srgb, var(--g-teal-lit) 35%, transparent);
+  --glow-gold:     0 12px 40px -10px color-mix(in srgb, var(--g-gold) 45%, transparent);
+
+  /* shape + motion */
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 24px;
+  --r-xl: 32px;
+  --r-pill: 999px;
+  --ease:      cubic-bezier(.22,1,.36,1);
+  --ease-soft: cubic-bezier(.4,0,.2,1);
+  --t-fast: .18s;
+  --t-mid:  .34s;
+  --t-slow: .72s;
+
+  --wrap: 1180px;
+  --gutter: clamp(18px, 4vw, 40px);
+  --flow: clamp(60px, 7.4vw, 108px);
+
+  /* --- layout.css still resolves spacing through the source's own tokens.
+     Redefined here so nothing inherits an old VISUAL value. ---------------- */
+  --ds-container-max: var(--wrap);
+  --ds-space-2xs: 4px;  --ds-space-xs: 8px;   --ds-space-sm: 14px;
+  --ds-space-md: 24px;  --ds-space-lg: 40px;  --ds-space-xl: 64px;
+  --ds-space-2xl: 96px;
+  --ds-section-py: var(--flow);
+  --ds-divider-h: 80px;
+  --et-flow: var(--flow);
+  --et-gap: clamp(18px, 2.4vw, 30px);
+  --et-measure: var(--wrap);
+  --et-i: 0;
+}
+
+/* ------------------------------------------------------------ 2 · THE GROUND */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--g-paper);
+  color: var(--g-fg);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* The aurora. Fixed behind everything, drifting slowly. Sections are
+   transparent, so this reads through the whole page and gives the glass
+   something to refract. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -25vh -20vw;
+  z-index: -2;
+  background:
+    radial-gradient(42% 38% at 18% 12%, color-mix(in srgb, var(--g-teal-lit) 30%, transparent), transparent 62%),
+    radial-gradient(38% 40% at 84% 8%,  color-mix(in srgb, var(--g-gold) 26%, transparent), transparent 64%),
+    radial-gradient(46% 44% at 72% 74%, color-mix(in srgb, var(--c-2) 24%, transparent),  transparent 66%),
+    radial-gradient(40% 36% at 10% 86%, color-mix(in srgb, var(--c-9) 22%, transparent), transparent 64%),
+    var(--g-paper);
+  filter: blur(10px);
+  animation: auroraDrift 34s var(--ease-soft) infinite alternate;
+}
+@keyframes auroraDrift {
+  0%   { transform: translate3d(0,0,0) scale(1); }
+  50%  { transform: translate3d(-2.5%, 1.5%, 0) scale(1.06); }
+  100% { transform: translate3d(2%, -2%, 0) scale(1.03); }
+}
+
+/* Fine grain over the aurora so the gradients never band. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.045'/%3E%3C/svg%3E");
+}
+
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-decoration: none; }
+::selection { background: color-mix(in srgb, var(--g-teal-lit) 26%, transparent); }
+
+.wrap { width: 100%; max-width: var(--wrap); margin-inline: auto; padding-inline: var(--gutter); }
+
+/* ------------------------------------------------------- 3 · TYPOGRAPHY */
+h1, h2, h3, h4,
+.et-h1, .et-h2, .et-h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -.035em;
+  line-height: 1.06;
+  color: var(--g-fg);
+  text-wrap: balance;
+  margin: 0 0 .42em;
+}
+h1, .et-h1, .ethc-hero__h { font-size: clamp(36px, 5.1vw, 68px); }
+h2, .et-h2              { font-size: clamp(27px, 3.5vw, 45px); }
+h3, .et-h3              { font-size: clamp(19px, 1.9vw, 24px); letter-spacing: -.02em; line-height: 1.16; }
+h4                      { font-size: clamp(17px, 1.6vw, 20px); letter-spacing: -.015em; }
+
+/* the one accent move on headings: a gradient-filled span */
+.et-ac, .et-h2 em, h1 em, h2 em, .grad {
+  font-style: normal;
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+p { margin: 0 0 1.05em; }
+p:last-child { margin-bottom: 0; }
+
+.et-lede, .dc-lead, .lede, .ha-hero__lede, .tib-hero__lede, .od-hero__lede {
+  font-size: clamp(17px, 1.35vw, 19.5px);
+  line-height: 1.6;
+  color: var(--g-fg-soft);
+  max-width: 66ch;
+}
+
+.site-content p, .site-content li { color: var(--g-fg-soft); }
+.site-content strong, .site-content b { color: var(--g-fg); font-weight: 650; }
+
+/* prose links: gradient underline that fills on hover */
+.site-content p > a, .site-content li > a, .dc-prose a, .foot-blurb a {
+  color: var(--g-teal);
+  background-image: linear-gradient(var(--g-gold), var(--g-gold));
+  background-size: 0% 2px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--c-2) 22%, transparent);
+  transition: background-size var(--t-mid) var(--ease), color var(--t-mid) var(--ease);
+}
+.site-content p > a:hover, .site-content li > a:hover, .dc-prose a:hover, .foot-blurb a:hover {
+  background-size: 100% 2px;
+  color: var(--g-teal-deep);
+}
+
+/* ---------------------------------------------------------- 4 · EYEBROWS */
+.et-eyebrow, .eyebrow, .ha-eyebrow, .tib-eyebrow, .od-eyebrow, .dc-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--g-teal);
+  margin: 0 0 18px;
+}
+/* The 40x2px gold bar that used to sit here rendered as an em-dash before every
+   section title ("— CLEAR LAKE EYE DOCTOR SINCE 1984"). Removed on request.
+   The eyebrow now carries its weight through colour, tracking and case alone. */
+@keyframes ruleIn { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ------------------------------------------------- 5 · SECTION RHYTHM */
+.rw-sec {
+  position: relative;
+  padding-block: var(--flow);
+  background: transparent;          /* the aurora shows through */
+}
+.rw-sec > .container { max-width: var(--wrap); margin-inline: auto; padding-inline: var(--gutter); }
+
+/* Tinted veils rather than solid bands — the ground stays visible. */
+.et-band--paper {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--c-1) 66%, transparent), color-mix(in srgb, var(--c-1) 34%, transparent));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.et-band--warm {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--g-cream) 78%, transparent), color-mix(in srgb, var(--g-cream) 42%, transparent));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Dark bands are deep glass with their own inner light. */
+.surface-dark {
+  position: relative;
+  isolation: isolate;
+  color: var(--g-on-dark);
+  background:
+    radial-gradient(60% 70% at 78% 10%, color-mix(in srgb, var(--g-teal-lit) 30%, transparent), transparent 64%),
+    radial-gradient(52% 62% at 12% 92%, color-mix(in srgb, var(--g-gold) 22%, transparent), transparent 66%),
+    linear-gradient(165deg, var(--g-ink-2), var(--g-ink));
+  border-block: 1px solid color-mix(in srgb, var(--c-1) 8%, transparent);
+}
+.surface-dark::after {
+  content: "";
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: url(/eyetrends-clearlake/assets/generated/grid-glow.webp) center/cover no-repeat;
+  opacity: .22;
+  mix-blend-mode: screen;
+}
+.surface-dark :is(h1,h2,h3,h4,.et-h1,.et-h2,.et-h3) { color: var(--c-1); }
+.surface-dark :is(p, li, .et-lede, .dc-lead, .lede) { color: var(--g-on-dark-soft); }
+.surface-dark .et-eyebrow, .surface-dark .eyebrow { color: var(--g-gold-lit); }
+.surface-dark .et-ac { background: linear-gradient(100deg, var(--g-gold-lit), var(--g-teal-lit)); -webkit-background-clip: text; background-clip: text; }
+
+/* Seam: a soft light bleed between bands instead of a hard edge. */
+.et-band--seam::before {
+  content: "";
+  position: absolute; left: 0; right: 0; top: -1px; height: 120px;
+  pointer-events: none;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--c-1) 55%, transparent), transparent);
+}
+
+/* ------------------------------------------------------ 6 · GLASS PRIMITIVE */
+/* Only the generic utility lives here. Every real component selector is
+   assigned in components.css, generated from audit/redesign-brief.json — the
+   output of a pass that read the actual markup. Hand-guessed lists used to sit
+   here and got .dc-pill wrong (it is a hairline row, not a card). */
+.glass {
+  position: relative;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-brd);
+  border-radius: var(--r-lg);
+  box-shadow: var(--glass-shadow), var(--glass-edge);
+  transition: transform var(--t-mid) var(--ease),
+              box-shadow var(--t-mid) var(--ease),
+              border-color var(--t-mid) var(--ease);
+}
+.glass:hover { transform: translateY(-6px); box-shadow: var(--glass-lift), var(--glass-edge); }
+
+/* ------------------------------------------------------------ 8 · BUTTONS */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-26);
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 15.5px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  padding: var(--sp-36) var(--sp-54);
+  border: 1px solid transparent;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform var(--t-fast) var(--ease),
+              box-shadow var(--t-mid) var(--ease),
+              color var(--t-mid) var(--ease),
+              border-color var(--t-mid) var(--ease);
+}
+.btn-lg { padding: var(--sp-41) var(--sp-59); font-size: 16.5px; }
+
+.btn-primary { color: var(--c-1); background: var(--grad-brand); box-shadow: var(--glow-teal); }
+/* the sweep: a light band that crosses the button on hover */
+.btn-primary::after {
+  content: "";
+  position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(100deg, transparent 20%, color-mix(in srgb, var(--c-1) 38%, transparent) 50%, transparent 80%);
+  transform: translateX(-120%);
+  transition: transform var(--t-slow) var(--ease);
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 0 1px color-mix(in srgb, var(--g-teal-lit) 30%, transparent), 0 22px 50px -12px color-mix(in srgb, var(--g-teal-lit) 55%, transparent); }
+.btn-primary:hover::after { transform: translateX(120%); }
+
+.btn-ghost {
+  color: var(--g-fg);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border-color: var(--glass-brd);
+  box-shadow: var(--glass-edge);
+}
+.btn-ghost:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--g-teal-lit) 50%, transparent); color: var(--g-teal); box-shadow: var(--glass-shadow); }
+
+.btn-onDark { color: var(--g-ink); background: var(--grad-gold); box-shadow: var(--glow-gold); }
+.btn-onDark:hover { transform: translateY(-3px); box-shadow: 0 22px 50px -12px color-mix(in srgb, var(--g-gold) 60%, transparent); }
+.btn-onWarm { color: var(--c-1); background: var(--grad-brand); box-shadow: var(--glow-teal); }
+.btn-onWarm:hover { transform: translateY(-3px); }
+
+.surface-dark .btn-ghost {
+  color: var(--c-1); background: color-mix(in srgb, var(--c-1) 8%, transparent);
+  border-color: color-mix(in srgb, var(--c-1) 24%, transparent);
+}
+.surface-dark .btn-ghost:hover { background: color-mix(in srgb, var(--c-1) 16%, transparent); border-color: color-mix(in srgb, var(--c-1) 40%, transparent); color: var(--c-1); }
+
+/* arrow nudge */
+.btn .arw, .et-golink svg, .dc-rel__go svg, .ha-cond__go svg {
+  transition: transform var(--t-mid) var(--ease);
+}
+.btn:hover .arw, .et-golink:hover svg, .dc-rel__go:hover svg, .ha-cond__go:hover svg { transform: translateX(4px); }
+
+/* inline "go" links */
+/* CTA links.
+   .tib-wayfinding a and .od-close__links a used to be in this list and were
+   removed: both are SECTION-level classes, so the descendant selector matched
+   every anchor inside them, not the go-links it was written for. A census of
+   the build found 28 .et-cat cards, 2 .tib-creed__pillar cards, 1 .btn and a
+   single .et-golink inside .tib-wayfinding - so the rule was styling four
+   cards and a button for the sake of one link that already carries .et-golink
+   and is matched by name here. Making a card inline-flex shrink-wraps it to
+   its absolutely positioned content, i.e. to nothing: measured at 390px, those
+   tiles rendered 1px wide inside a 337px column and lost their photographs.
+   .od-close__links held only .et-golink and .btn, so it was redundant too. */
+.et-golink, .dc-rel__go, .ha-cond__go {
+  display: inline-flex; align-items: center; gap: var(--sp-19);
+  font-weight: 620; font-size: var(--fs-19);
+  color: var(--g-teal);
+  transition: color var(--t-mid) var(--ease), gap var(--t-mid) var(--ease);
+}
+.et-golink:hover, .dc-rel__go:hover, .ha-cond__go:hover { color: var(--g-teal-deep); gap: var(--sp-30); }
+.surface-dark :is(.et-golink, .dc-rel__go, .ha-cond__go) { color: var(--g-gold-lit); }
+
+/* --------------------------------------------- 9 · STAT TILES & LABELS ---- */
+/* Pills, stat numbers and rows are assigned in components.css. What stays here
+   is the shared tile surface and the label typography they all share. */
+.ethc-hero__stat, .et-stat, .ia-stat, .bw-stat, .dc-proof__i {
+  padding: var(--sp-43) var(--sp-45);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-brd);
+  border-radius: var(--r-md);
+  box-shadow: var(--glass-edge);
+}
+.ethc-hero__l, .et-stat__l, .dc-proof__l, .od-record__l, .bw-stat__l, .ia-stat__suf {
+  display: block;
+  margin-top: var(--sp-10);
+  font-size: var(--fs-6);
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--g-fg-faint);
+}
+.surface-dark :is(.ethc-hero__stat, .et-stat, .ia-stat, .dc-proof__i) {
+  background: color-mix(in srgb, var(--c-1) 7%, transparent);
+  border-color: color-mix(in srgb, var(--c-1) 16%, transparent);
+}
+.surface-dark :is(.ethc-hero__l, .et-stat__l, .dc-proof__l, .bw-stat__l) { color: color-mix(in srgb, var(--c-7) 62%, transparent); }
+
+/* ---------------------------------------------------- 11 · ICON CHIPS / FAQ */
+.dc-visit__ic, .dc-rel__ic, .dc-pill__ic, .et-svc__ico, .ia-ic, .ha-cond__ic, .dc-faq__ic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  color: var(--g-teal);
+  background: linear-gradient(150deg, color-mix(in srgb, var(--g-teal-lit) 16%, transparent), color-mix(in srgb, var(--g-gold) 14%, transparent));
+  border: 1px solid color-mix(in srgb, var(--c-1) 70%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--c-1) 90%, transparent);
+}
+.surface-dark :is(.dc-visit__ic, .dc-rel__ic, .et-svc__ico, .dc-faq__ic) {
+  color: var(--g-gold-lit);
+  background: color-mix(in srgb, var(--c-1) 9%, transparent);
+  border-color: color-mix(in srgb, var(--c-1) 16%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--c-1) 14%, transparent);
+}
+.dc-faq__item { padding: var(--sp-10) var(--sp-45); margin-bottom: var(--sp-30); }
+.dc-faq__q, .dc-faq__item > summary {
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-weight: 650;
+  font-size: 17.5px;
+  letter-spacing: -.015em;
+  color: var(--g-fg);
+  padding: 14px 0;
+  list-style: none;
+}
+.dc-faq__item > summary::-webkit-details-marker { display: none; }
+.dc-faq__a { color: var(--g-fg-soft); padding-bottom: var(--sp-33); }
+
+/* ------------------------------------------------------------- 12 · QUOTES */
+blockquote, .et-review__q, .bw-quote {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: clamp(19px, 2vw, 24px);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -.02em;
+  color: var(--g-fg);
+}
+.et-review__src, .bw-quote__src { font-size: 13.5px; color: var(--g-fg-faint); font-weight: 600; }
+
+/* ---------------------------------------------------- 13 · SCROLL REVEAL */
+/* Blur-in + rise. Distinct from the source (which never animated at all). */
+/* NO scale() here. A section that is itself a reveal target was being drawn at
+   98.5% width, so its content edge sat 9px inward until it revealed and then
+   snapped — measured on /services/: content-left 170 before, 161 after, on five
+   sections. Translate and fade only; scaling a full-width block moves its edges. */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  filter: blur(10px);
+  transition:
+    opacity var(--t-slow) var(--ease),
+    transform var(--t-slow) var(--ease),
+    filter var(--t-slow) var(--ease);
+  will-change: opacity, transform, filter;
+}
+.reveal.in-view { opacity: 1; transform: none; filter: blur(0); }
+.et-reveal.reveal { transform: translateY(26px); }
+.et-reveal.reveal.in-view { transform: none; }
+
+/* ----------------------------------------------------- 14 · REDUCED MOTION */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+  body::before { animation: none; }
+  .reveal, .et-reveal.reveal { opacity: 1 !important; transform: none !important; filter: none !important; }
+  .rf-progress { display: none; }
+}
+
+/* ---------------------------------------------------- 15 · HERO COMPOSITION */
+/* The hero copy column is long by content (eyebrow + 3-line H1 + lede + five
+   chips + two CTAs + three stats). Centring the media against it pushed the
+   image to y=489 on a 650px viewport — below the fold on load. Top-align it,
+   and let it stick while the copy scrolls past. */
+.ethc-hero__grid,
+.ha-hero__inner,
+.tib-hero__grid,
+.od-hero__grid { align-items: start; }
+
+.ethc-hero { padding-block: clamp(28px, 4vw, 56px) var(--flow); }
+
+@media (min-width: 1041px) {
+  /* .ethc-hero__media is full-bleed now and must not stick; .tib-hero__media
+     is still a column image, so it keeps the behaviour. */
+  .tib-hero__media { position: sticky; top: 108px; }
+}
+
+/* The floating proof badge reads as a glass chip lifted off the image. */
+.ethc-hero__badge {
+  background: color-mix(in srgb, var(--c-1) 74%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid var(--glass-brd);
+  border-radius: var(--r-md);
+  box-shadow: var(--glass-shadow), var(--glass-edge);
+}
+.ethc-hero__ring {
+  display: grid; place-items: center;
+  width: 34px; height: 34px; border-radius: 50%;
+  color: var(--c-1);
+  background: var(--grad-brand);
+  box-shadow: var(--glow-teal);
+}
+
+/* stats sit in a row of glass tiles */
+.ethc-hero__proof, .et-stats { display: flex; flex-wrap: wrap; gap: var(--sp-33); margin-top: var(--sp-55); }
+.ethc-menu { display: flex; flex-wrap: wrap; gap: var(--sp-26); margin: 24px 0 4px; }
+.et-cta-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-33); margin-top: var(--sp-54); }
+
+/* The proof badge: layout.css leaves it position:relative at top:-22px, so it
+   escaped the frame's overflow:hidden and got its top row clipped. Anchor it
+   inside the frame as a glass overlay, which is what it reads as anyway. */
+.ethc-hero__media .ethc-hero__badge {
+  position: absolute;
+  inset: auto 18px 18px 18px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 13px var(--sp-41);
+}
+.ethc-hero__badge b { display: block; font-weight: 700; color: var(--g-fg); font-size: var(--fs-16); }
+.ethc-hero__badge span span,
+.ethc-hero__badge > span > span { display: block; font-size: var(--fs-8); color: var(--g-fg-soft); }
+
+/* =============================================================================
+   16 · ONE ALIGNMENT RULE
+   Every block in a section starts on the container's content edge. layout.css
+   auto-centres a handful of blocks (.et-sec-head x6, .et-lede, .bw-team,
+   .ethc-stance__q, .ha-hero__inner), which left their headings flush-left and
+   the block beneath them inset — measured at 70px on /our-doctor/. Left-align
+   them and keep the measure as a max-width instead of a centring device.
+   ========================================================================== */
+.rw-sec :is(.et-sec-head, .et-lede, .bw-team, .ethc-stance__q, .od-bio, .ia-callout) {
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+}
+.rw-sec .col--measure { margin-inline: 0; max-width: var(--et-measure); }
+
+/* Cards carry their own padding, so an image inside one is meant to be inset.
+   Blocks that are NOT cards share the text column exactly. */
+.rw-sec > .container > .row > .col > :is(p, h1, h2, h3, ul, ol) { margin-inline-start: 0; }
+
+/* Consistent vertical rhythm between a section head and the body that follows */
+.row--head { margin-bottom: clamp(28px, 3.4vw, 52px); }
+.et-sec-head + * { margin-top: 0; }
+.et-lede { margin-top: 14px; }
+
+/* =============================================================================
+   17 · FULL-WIDTH HERO
+   The hero image spans the full viewport. The media column is lifted out of the
+   grid and becomes the section's background; the copy sits over a scrim in the
+   normal content column, so it still aligns with every other section.
+   ========================================================================== */
+.ethc-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: clamp(560px, 82vh, 860px);
+  padding-block: clamp(56px, 8vw, 104px);
+  border-radius: 0;
+}
+/* the grid collapses to one column — the media no longer occupies a track */
+.ethc-hero .ethc-hero__grid { grid-template-columns: 1fr; display: block; }
+/* The container must stay STATIC. Positioning it made it the media's containing
+   block (so the image stopped at the 1180px column instead of going full-bleed)
+   AND created a stacking context that painted the image over the scrim. The
+   copy is raised on its own instead. */
+.ethc-hero .container { position: static; width: 100%; }
+.ethc-hero .ethc-hero__copy { position: relative; z-index: 2; }
+
+.ethc-hero .ethc-hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;      /* layout.css pins 5/6 and 16/11 */
+  max-width: none;
+  max-height: none;        /* layout.css caps at min(72vh) and 440px */
+  min-height: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+.ethc-hero .ethc-hero__media::after { content: none; }
+.ethc-hero .ethc-hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% 45%;
+  transform: none;
+}
+/* The scrim lives INSIDE the media, not on the section. As a section ::before it
+   never painted over the image — forced to solid red it was still invisible —
+   so it is attached to the media element instead, where it is unambiguously
+   above the <img> it has to darken. */
+.ethc-hero .ethc-hero__media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  /* Strong only where the copy sits, clearing completely by two-thirds across so
+     the room is actually visible — the point of a full-width image hero. */
+  background:
+    /* Stops chosen by measurement, not eye: compositing the scrim over a
+       worst-case WHITE photo, the copy zone (x 7%..38%) must clear 4.5:1 for
+       body text. The previous ramp fell to 3.85:1 at x=38%; this holds 7.67:1
+       there and still clears completely by 92% so the room reads. */
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--c-3) 90%, transparent) 0%,
+      color-mix(in srgb, var(--c-3) 82%, transparent) 30%,
+      color-mix(in srgb, var(--c-3) 64%, transparent) 50%,
+      color-mix(in srgb, var(--c-3) 22%, transparent) 72%,
+      transparent 92%),
+    linear-gradient(0deg, color-mix(in srgb, var(--c-3) 34%, transparent) 0%, transparent 26%);
+}
+
+/* copy on the scrim */
+.ethc-hero .ethc-hero__copy { max-width: 44rem; opacity: 1; transform: none; filter: none; }
+.ethc-hero .ethc-hero__h { color: var(--c-1); }
+.ethc-hero .ethc-hero__sub { color: color-mix(in srgb, var(--c-7) 86%, transparent); font-size: clamp(17px, 1.4vw, 20px); max-width: 40rem; }
+.ethc-hero .et-eyebrow { color: var(--g-gold-lit); }
+.ethc-hero .ethc-menu__chip {
+  color: var(--c-1);
+  background: color-mix(in srgb, var(--c-1) 10%, transparent);
+  border-color: color-mix(in srgb, var(--c-1) 22%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--c-1) 16%, transparent);
+}
+.ethc-hero .ethc-menu__chip svg { color: var(--g-gold-lit); }
+.ethc-hero .ethc-herocall { color: var(--c-1); }
+.ethc-hero .ethc-herocall:hover { color: var(--g-gold-lit); }
+
+/* stats become a glass strip sitting on the image */
+.ethc-hero .ethc-hero__proof { margin-top: clamp(28px, 3.4vw, 44px); gap: 12px; }
+/* Dark glass, not light. At 768px the stats wrap and the third tile lands where
+   the scrim has cleared, so a 9%-white tile left its label at 1.51:1 over the
+   bright part of the photo. A dark tile reads on any backdrop. */
+.ethc-hero .ethc-hero__stat {
+  background: color-mix(in srgb, var(--c-3) 62%, transparent);
+  border-color: color-mix(in srgb, var(--c-1) 20%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+}
+.ethc-hero .ethc-hero__k {
+  background: linear-gradient(100deg, var(--c-1), var(--g-gold-lit));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+.ethc-hero .ethc-hero__l { color: color-mix(in srgb, var(--c-7) 84%, transparent); }
+
+/* the proof badge anchors to the bottom-right of the section, not the frame */
+.ethc-hero .ethc-hero__badge {
+  position: absolute;
+  inset: auto clamp(18px, 4vw, 40px) clamp(18px, 3vw, 34px) auto;
+  left: auto;
+  z-index: 3;
+}
+@media (max-width: 900px) {
+  .ethc-hero { min-height: clamp(520px, 78vh, 720px); }
+  .ethc-hero::before {
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--c-3) 80%, transparent) 0%, color-mix(in srgb, var(--c-3) 68%, transparent) 48%, color-mix(in srgb, var(--c-3) 82%, transparent) 100%);
+  }
+  .ethc-hero .ethc-hero__badge { display: none; }
+}
+
+/* =============================================================================
+   18 · REVISION-3 CORRECTIONS
+   Each rule below answers a measured defect, noted with the measurement.
+   ========================================================================== */
+
+/* --- a · service cards were unequal heights ------------------------------
+   The .row--svc grid stretched each .col to 381px but the card inside kept its
+   content height (353px on two of six). Cards fill their cell; the flex column
+   plus margin-top:auto on the footer then pins every "go" link to the same
+   baseline. This is the pattern the component map called for. */
+.row--svc > .col,
+.row--frames > .col,
+.row--cards > .col { display: flex; }
+.row--svc > .col > *,
+.row--frames > .col > *,
+.row--cards > .col > * { width: 100%; }
+.et-svc, .et-cat, .dc-rel, .ha-cond, .ia-link, .bw-team__member, .dc-relhub {
+  height: 100%;
+}
+.et-svc { display: flex; flex-direction: column; }
+.et-svc__foot, .dc-rel__go, .ha-cond__go { margin-top: auto; }
+
+/* --- b · split rows put image and text on different baselines -------------
+   .row--split-media is align-items:center, so on the doctor section the image
+   column started at y=3583 while the text column started at y=3425 — 158px out
+   of step, which is what read as "all over the place". Top-align both. */
+/* Specificity matters here: layout.css carries `.rw-sec .row--split-media
+   { align-items: center }` at (0,2,0), which beat a bare class selector. Match
+   its specificity so the later rule wins. */
+.rw-sec .row--split,
+.rw-sec .row--split-media,
+.rw-sec .row--media-split { align-items: start; }
+
+/* --- c · designer house logos were unreadable -----------------------------
+   .ethc-house was a WHITE PILL in the original; the component map said to keep
+   it bare, so the dark brand wordmarks ended up on the aurora with nothing
+   behind them. The pill comes back as light glass, and every logo is normalised
+   to one optical height (they ranged 31px to 73px because each brand's artwork
+   has a different aspect ratio). */
+/* The pill row still ships on /products/designer-frames/, where this block
+   carries the brand NAMES as text instead of wordmark images and so is not the
+   row the client asked to unpack. The marquee rules below override every one of
+   these inside .ethc-marquee, at higher specificity.
+
+   .ethc-houses has to keep its own rule here. layout.css lays this block out as
+   display:grid with repeat(3,1fr) at narrow widths, and a text pill cannot
+   shrink below its content: dropping this rule put the "Lindberg" pill 34px
+   past the right edge at 390px and gave the page a horizontal scrollbar. A
+   wrapping flex row lets the pills reflow instead. */
+.ethc-houses {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.ethc-house {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 10px 20px;
+  border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--c-1) 82%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid var(--glass-brd);
+  box-shadow: var(--glass-edge), var(--glass-shadow);
+  transition: transform var(--t-fast) var(--ease), border-color var(--t-mid) var(--ease);
+}
+.ethc-house:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--g-teal-lit) 45%, transparent);
+}
+.surface-dark .ethc-house {
+  background: color-mix(in srgb, var(--c-1) 92%, transparent);
+}
+
+/* =========================================================================
+   21 · MOBILE TOUCH SPACING
+   =========================================================================
+   Adjacent pills and go-links measured ~7.5px apart on a phone, which is under
+   the 8px a finger needs to tell two targets apart. The pills themselves are
+   large enough; it is only the gap between them that was tight. */
+@media (max-width: 860px) {
+  /* Containers named from measurement, not from guessing which ones hold
+     pills: these are the three whose adjacent links measured 7-8px apart on a
+     phone (.bw-team__contact, .od-close__links, .ha-ins), plus the chip rows. */
+  .rw-sec .et-chips,
+  .rw-sec .ethc-why__tags,
+  .rw-sec .ha-ins__tags,
+  .rw-sec .ha-ins,
+  .rw-sec .od-close__links,
+  .rw-sec .bw-team__contact { gap: 12px; }
+  .rw-sec .et-cta-cluster { gap: 14px; }
+}
+
+/* =========================================================================
+   20 · SIDE-BY-SIDE ROWS: THE SLACK COLUMN
+   =========================================================================
+   REVISION 8. Client: "fix spaces and padding errors".
+
+   Section rhythm was already even - 107px top and bottom on eleven of twelve
+   homepage bands, every seam 0px - and the container insets were symmetric, so
+   the spacing fault was not at section level at all. It was INSIDE the
+   side-by-side rows: a tall text column next to a short media column, top
+   aligned, which dumps every pixel of the difference as dead space under the
+   image. Measured at 1440px across fourteen pages, 22 rows were like this:
+
+     /patient-forms/               955 vs 360   595px of slack
+     /services/childrens-eye-care/ 1033 vs 520  513px
+     /insurance/                   844 vs 376   467px
+     /products/                    1107 vs 658  449px
+     ... down to 199px
+
+   Two rules fix it, and they are deliberately different because the pictures
+   are different.
+
+   a - EVERY media column centres its contents. Whatever slack remains is split
+       above and below instead of piling up underneath, which reads as composed
+       rather than as a gap. This is the only rule portraits get.
+   b - SCENE photography additionally fills the column, so tops and bottoms line
+       up and the slack goes to zero. This is the better result and it is what
+       the earlier "alignment all over the place" note was asking for too - but
+       it crops, so it is applied by name to room and product shots only.
+
+   .et-doctor__media is excluded from (b) on purpose: it holds a photograph of
+   Dr. Hyder at 511x560, and filling a 1093px column with it would crop through
+   his face. A portrait gets centred, never stretched. */
+.rw-sec :is(.row--split, .row--split-media, .tib-hero__grid) > .col:not(:only-child):is(
+    :has(> [class*="media"]), :has(> [class*="portrait"]), :has(> img), :has(> picture)) {
+  /* align-self:stretch is load-bearing. The row is top-aligned, so without it
+     the column is only as tall as its contents and the height:100% below
+     resolves against an auto height - which collapsed the media to nothing and
+     emptied the right-hand column on /patient-forms/ and /insurance/. The
+     column has to own the full row height before anything can fill it. */
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* (b) scene photography fills its column. Capped so a very long text column
+   cannot stretch a room into a letterbox; past the cap the rule above centres
+   what is left. */
+/* NO media is stretched to fill its column, and that is a decision, not an
+   omission. Filling looked excellent on the pages I first tried it on, and it
+   is what removes the slack completely - but the same class holds a different
+   photograph on every page. .tib-hero__media is a 1200x1586 PORTRAIT of the
+   frame wall on /products/designer-frames/ and a 1600x772 WIDE shot of the
+   storefront on /eye-health/ and /reviews/. Filling by class therefore cannot
+   be safe: it squeezed that storefront into a 533x797 box, a 3.1x tightening
+   that cut through the fascia so the practice's own sign read "EYE o TREN".
+
+   Distinguishing them needs each image's intrinsic size, which this stylesheet
+   does not have. So the rule above centres every media column and nothing is
+   resized: the slack is split above and below instead of piling under the
+   picture, and not one photograph is re-cropped. */
+
+/* Stacked layouts have a single column, so there is no slack to distribute and
+   the centring above is a no-op there. Nothing to undo. */
+
+/* --- the homepage doctor section -----------------------------------------
+   REVISION 7. The client asked for the two stat tiles out, the "More about
+   Dr. Hyder" link moved under the portrait, and the space that left tidied up.
+
+   The tiles carried `margin-top: --ds-space-lg` plus `padding-top:
+   --ds-space-lg` of their own, so removing them takes that spacing with them.
+   What is left is the moved link, which needs a gap from the role line above it
+   but nothing like the separation the stats block had. */
+.rw-sec .et-doctor__more {
+  margin-top: clamp(14px, 1.6vw, 20px);
+}
+/* With the stats gone the right column is markedly shorter than the left, and
+   the row is top-aligned (see section 16), which left a tall empty area beside
+   the copy. Centring the two columns against each other closes it without
+   stretching anything. */
+/* Compound, not descendant: .et-doctor sits ON the .rw-sec element itself, so
+   `.rw-sec .et-doctor` matches nothing at all. */
+.rw-sec.et-doctor .row--split-media {
+  align-items: center;
+}
+
+/* Designer houses: an infinite marquee, no pills.
+   REVISION 6 (client: "remove the logos from the pills, I want them floating
+   and scrolling in an infinite carousel loop"). The pill was revision 4's
+   answer to a readability complaint that turned out to be about a different
+   element entirely; with the logos floating, the only thing carrying them is
+   the band behind, and all seven wordmarks are pure black ink on transparent,
+   so they read on it.
+
+   Every one of these selectors is scoped with .rw-sec on purpose. layout.css
+   sets .ethc-houses to display:grid with repeat(7,1fr) -- and to repeat(4) and
+   repeat(3) inside media queries -- at :where(.rw-sec) specificity (0,1,0). A
+   media query adds no specificity, so (0,2,0) here beats all three at every
+   width; the bare class would lose to them and the track would be laid out as
+   a grid. */
+.rw-sec .ethc-houses.ethc-marquee {
+  display: block;
+  grid-template-columns: none;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  /* the ends fade rather than cut, so items enter and leave instead of popping */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+}
+.rw-sec .ethc-marquee__track {
+  --ethc-gap: clamp(36px, 5vw, 76px);
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  width: max-content;
+  animation: ethc-marquee-scroll 32s linear infinite;
+  will-change: transform;
+}
+/* The travel is 100%/copies, which is exactly one set. That is only true
+   because the spacing is a MARGIN on each item rather than a flex gap: with a
+   gap, the track would be (copies x set) + (copies x items - 1) gaps, one gap
+   short of a whole number of periods, and the loop would jump by half a gap on
+   every wrap. As a margin, each item carries its own trailing space and the
+   track is exactly copies x period. */
+@keyframes ethc-marquee-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(calc(-100% / var(--ethc-copies, 3)), 0, 0); }
+}
+.rw-sec .ethc-marquee .ethc-house {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  margin-inline-end: var(--ethc-gap);
+  /* the pill, removed */
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+          backdrop-filter: none;
+  transform: none;
+}
+.rw-sec .ethc-marquee .ethc-house__logo {
+  height: clamp(24px, 2.5vw, 32px);
+  width: auto;
+  max-width: none;
+  object-fit: contain;
+  display: block;
+  /* black artwork on a pale band: held just off full black so the row reads as
+     one calm line rather than seven competing logos */
+  opacity: .66;
+  filter: grayscale(1);
+  transition: opacity var(--t-mid) var(--ease);
+}
+.rw-sec .ethc-marquee:hover .ethc-house__logo { opacity: .9; }
+/* a marquee that will not stop is hard to read a single logo in */
+.rw-sec .ethc-marquee:hover .ethc-marquee__track,
+.rw-sec .ethc-marquee:focus-within .ethc-marquee__track { animation-play-state: paused; }
+
+.surface-dark .ethc-marquee .ethc-house__logo {
+  filter: grayscale(1) invert(1);
+  opacity: .8;
+}
+
+/* Perpetual motion is exactly what this setting is for. Reduced motion gets the
+   same row, stopped, and scrollable by hand instead. */
+@media (prefers-reduced-motion: reduce) {
+  .rw-sec .ethc-marquee__track { animation: none; }
+  .rw-sec .ethc-houses.ethc-marquee {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+            mask-image: none;
+  }
+}
+
+/* --- d · the pull-quote portrait ------------------------------------------
+   The "In Dr. Hyder's words" section is a quote with no image in the source.
+   His portrait was added (tools/build.mjs) and, at the client's request, sits
+   BESIDE the quote rather than above it.
+
+   The image is the client's own photograph with the background cut away
+   (tools/cutout-portrait.mjs). Because it carries real alpha, the lift has to
+   be a drop-shadow filter: a box-shadow would trace the rectangular element
+   box and draw a hard edge through empty space. */
+.ethc-stance--split {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(22px, 4vw, 56px);
+  text-align: left;
+}
+/* The source centres this block (col--measure col--center, and an inline
+   justify-content on the eyebrow that the builder drops). A two-column layout
+   needs the room back and needs the text ranged left. */
+.rw-sec .ethc-stance--split { text-align: left; }
+.rw-sec .col--measure:has(.ethc-stance--split) { max-width: min(1060px, 100%); }
+.ethc-stance--split .ethc-stance__body > * { text-align: left; }
+.rw-sec .ethc-stance--split .ethc-stance__q { margin-inline: 0; max-width: 24em; }
+.ethc-stance--split .et-eyebrow { justify-content: flex-start; }
+
+/* Measured from the cut-out's alpha channel: canvas 511x560, subject bounding
+   box x=127 y=50 w=239 h=510. The frame below is that box plus a little air,
+   and object-position 15% is what centres the subject inside it under cover.
+   Typed guesses drift; these came from sampling the pixels. */
+.ethc-stance__portrait {
+  width: clamp(190px, 25vw, 300px);
+  aspect-ratio: 279 / 530;
+  margin: 0;
+  position: relative;
+  isolation: isolate;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+/* a soft ground so the cut-out is anchored rather than floating on the band */
+.ethc-stance__portrait::before {
+  content: "";
+  position: absolute;
+  inset: -6% -20% -3%;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(58% 50% at 50% 64%,
+    color-mix(in srgb, var(--g-teal-lit) 34%, transparent) 0%,
+    color-mix(in srgb, var(--g-teal-lit) 12%, transparent) 46%,
+    transparent 72%);
+}
+.ethc-stance__portrait img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 15% 50%;
+  display: block;
+  filter: drop-shadow(0 24px 38px color-mix(in srgb, var(--c-3) 66%, transparent));
+}
+@media (max-width: 860px) {
+  .ethc-stance--split { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+  .rw-sec .ethc-stance--split { text-align: center; }
+  .ethc-stance--split .ethc-stance__body > * { text-align: center; }
+  .rw-sec .ethc-stance--split .ethc-stance__q { margin-inline: auto; }
+  .ethc-stance--split .et-eyebrow { justify-content: center; }
+  .ethc-stance__portrait { width: clamp(168px, 46vw, 238px); }
+}
+
+/* =========================================================================
+   19 · TEXT SITTING ON A PHOTOGRAPH
+   =========================================================================
+   REVISION 5. The client reported the text on the "Designer houses we carry"
+   images as unreadable. Revision 4 treated the brand LOGOS, which was the
+   wrong element: sampling their pixels shows all seven are pure black ink on
+   transparent (avg luminance 0) over an 82%-white pill, which is legible.
+
+   The unreadable text is the CATEGORY TILES below them. Each tile stacks a
+   photograph (.et-cat__scene), a scrim (.et-cat__scrim) and a caption
+   (.et-cat__body) — and strip-visuals.mjs had removed the scrim's gradient as
+   an appearance declaration without anything re-authoring it. The scrim was
+   painting nothing, leaving dark ink on dark photographs. Measured on the
+   homepage before this rule:
+
+     Contact Lenses  #17262b on rgb(8,43,30)     1.02:1
+     Sunglasses      #17262b on rgb(64,35,19)    1.09:1
+     Frames          #17262b on rgb(126,75,41)   2.17:1
+     Kids' Eyewear   #17262b on rgb(235,199,150) 9.75:1   (passed only by luck
+                                                           of a pale photo)
+
+   32 tiles across the build were in this state. */
+.et-cat__scene img,
+.et-cat__scene picture {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.et-cat__scrim {
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to top,
+    color-mix(in srgb, var(--c-3) 93%, transparent) 0%,
+    color-mix(in srgb, var(--c-3) 84%, transparent) 24%,
+    color-mix(in srgb, var(--c-3) 55%, transparent) 48%,
+    color-mix(in srgb, var(--c-3) 20%, transparent) 72%,
+    transparent 100%);
+}
+/* The caption has to clear the scrim, and its colour can no longer be
+   inherited: the tile's own glass surface is light, so the inherited ink was
+   the dark --g-fg. On the scrim the caption is always on-dark. */
+.et-cat__body { z-index: 2; }
+.rw-sec .et-cat__name,
+.rw-sec .et-cat .et-cat__name { color: var(--g-on-dark); }
+.rw-sec .et-cat__eyebrow,
+.rw-sec .surface-dark .et-cat__eyebrow { color: var(--c-9); }
+.rw-sec .et-cat__arrow,
+.rw-sec .surface-dark .et-cat__arrow { color: var(--c-9); }
+.rw-sec .et-cat__arrow:hover,
+.rw-sec .surface-dark .et-cat__arrow:hover { color: var(--c-1); }
+/* The photograph covers the tile's glass entirely, so the rim is the only part
+   of that surface still doing work. Keep it; drop the blur, which costs a
+   composite layer for something no longer visible. */
+.et-cat { -webkit-backdrop-filter: none; backdrop-filter: none; }
+
+/* The tile scrim alone is not enough when the caption wraps: a long eyebrow
+   pushes the text up the tile to where the gradient has thinned out, and it
+   was measured at 2.84:1 on the three-line captions on /products/contact-
+   lenses/. A plate that sizes itself to the caption fixes every caption height
+   rather than the one the ramp was tuned for. It extends 64px above the
+   caption box and fades out there, so there is no visible band edge.
+   .et-cat__body is already absolutely positioned, so it is its own containing
+   block; isolate it so the plate can sit behind the text but still above the
+   tile scrim. */
+.et-cat__body { isolation: isolate; }
+.et-cat__body::before {
+  content: "";
+  position: absolute;
+  inset: -64px 0 0 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(to top,
+    color-mix(in srgb, var(--c-3) 90%, transparent) 0%,
+    color-mix(in srgb, var(--c-3) 86%, transparent) calc(100% - 64px),
+    transparent 100%);
+}
+
+/* --- the sub-page hero -----------------------------------------------------
+   .ha-hero__scrim is the same defect as .et-cat__scrim: the element is in the
+   markup and layout.css gives it inset:0 and z-index:1, but its gradient was
+   stripped as an appearance declaration and never re-authored, so it painted
+   nothing. The copy sits left (.ha-hero__copy is max-width:44rem), so the ramp
+   is horizontal, with a bottom lift for the sub-heading. Held at 0.86 out to
+   40% because the copy column reaches about 52% of the stage at 1440px. */
+.ha-hero__scrim {
+  background:
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--c-3) 90%, transparent) 0%,
+      color-mix(in srgb, var(--c-3) 86%, transparent) 40%,
+      color-mix(in srgb, var(--c-3) 70%, transparent) 58%,
+      color-mix(in srgb, var(--c-3) 40%, transparent) 78%,
+      color-mix(in srgb, var(--c-3) 18%, transparent) 100%),
+    linear-gradient(to top,
+      color-mix(in srgb, var(--c-3) 45%, transparent) 0%,
+      color-mix(in srgb, var(--c-3) 16%, transparent) 45%,
+      transparent 80%);
+}
+/* Narrow viewports put the copy across the full width, so there is no "cool"
+   side of the image to fade towards - the scrim has to be even instead. */
+@media (max-width: 860px) {
+  .ha-hero__scrim {
+    background: linear-gradient(to top,
+      color-mix(in srgb, var(--c-3) 90%, transparent) 0%,
+      color-mix(in srgb, var(--c-3) 84%, transparent) 45%,
+      color-mix(in srgb, var(--c-3) 74%, transparent) 100%);
+  }
+}
+
+/* --- captions and tags laid directly on a photograph -----------------------
+   .et-frame__tag and .tib-creed__cap are positioned over the top-left and
+   bottom-left of a photograph with no scrim of any kind behind them, measured
+   at 1.35:1 and 1.11:1. A gradient cannot help a chip that small, so each gets
+   its own plate. --c-7 on an 82% --c-3 plate is 8.9:1 even over a white
+   photograph. */
+.et-frame__tag,
+.tib-creed__cap {
+  display: inline-flex;
+  align-items: center;
+  padding: .42em .82em;
+  border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--c-3) 84%, transparent);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  backdrop-filter: blur(10px) saturate(150%);
+  border: 1px solid color-mix(in srgb, var(--c-1) 20%, transparent);
+  box-shadow: 0 10px 24px -12px color-mix(in srgb, var(--c-3) 72%, transparent);
+  color: var(--g-on-dark);
+  font-weight: 600;
+  line-height: 1.25;
+  max-width: calc(100% - 24px);
+}
+.rw-sec .et-frame__tag,
+.rw-sec .tib-creed__cap,
+.rw-sec .surface-dark .et-frame__tag,
+.rw-sec .surface-dark .tib-creed__cap { color: var(--g-on-dark); }
+
+/* The sub-page hero band carries no .surface-dark class, so its copy inherits
+   the light-surface ink. That was survivable while .ha-hero__scrim painted
+   nothing; now that the scrim is a real dark ramp the copy has to come with
+   it, or the heading sits dark-on-dark. Measured at 1.18:1 before this rule. */
+/* Scoped with .rw-sec deliberately. The bare class is (0,1,0) and loses to
+   `.site-content p` at (0,1,1) in this same stylesheet, which is how
+   .ha-hero__sub stayed at --g-fg-soft and measured 1.69:1 on the new scrim
+   even though a rule for it existed. */
+.rw-sec .ha-hero__inner,
+.rw-sec .ha-hero__copy,
+.rw-sec .ha-hero__h,
+.rw-sec .ha-hero__sub { color: var(--g-on-dark); }
+.rw-sec .ha-hero__hl,
+.rw-sec .ha-hero__eyebrow,
+.rw-sec .ha-hero__call { color: var(--c-9); }
+.rw-sec .ha-hero__call:hover { color: var(--c-1); }
+.rw-sec .ha-hero__copy .btn-ghost {
+  color: var(--g-on-dark);
+  border-color: color-mix(in srgb, var(--c-1) 42%, transparent);
+}
+
+/* Chips that float directly ON a photograph cannot use the standard 58% glass.
+   Every other glass surface sits on a known page background; these sit on
+   pixels nobody controls. At 58% a dark photograph shows through and the
+   badge's secondary line measured 2.11:1 over the hero. At 93% the plate is
+   effectively opaque, which holds 5.4:1 for --g-fg-soft even over a black
+   photograph, and the blur still reads as glass against the image edges. */
+/* .rw-sec scoping again: components.css assigns the standard glass to these
+   at the same specificity and loads after this file, so the bare class loses
+   the tie. */
+.rw-sec .ethc-hero__badge,
+.rw-sec .tib-hero__chip {
+  background: color-mix(in srgb, var(--c-1) 93%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(165%);
+  backdrop-filter: blur(18px) saturate(165%);
+}

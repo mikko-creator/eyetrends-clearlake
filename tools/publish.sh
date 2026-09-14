@@ -64,16 +64,30 @@ echo "  pushed $(git rev-parse --short HEAD)"
 
 # --- 4 · push the preview ----------------------------------------------------
 say "4. pushing the preview to gh-pages"
-git -C "$PAGES_DIR" rev-parse --git-dir >/dev/null 2>&1 || {
+# Test for the .git DIRECTORY, not `rev-parse --git-dir`. rev-parse walks UP:
+# build-pages.mjs rm -rf's this directory each run, taking its .git with it, so
+# rev-parse then finds the PARENT repository, reports success, and every
+# subsequent `git -C "$PAGES_DIR"` silently operates on the main repo. That is
+# exactly how the first publish pushed main to gh-pages and served a directory
+# listing of src/ and tools/ instead of the site.
+if [ ! -d "$PAGES_DIR/.git" ]; then
   git -C "$PAGES_DIR" init -q
   git -C "$PAGES_DIR" config user.name  "$(git config user.name)"
   git -C "$PAGES_DIR" config user.email "$(git config user.email)"
-}
+fi
+# and prove we are about to push the SITE, not the project
+if [ ! -f "$PAGES_DIR/index.html" ]; then
+  echo "  $PAGES_DIR/index.html missing — refusing to push"; exit 1
+fi
 git -C "$PAGES_DIR" add -A
 git -C "$PAGES_DIR" commit -q -m "Eye Trends Clear Lake — public preview ($(git rev-parse --short HEAD))" || echo "  nothing new to commit"
 git -C "$PAGES_DIR" branch -M main
 git -C "$PAGES_DIR" push -f "https://github.com/$SLUG.git" main:gh-pages
 echo "  pushed gh-pages"
+if ! gh api "repos/$SLUG/contents/index.html?ref=gh-pages" >/dev/null 2>&1; then
+  echo "  index.html is NOT at the root of gh-pages — the wrong tree was pushed"; exit 1
+fi
+echo "  verified: index.html is at the gh-pages root"
 
 # --- 5 · enable Pages --------------------------------------------------------
 say "5. GitHub Pages"

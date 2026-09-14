@@ -1,0 +1,73 @@
+{
+  "schema": "site-reforge/sweep@1",
+  "url": "http://127.0.0.1:8781/",
+  "capturedAt": "2026-09-14T02:30:14.451Z",
+  "viewport": {
+    "w": 390,
+    "h": 900,
+    "dpr": 1.3499999046325684
+  },
+  "documentScrollWidth": 372,
+  "counts": {
+    "blocker": 0,
+    "major": 0,
+    "minor": 6,
+    "nit": 0
+  },
+  "findings": [
+    {
+      "check": "img-oversized",
+      "severity": "minor",
+      "title": "Image far larger than its display size",
+      "detail": "",
+      "selector": "#site-head > div.wrap.head-in > a.brand > picture > img",
+      "value": "644px natural vs 132px displayed",
+      "pageLevel": false
+    },
+    {
+      "check": "img-oversized",
+      "severity": "minor",
+      "title": "Image far larger than its display size",
+      "detail": "",
+      "selector": "#main > div.rw-sec.rw-p-home:nth-of-type(1) > div.container > div.row.ethc-hero__grid > div.col:nth-of-type(2) > div.ethc-hero__media.et-reveal > img.et-media-img",
+      "value": "1024px natural vs 333px displayed",
+      "pageLevel": false
+    },
+    {
+      "check": "font-too-small",
+      "severity": "minor",
+      "title": "Text under 12px",
+      "detail": "",
+      "selector": "#main > div.rw-sec.rw-p-home:nth-of-type(1) > div.container > div.row.ethc-hero__grid > div.col:nth-of-type(2) > div.ethc-hero__media.et-reveal > div.ethc-hero__badge > span:nth-of-type(2) > span",
+      "value": "11.84px",
+      "pageLevel": false
+    },
+    {
+      "check": "text-clipped",
+      "severity": "minor",
+      "title": "Text clipped by overflow:hidden",
+      "detail": "",
+      "selector": "#main > div.rw-sec.rw-p-home:nth-of-type(1)",
+      "value": "1323px in 1203px",
+      "pageLevel": false
+    },
+    {
+      "check": "text-clipped",
+      "severity": "minor",
+      "title": "Text clipped by overflow:hidden",
+      "detail": "",
+      "selector": "#main > div.rw-sec.rw-p-home:nth-of-type(4)",
+      "value": "1614px in 1468px",
+      "pageLevel": false
+    },
+    {
+      "check": "text-clipped",
+      "severity": "minor",
+      "title": "Text clipped by overflow:hidden",
+      "detail": "",
+      "selector": "#main > div.rw-sec.rw-p-home:nth-of-type(11)",
+      "value": "498px in 453px",
+      "pageLevel": false
+    }
+  ]
+}

@@ -1,0 +1,630 @@
+/* =============================================================================
+   REFORGE LAYER — SGEN preset library applied to Eye Trends
+   Loaded AFTER base.css. The source's own design CSS is `:where()`-scoped
+   (specificity 0), so plain classes here win without !important.
+
+   Every numbered block below maps to a preset in the SGEN Living Styleguide
+   TOP-12 (presets/sgen-design-system/00-top12.html). Tokens are the CLIENT's
+   own (--ds-*), harvested from the live site — PRESET -> ADAPT -> COMPOSE.
+   ========================================================================== */
+
+:root {
+  /* --- adapted from the preset library's token spec, valued from the client */
+  --rf-wrap: 1200px;
+  --rf-gutter: clamp(18px, 4vw, 36px);
+  --rf-flow: clamp(64px, 9vw, 116px);
+
+  --rf-ink: var(--ds-ink, var(--c-6));
+  --rf-ink-soft: var(--ds-ink-soft, var(--c-8));
+  --rf-primary: var(--ds-primary, var(--c-2));
+  --rf-primary-deep: var(--ds-primary-deep, var(--c-3));
+  --rf-accent: var(--ds-accent, #E0A44C);
+  --rf-paper: var(--ds-bg-surface, var(--c-5));
+  --rf-warm: var(--ds-bg-warm, #F6F1E9);
+  --rf-surface: var(--ds-bg-surface-2, var(--c-1));
+  --rf-line: var(--ds-line, #DCE4E7);
+  --rf-hairline: var(--ds-hairline, color-mix(in srgb, var(--c-3) 10%, transparent));
+
+  /* 3 — soft, large-blur, ink-tinted shadow (never black, never hard) */
+  --rf-shadow-rest: 0 1px 2px color-mix(in srgb, var(--c-3) 5%, transparent);
+  --rf-shadow-card: 0 4px 20px color-mix(in srgb, var(--c-3) 6%, transparent), 0 12px 40px color-mix(in srgb, var(--c-3) 8%, transparent);
+  --rf-shadow-lift: 0 24px 60px -12px color-mix(in srgb, var(--c-3) 20%, transparent);
+
+  --rf-ease: cubic-bezier(.4,0,.2,1);
+  --rf-ease-out: cubic-bezier(.16,1,.3,1);
+  --rf-dur: .25s;
+  --rf-dur-slow: .6s;
+
+  --rf-r-control: 8px;
+  --rf-r-surface: 14px;
+  --rf-r-panel: 22px;
+  --rf-r-pill: 999px;
+
+  --rf-head-h: 74px;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--rf-paper);
+  color: var(--rf-ink);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+img { max-width: 100%; }
+a { color: inherit; }
+
+.wrap { width: 100%; max-width: var(--rf-wrap); margin-inline: auto; padding-inline: var(--rf-gutter); }
+
+/* ---- 9 · accessible focus, and a real skip link ------------------------- */
+.skip-link {
+  position: absolute; left: -9999px; top: 0; z-index: 2000;
+  background: var(--rf-primary-deep); color: var(--c-1); padding: 12px 18px; border-radius: 0 0 var(--rf-r-control) 0;
+}
+.skip-link:focus { left: 0; }
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 3px solid var(--rf-accent); outline-offset: 2px; border-radius: 4px;
+}
+
+/* =============================================================== 2 · TYPE ===
+   Display face on headings, oversized, tight, negative-tracked.          */
+.h2, .et-h2, .site-content h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(30px, 4.2vw, 52px);
+  line-height: 1.08;
+  letter-spacing: -.022em;
+  color: var(--rf-primary-deep);
+  margin: 0 0 .5em;
+  text-wrap: balance;
+}
+.site-content h1, .ethc-hero__h, .et-h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(38px, 6.2vw, 74px);
+  line-height: 1.04;
+  letter-spacing: -.03em;
+  color: var(--rf-primary-deep);
+  margin: 0 0 .4em;
+  text-wrap: balance;
+}
+.site-content h3 {
+  font-family: var(--font-display);
+  font-weight: 600; letter-spacing: -.015em; line-height: 1.2;
+  font-size: clamp(19px, 2.1vw, 24px);
+  color: var(--rf-primary-deep);
+}
+.lede, .et-lede, .dc-lead {
+  font-size: clamp(17px, 1.5vw, 20px);
+  line-height: 1.62;
+  color: var(--rf-ink-soft);
+  max-width: 68ch;
+}
+
+/* ========================================================= 10 · EYEBROW ====
+   Kicker + accent rule above every section H2 — editorial rhythm.        */
+.eyebrow, .et-eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--ds-font-mono, 'Space Mono', ui-monospace, monospace);
+  text-transform: uppercase; letter-spacing: .16em;
+  font-size: 11.5px; font-weight: 700;
+  color: var(--rf-accent);
+  margin: 0 0 14px;
+}
+.eyebrow::before, .et-eyebrow::before {
+  content: ""; width: 34px; height: 2px; background: currentColor; display: inline-block; flex: none;
+}
+.surface-dark .eyebrow, .surface-dark .et-eyebrow { color: var(--ds-accent-light, var(--c-9)); }
+
+/* ================================================ 11 · SECTION RHYTHM =====
+   Large vertical padding + alternating grounds.                          */
+.rw-sec { padding-block: var(--rf-flow); position: relative; }
+/* .container is base.css's job — overriding it here broke .container--full */
+.et-band--paper { background: var(--rf-surface); }
+.et-band--warm { background: var(--rf-warm); }
+.surface-dark {
+  background: var(--rf-primary-deep);
+  color: var(--ds-ink-on-dark, var(--c-7));
+}
+.surface-dark :is(h1,h2,h3,h4,.et-h2,.h2) { color: var(--c-1); }
+.surface-dark :is(p,li,.lede,.et-lede) { color: color-mix(in srgb, var(--c-7) 82%, transparent); }
+
+/* 8 — image bottom-fade / directional scrim: kills the hard seam --------- */
+.et-band--seam::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 90px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--c-5) 0%, transparent), var(--rf-paper));
+  pointer-events: none;
+}
+
+/* ============================================ 12 · AMBIENT HERO DEPTH =====
+   Glow blobs / duotone wash behind the hero.                             */
+.et-wash { position: relative; isolation: isolate; overflow: hidden; }
+.et-wash::before {
+  content: ""; position: absolute; inset: -20% -10% auto -10%; height: 130%;
+  background:
+    radial-gradient(52% 60% at 78% 12%, color-mix(in srgb, var(--c-2) 16%, transparent), transparent 68%),
+    radial-gradient(44% 52% at 8% 88%, rgba(224,164,76,.14), transparent 70%);
+  z-index: -1; pointer-events: none;
+}
+.surface-dark.et-wash::before {
+  background:
+    radial-gradient(52% 60% at 78% 12%, rgba(20,165,140,.26), transparent 68%),
+    radial-gradient(44% 52% at 8% 88%, rgba(224,164,76,.18), transparent 70%);
+}
+/* Generated abstract optical texture behind dark bands. Deliberately faint and
+   abstract: it reads as texture, never as a photograph of these premises. */
+.surface-dark::after {
+  content: ""; position: absolute; inset: 0; z-index: -2; pointer-events: none;
+  background: url(/assets/generated/bg-dark.webp) center/cover no-repeat;
+  opacity: .16; mix-blend-mode: luminosity;
+}
+.surface-dark { position: relative; isolation: isolate; }
+
+/* ==================================================== 4 · SCROLL REVEAL ====
+   Entrance with sibling stagger, driven by IntersectionObserver.
+   The source shipped the rest-state only and never added the in-state, so
+   every element sat 14px low forever. This is the working contract.      */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity var(--rf-dur-slow) var(--rf-ease-out),
+              transform var(--rf-dur-slow) var(--rf-ease-out);
+  will-change: opacity, transform;
+}
+.reveal.in-view { opacity: 1; transform: none; }
+/* the source's own rest-state must not fight ours */
+.et-reveal.reveal { transform: translateY(24px); }
+.et-reveal.reveal.in-view { transform: none; }
+
+/* directional variants, used by the builder's band classes */
+.reveal--left  { transform: translateX(-28px); }
+.reveal--right { transform: translateX(28px); }
+.reveal--scale { transform: scale(.96); }
+.reveal--left.in-view, .reveal--right.in-view, .reveal--scale.in-view { transform: none; }
+
+/* ================================================ 3 + 7 · CARDS & MEDIA ====
+   Soft shadow + lift on hover; image zoom inside a clipped frame.        */
+.dc-frame, .et-media, .ethc-hero__media, .dc-rel, .dc-pill, .ha-cond, .et-card {
+  border-radius: var(--rf-r-surface);
+}
+.dc-rel, .dc-pill, .ha-cond, .et-card, .mcard {
+  background: var(--rf-surface);
+  border: 1px solid var(--rf-hairline);
+  box-shadow: var(--rf-shadow-rest);
+  transition: transform var(--rf-dur) var(--rf-ease),
+              box-shadow var(--rf-dur) var(--rf-ease),
+              border-color var(--rf-dur) var(--rf-ease);
+}
+.dc-rel:hover, .dc-pill:hover, .ha-cond:hover, .et-card:hover, .mcard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--rf-shadow-lift);
+  border-color: color-mix(in srgb, var(--rf-primary) 30%, transparent);
+}
+.dc-frame, .ethc-hero__media {
+  overflow: hidden;
+  box-shadow: var(--rf-shadow-card);
+  position: relative;
+}
+.dc-frame img, .ethc-hero__media img, .et-media-img {
+  transition: transform .7s var(--rf-ease-out);
+}
+.dc-frame:hover img, .ethc-hero__media:hover img { transform: scale(1.045); }
+
+/* ==================================================== 9 · BUTTONS (2-way) ==
+   Accent-flip: fill <-> ghost, named-property transitions only.          */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  font: inherit; font-weight: 600; font-size: var(--fs-23);
+  padding: 13px 24px;
+  border-radius: var(--rf-r-pill);
+  border: 2px solid transparent;
+  text-decoration: none; cursor: pointer;
+  transition: background-color var(--rf-dur) var(--rf-ease),
+              color var(--rf-dur) var(--rf-ease),
+              border-color var(--rf-dur) var(--rf-ease),
+              transform var(--rf-dur) var(--rf-ease),
+              box-shadow var(--rf-dur) var(--rf-ease);
+}
+.btn-lg { padding: 16px 30px; font-size: 17px; }
+.btn-primary {
+  background: var(--rf-primary); color: var(--c-1); border-color: var(--rf-primary);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--c-2) 24%, transparent);
+}
+.btn-primary:hover {
+  background: transparent; color: var(--rf-primary);
+  transform: translateY(-2px); box-shadow: 0 12px 30px color-mix(in srgb, var(--c-2) 18%, transparent);
+}
+.btn-ghost {
+  background: transparent; color: var(--rf-primary-deep); border-color: var(--rf-hairline);
+}
+.btn-ghost:hover { background: var(--rf-primary-deep); color: var(--c-1); border-color: var(--rf-primary-deep); transform: translateY(-2px); }
+.btn-onDark { background: var(--rf-accent); color: var(--rf-primary-deep); border-color: var(--rf-accent); }
+.btn-onDark:hover { background: transparent; color: var(--rf-accent); }
+.btn-onWarm { background: var(--rf-primary); color: var(--c-1); border-color: var(--rf-primary); }
+.btn-onWarm:hover { background: transparent; color: var(--rf-primary); }
+.surface-dark .btn-ghost { color: var(--c-1); border-color: color-mix(in srgb, var(--c-1) 28%, transparent); }
+.surface-dark .btn-ghost:hover { background: var(--c-1); color: var(--rf-primary-deep); }
+
+/* ===================================================== 5 · COUNT-UP STATS ==*/
+.ethc-hero__proof, .et-stats { display: flex; flex-wrap: wrap; gap: clamp(20px, 4vw, 48px); margin-top: 34px; }
+.ethc-hero__stat, .et-stat { display: flex; flex-direction: column; gap: 2px; }
+.ethc-hero__k, .et-stat__k {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 3.4vw, 42px); font-weight: 700; line-height: 1;
+  letter-spacing: -.02em; color: var(--rf-primary);
+  font-variant-numeric: tabular-nums;
+}
+.ethc-hero__l, .et-stat__l {
+  font-size: var(--fs-8); letter-spacing: .06em; text-transform: uppercase;
+  color: var(--rf-ink-soft); font-weight: 600;
+}
+
+/* ===================================================== 1 · PILLS / CHIPS ===*/
+.et-pill, .ethc-menu__chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px; border-radius: var(--rf-r-pill);
+  background: color-mix(in srgb, var(--rf-primary) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--rf-primary) 18%, transparent);
+  color: var(--rf-primary-deep);
+  font-size: 13.5px; font-weight: 600;
+}
+.et-pill svg, .ethc-menu__chip svg { width: 17px; height: 17px; flex: none; }
+.ethc-menu { display: flex; flex-wrap: wrap; gap: 9px; margin: 22px 0 4px; }
+.surface-dark .et-pill {
+  background: color-mix(in srgb, var(--c-1) 8%, transparent); border-color: color-mix(in srgb, var(--c-1) 16%, transparent); color: var(--c-7);
+}
+
+/* ============================================================== 6 · HEADER ==
+   Glass sticky header: transparent over the top, blurred + solid on scroll. */
+.topbar {
+  background: var(--rf-primary-deep); color: color-mix(in srgb, var(--c-7) 86%, transparent);
+  font-size: var(--fs-8); position: relative; z-index: 60;
+}
+.topbar-in { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding-block: 9px; }
+.topbar p { margin: 0; }
+.topbar-call { color: var(--rf-accent); font-weight: 700; text-decoration: none; white-space: nowrap; }
+.topbar-call:hover { text-decoration: underline; }
+@media (max-width: 900px) { .topbar-hours { display: none; } }
+@media (max-width: 600px) { .topbar-note { display: none; } .topbar-in { justify-content: center; } }
+
+.site-head {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--c-1) 86%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid transparent;
+  transition: background-color .3s var(--rf-ease), box-shadow .3s var(--rf-ease),
+              border-color .3s var(--rf-ease), padding .3s var(--rf-ease);
+}
+.site-head.is-stuck {
+  background: color-mix(in srgb, var(--c-1) 94%, transparent);
+  border-bottom-color: var(--rf-hairline);
+  box-shadow: 0 6px 26px color-mix(in srgb, var(--c-3) 7%, transparent);
+}
+.head-in { display: flex; align-items: center; gap: 18px; min-height: var(--rf-head-h); }
+.brand { display: flex; align-items: center; flex: none; text-decoration: none; }
+.brand img { height: 36px; width: auto; max-width: 190px; object-fit: contain; display: block; }
+.head-ctas { margin-left: auto; display: flex; align-items: center; gap: 10px; flex: none; }
+.head-ctas .btn { padding: 10px 17px; font-size: var(--fs-16); flex: none; white-space: nowrap; }
+.head-call { white-space: nowrap; }
+/* the header CTA never competes with the nav: the phone lives in the topbar */
+
+/* --- primary nav + mega panels ----------------------------------------- */
+.nv { min-width: 0; }
+.nv-list { list-style: none; display: flex; align-items: center; gap: 2px; margin: 0; padding: 0; flex-wrap: nowrap; }
+.nv-item { position: static; flex: none; }
+.nv-link {
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+  padding: 10px 11px; border-radius: var(--rf-r-control);
+  font-size: var(--fs-16); font-weight: 600; color: var(--rf-primary-deep); text-decoration: none;
+  transition: background-color var(--rf-dur) var(--rf-ease), color var(--rf-dur) var(--rf-ease);
+}
+.nv-link:hover, .nv-item:hover > .nv-link { background: color-mix(in srgb, var(--rf-primary) 9%, transparent); color: var(--rf-primary); }
+.nv-link[aria-current="page"] {
+  color: var(--rf-primary);
+  box-shadow: inset 0 -2px 0 var(--rf-accent);
+}
+.nv-caret { width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translateY(-2px); transition: transform var(--rf-dur) var(--rf-ease); }
+.nv-has-mega:hover .nv-caret { transform: rotate(-135deg) translateY(-2px); }
+
+.mega {
+  position: absolute; left: 0; right: 0; top: 100%;
+  background: var(--rf-surface);
+  border-top: 1px solid var(--rf-hairline);
+  box-shadow: 0 26px 50px -18px color-mix(in srgb, var(--c-3) 24%, transparent);
+  opacity: 0; visibility: hidden; transform: translateY(-8px);
+  transition: opacity .22s var(--rf-ease), transform .22s var(--rf-ease), visibility .22s;
+}
+.nv-has-mega:hover > .mega, .nv-has-mega:focus-within > .mega { opacity: 1; visibility: visible; transform: none; }
+.mega-inner {
+  width: 100%; max-width: var(--rf-wrap); margin-inline: auto; padding: 30px var(--rf-gutter) 36px;
+  display: grid; grid-template-columns: minmax(220px, 280px) 1fr; gap: 34px;
+}
+.mega-promo { border-radius: var(--rf-r-surface); padding: 24px; align-self: start; }
+.mega-promo--teal { background: var(--rf-primary-deep); color: var(--c-1); }
+.mega-promo--warm { background: var(--rf-warm); }
+.mega-promo h3 { margin: 0 0 8px; font-size: 20px; }
+.mega-promo--teal h3 { color: var(--c-1); }
+.mega-promo p { margin: 0 0 16px; font-size: 14px; line-height: 1.55; }
+.mega-promo--teal p { color: color-mix(in srgb, var(--c-7) 78%, transparent); }
+.mega-promo .btn { font-size: 14px; padding: 10px 18px; }
+.mega-cols { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 22px; }
+.mcol { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.mcol-head {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: var(--fs-16); color: var(--rf-primary-deep);
+  text-decoration: none; padding-bottom: 7px; margin-bottom: 3px;
+  border-bottom: 2px solid color-mix(in srgb, var(--rf-accent) 55%, transparent);
+}
+.mcol-head:hover { color: var(--rf-primary); }
+.mlink {
+  font-size: 13.5px; color: var(--rf-ink-soft); text-decoration: none; padding: 3px 0;
+  transition: color var(--rf-dur) var(--rf-ease), transform var(--rf-dur) var(--rf-ease);
+}
+.mlink:hover { color: var(--rf-primary); transform: translateX(3px); }
+.mega-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; align-content: start; }
+.mcard { display: flex; flex-direction: column; gap: 5px; padding: 16px 18px; border-radius: var(--rf-r-surface); text-decoration: none; }
+.mcard-t { font-weight: 700; color: var(--rf-primary-deep); font-size: var(--fs-19); }
+.mcard-d { font-size: var(--fs-8); color: var(--rf-ink-soft); line-height: 1.5; }
+
+/* --- burger + mobile nav ------------------------------------------------ */
+.burger { display: none; flex-direction: column; gap: 5px; background: none; border: 0; padding: 10px; cursor: pointer; }
+.burger span { display: block; width: 24px; height: 2px; background: var(--rf-primary-deep); transition: transform var(--rf-dur) var(--rf-ease), opacity var(--rf-dur) var(--rf-ease); }
+.burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.mobile-nav {
+  position: fixed; inset: 0; z-index: 70; background: var(--rf-surface);
+  overflow-y: auto; padding-block: 22px 60px;
+  animation: rfSlideIn .28s var(--rf-ease-out);
+}
+@keyframes rfSlideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+.mobile-in { display: flex; flex-direction: column; gap: 2px; }
+.mob-link { font-family: var(--font-display); font-weight: 700; font-size: 20px; padding: 11px 0; text-decoration: none; color: var(--rf-primary-deep); border-bottom: 1px solid var(--rf-hairline); }
+.mob-group { margin-top: 20px; display: flex; flex-direction: column; gap: 1px; }
+.mob-h { font-family: var(--ds-font-mono, monospace); text-transform: uppercase; letter-spacing: .14em; font-size: 11px; color: var(--rf-accent); margin: 0 0 8px; font-weight: 700; }
+.mob-sub { font-size: var(--fs-19); padding: 8px 0; text-decoration: none; color: var(--rf-ink-soft); }
+.mob-cta { margin-top: 26px; }
+body.nav-open { overflow: hidden; }
+@media (max-width: 1040px) {
+  .nv { display: none; }
+  .burger { display: flex; margin-left: auto; }
+  .head-ctas { margin-left: 0; }
+  .head-ctas .btn-primary { display: none; }
+}
+@media (min-width: 1041px) { .mobile-nav { display: none !important; } }
+@media (max-width: 1180px) { .mega-cols { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+@media (max-width: 1040px) { .mega { display: none; } }
+
+/* ===================================================== SCROLL PROGRESS =====*/
+.rf-progress { position: fixed; left: 0; top: 0; height: 3px; width: 100%; z-index: 90; pointer-events: none; }
+.rf-progress .bar {
+  height: 100%; width: 100%; transform: scaleX(0); transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--rf-primary), var(--rf-accent));
+}
+.rf-top {
+  position: fixed; right: 20px; bottom: 20px; z-index: 80;
+  width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--rf-hairline);
+  background: var(--rf-surface); color: var(--rf-primary-deep); cursor: pointer;
+  box-shadow: var(--rf-shadow-card);
+  opacity: 0; visibility: hidden; transform: translateY(10px);
+  transition: opacity var(--rf-dur) var(--rf-ease), transform var(--rf-dur) var(--rf-ease), visibility var(--rf-dur);
+}
+.rf-top.is-visible { opacity: 1; visibility: visible; transform: none; }
+
+/* ======================================================== BOOKING SECTION ==*/
+.book-band { background: var(--rf-warm); padding-block: var(--rf-flow); scroll-margin-top: 90px; }
+.book-grid {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: clamp(28px, 5vw, 64px); align-items: start;
+}
+.book-meta { font-size: 14px; color: var(--rf-ink-soft); margin: 18px 0 0; }
+.book-form {
+  background: var(--rf-surface); border: 1px solid var(--rf-hairline);
+  border-radius: var(--rf-r-panel); padding: clamp(22px, 3vw, 34px);
+  box-shadow: var(--rf-shadow-card);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.fld { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.fld--full { grid-column: 1 / -1; }
+.fld label { font-size: var(--fs-8); font-weight: 600; color: var(--rf-ink-soft); }
+.fld input, .fld select, .fld textarea {
+  font: inherit; font-size: var(--fs-19); padding: 11px 13px;
+  border: 1px solid var(--rf-line); border-radius: var(--rf-r-control);
+  background: var(--rf-paper); color: var(--rf-ink); width: 100%;
+  transition: border-color var(--rf-dur) var(--rf-ease), box-shadow var(--rf-dur) var(--rf-ease);
+}
+.fld input:focus, .fld select:focus, .fld textarea:focus {
+  border-color: var(--rf-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--rf-primary) 16%, transparent);
+  outline: none;
+}
+.book-form .btn { grid-column: 1 / -1; }
+.hp { position: absolute; left: -9999px; top: -9999px; }
+.hp input, .hp label { opacity: 0; pointer-events: none; width: 1px; height: 1px; font-size: var(--fs-23); }
+.form-note { grid-column: 1 / -1; margin: 0; font-size: 14px; color: var(--rf-primary); font-weight: 600; }
+@media (max-width: 860px) { .book-grid { grid-template-columns: 1fr; } .book-form { grid-template-columns: 1fr; } }
+
+/* =============================================================== FOOTER ====*/
+.site-foot { background: var(--rf-primary-deep); color: color-mix(in srgb, var(--c-7) 76%, transparent); padding-block: clamp(46px, 6vw, 78px) 0; }
+.foot-grid { display: grid; grid-template-columns: 1.6fr repeat(3, 1fr) 1.2fr; gap: 34px; }
+.foot-name { font-family: var(--font-display); font-weight: 700; font-size: 24px; color: var(--c-1); margin: 0 0 10px; letter-spacing: -.02em; }
+.foot-blurb { font-size: 14px; line-height: 1.65; margin: 0; }
+.foot-blurb a { color: var(--rf-accent); }
+.foot-h { font-family: var(--ds-font-mono, monospace); text-transform: uppercase; letter-spacing: .14em; font-size: 11px; color: var(--rf-accent); margin: 0 0 14px; font-weight: 700; }
+.foot-col { display: flex; flex-direction: column; gap: 9px; }
+.foot-col a { font-size: 14px; color: color-mix(in srgb, var(--c-7) 76%, transparent); text-decoration: none; transition: color var(--rf-dur) var(--rf-ease), transform var(--rf-dur) var(--rf-ease); }
+.foot-col a:hover { color: var(--c-1); transform: translateX(3px); }
+.foot-addr, .foot-hours { margin: 0; font-size: 14px; line-height: 1.6; }
+.foot-hours { color: color-mix(in srgb, var(--c-7) 60%, transparent); font-size: var(--fs-8); }
+.foot-phone { font-weight: 700; color: var(--rf-accent) !important; font-size: var(--fs-23) !important; }
+.foot-legal {
+  display: flex; flex-wrap: wrap; gap: 14px 26px; justify-content: space-between; align-items: center;
+  margin-top: clamp(38px, 5vw, 60px); padding-block: 22px;
+  border-top: 1px solid color-mix(in srgb, var(--c-1) 10%, transparent); font-size: var(--fs-8);
+}
+.foot-legal p { margin: 0; }
+.foot-legal nav { display: flex; flex-wrap: wrap; gap: 18px; }
+.foot-legal a { color: color-mix(in srgb, var(--c-7) 70%, transparent); text-decoration: none; }
+.foot-legal a:hover { color: var(--c-1); text-decoration: underline; }
+@media (max-width: 980px) { .foot-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .foot-grid { grid-template-columns: 1fr; } }
+
+/* ===================================================== LAYOUT — HANDS OFF ===
+   base.css ships the source's COMPLETE grid system (.row is display:block by
+   default, with .row--split / .row--frames / .row--head as explicit grids).
+   An earlier "safety net" here redefined .row as a flex row and squeezed six
+   service cards into six unreadable columns. Layout belongs to base.css; this
+   layer only restyles. Do not reintroduce generic .row/.col rules.        */
+
+/* =============================================== 9 · REDUCED MOTION ========
+   Honoured even where the source ignored it.                             */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal, .et-reveal.reveal { opacity: 1 !important; transform: none !important; }
+  .rf-progress { display: none; }
+}
+
+/* ============================================================== SEARCH =====
+   The source's /search was a platform endpoint; this build runs it in the
+   browser over a static index, keeping the same URL shape.                */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.head-search {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: var(--rf-r-pill);
+  color: var(--rf-primary-deep); text-decoration: none; flex: none;
+  border: 1px solid var(--rf-hairline);
+  transition: background-color var(--rf-dur) var(--rf-ease), color var(--rf-dur) var(--rf-ease);
+}
+.head-search:hover { background: var(--rf-primary-deep); color: var(--c-1); }
+.search-form { display: flex; gap: 10px; flex-wrap: wrap; margin: 22px 0 12px; }
+.search-form input {
+  flex: 1 1 260px; min-width: 0; font: inherit; font-size: var(--fs-23); padding: 13px 16px;
+  border: 1px solid var(--rf-line); border-radius: var(--rf-r-control); background: var(--rf-surface);
+}
+.search-form input:focus {
+  outline: none; border-color: var(--rf-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--rf-primary) 16%, transparent);
+}
+.search-status { color: var(--rf-ink-soft); font-size: var(--fs-16); margin: 0 0 8px; }
+.search-results { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 18px; }
+.search-hit {
+  background: var(--rf-surface); border: 1px solid var(--rf-hairline);
+  border-radius: var(--rf-r-surface); padding: 20px 22px; box-shadow: var(--rf-shadow-rest);
+  transition: transform var(--rf-dur) var(--rf-ease), box-shadow var(--rf-dur) var(--rf-ease);
+}
+.search-hit:hover { transform: translateY(-3px); box-shadow: var(--rf-shadow-lift); }
+.search-hit__t {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 18px; color: var(--rf-primary-deep); text-decoration: none;
+}
+.search-hit__t:hover { color: var(--rf-primary); text-decoration: underline; }
+.search-hit__u { font-family: var(--ds-font-mono, monospace); font-size: 12px; color: var(--rf-primary); margin: 4px 0 8px; }
+.search-hit__s { margin: 0; font-size: var(--fs-16); line-height: 1.6; color: var(--rf-ink-soft); }
+.search-hit__s mark { background: color-mix(in srgb, var(--rf-accent) 40%, transparent); color: inherit; padding: 0 2px; border-radius: 3px; }
+
+/* --- header search panel (the source's search modal, rebuilt) ------------- */
+.search-panel {
+  position: sticky; top: var(--rf-head-h); z-index: 49;
+  background: var(--rf-surface);
+  border-bottom: 1px solid var(--rf-hairline);
+  box-shadow: 0 14px 30px -18px color-mix(in srgb, var(--c-3) 34%, transparent);
+  animation: rfSlideIn .22s var(--rf-ease-out);
+}
+.search-panel-in { display: flex; align-items: center; gap: 16px; padding-block: 18px; flex-wrap: wrap; }
+.search-panel__h {
+  font-family: var(--font-display); font-size: 17px; font-weight: 700;
+  color: var(--rf-primary-deep); margin: 0; letter-spacing: -.01em; flex: none;
+}
+.search-panel__form { display: flex; gap: 10px; flex: 1 1 320px; min-width: 0; }
+.search-panel__form input {
+  flex: 1 1 auto; min-width: 0; font: inherit; font-size: var(--fs-19); padding: 11px 14px;
+  border: 1px solid var(--rf-line); border-radius: var(--rf-r-control); background: var(--rf-paper);
+}
+.search-panel__form input:focus {
+  outline: none; border-color: var(--rf-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--rf-primary) 16%, transparent);
+}
+.search-panel__close {
+  background: none; border: 0; font-size: 26px; line-height: 1; cursor: pointer;
+  color: var(--rf-ink-soft); padding: 4px 8px; flex: none;
+}
+.search-panel__close:hover { color: var(--rf-primary-deep); }
+
+/* =========================================== RESPONSIVE QA FIXES ===========
+   From the 16-sweep run at 390 / 768 / 1024 / 1440 (audit/sweep-findings.json).
+   Every rule here answers a finding that sweep actually raised.            */
+
+/* font-too-small ×204 — nothing under 12px. The eyebrow and the column heads
+   were 11–11.5px, which is below the legibility floor the sweep enforces.  */
+.eyebrow, .et-eyebrow { font-size: 12px; }
+.mob-h, .foot-h { font-size: 12px; }
+
+/* tap-target-small ×128 at 390/768 — WCAG 2.5.8. Links that were 20–36px tall
+   get a real 44px hit area without changing how they look.                 */
+@media (max-width: 834px) {
+  .topbar-call,
+  .foot-col a,
+  .foot-legal a,
+  .et-golink,
+  .ethc-herocall,
+  .et-review__src,
+  .et-cta-cluster > a,
+  .dc-visit__row a,
+  .dc-rel__go,
+  .ha-cond__go,
+  .mlink,
+  .mob-sub,
+  /* Any COMPONENT link (one that carries a class) is a standalone control and
+     needs a real hit area. A bare <a> inside prose is exempt under WCAG 2.5.8
+     and is deliberately not matched here. */
+  .rw-sec a[class]:not(.btn),
+  .rw-sec div > a:not([class]) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 46px;   /* 44 renders as 43.9 at dpr 1.5 and the sweep floors */
+  }
+  .brand { min-height: 46px; align-items: center; }
+  .head-search { width: 46px; height: 46px; }
+  .burger { min-height: 46px; min-width: 46px; justify-content: center; }
+
+  /* iOS zooms any input under 16px on focus, which reflows the whole page. */
+  .fld input, .fld select, .fld textarea,
+  .search-form input, .search-panel__form input { font-size: var(--fs-23); }
+  .topbar-in { padding-block: 2px; }
+}
+
+/* font-too-small — base.css ships type down to 9.92px. Hold a floor without
+   touching the scale above it. */
+.site-content :is(small, .et-note, .dc-note, figcaption, .et-fine, .dc-fine) { font-size: 12px; }
+
+/* font-too-small — the remaining sub-12px classes, named individually rather
+   than floored site-wide (a blanket max(1em,12px) would have overridden every
+   deliberate size in base.css and flattened the type scale). */
+.ethc-why__tag, .et-cat__eyebrow, .ethc-subhead, .et-kicker, .et-micro { font-size: 12px; }
+
+/* tap-target: inline prose links. WCAG 2.5.8 exempts links inside a sentence,
+   but a bigger hit area still helps on a phone. Vertical padding on an INLINE
+   box grows the hit rect without changing line spacing, so prose is untouched. */
+@media (max-width: 834px) {
+  .rw-sec p > a:not([class]),
+  .rw-sec li > a:not([class]),
+  .foot-blurb a {
+    padding-block: 14px;
+    margin-block: -14px;
+  }
+  /* The honeypot is a bot trap, never a user target — size it so it is not
+     measured as an undersized one. It stays off-screen and inert. */
+  .hp input, .hp label { width: 46px; height: 46px; }
+}

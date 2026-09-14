@@ -1,0 +1,37 @@
+{
+  "schema": "site-reforge/sweep@1",
+  "url": "http://127.0.0.1:8781/search/",
+  "capturedAt": "2026-09-14T02:30:17.681Z",
+  "viewport": {
+    "w": 768,
+    "h": 900,
+    "dpr": 1.3499999046325684
+  },
+  "documentScrollWidth": 751,
+  "counts": {
+    "blocker": 0,
+    "major": 0,
+    "minor": 2,
+    "nit": 0
+  },
+  "findings": [
+    {
+      "check": "img-oversized",
+      "severity": "minor",
+      "title": "Image far larger than its display size",
+      "detail": "",
+      "selector": "#site-head > div.wrap.head-in > a.brand > picture > img",
+      "value": "988px natural vs 190px displayed",
+      "pageLevel": false
+    },
+    {
+      "check": "text-clipped",
+      "severity": "minor",
+      "title": "Text clipped by overflow:hidden",
+      "detail": "",
+      "selector": "#main > section.rw-sec.et-band:nth-of-type(1) > div.container > div.row.row--head:nth-of-type(1) > div.col.col--measure > form.search-form > label.sr-only",
+      "value": "25px in 1px",
+      "pageLevel": false
+    }
+  ]
+}

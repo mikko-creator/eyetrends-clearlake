@@ -1,0 +1,632 @@
+{
+  "schema": "site-reforge/sweep-findings@1",
+  "generated": "2026-09-14T02:30:21.296Z",
+  "sweeps": 16,
+  "widths": [
+    390,
+    768,
+    1024,
+    1440
+  ],
+  "dimensions": [
+    {
+      "name": "Viewport 1024px",
+      "findings": [
+        {
+          "severity": "minor",
+          "title": "Image far larger than its display size",
+          "detail": "",
+          "location": "#site-head > div.wrap.head-in > a.brand > picture > img @ 1024px",
+          "value": "988px natural vs 190px displayed"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-home:nth-of-type(1) > div.container > div.row.ethc-hero__grid > div.col:nth-of-type(2) > div.ethc-hero__media.et-reveal > div.ethc-hero__badge > span:nth-of-type(2) > span @ 1024px",
+          "value": "11.84px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-home:nth-of-type(1) @ 1024px",
+          "value": "1346px in 1224px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-home:nth-of-type(4) @ 1024px",
+          "value": "1591px in 1446px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-home:nth-of-type(11) @ 1024px",
+          "value": "541px in 492px"
+        }
+      ]
+    },
+    {
+      "name": "Viewport 1440px",
+      "findings": [
+        {
+          "severity": "minor",
+          "title": "Image far larger than its display size",
+          "detail": "",
+          "location": "#site-head > div.wrap.head-in > a.brand > picture > img @ 1440px",
+          "value": "988px natural vs 190px displayed"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-home:nth-of-type(1) > div.container > div.row.ethc-hero__grid > div.col:nth-of-type(2) > div.ethc-hero__media.et-reveal > div.ethc-hero__badge > span:nth-of-type(2) > span @ 1440px",
+          "value": "11.84px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-home:nth-of-type(1) @ 1440px",
+          "value": "1099px in 999px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-home:nth-of-type(4) @ 1440px",
+          "value": "1225px in 1114px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-home:nth-of-type(11) @ 1440px",
+          "value": "646px in 587px"
+        }
+      ]
+    },
+    {
+      "name": "Viewport 390px",
+      "findings": [
+        {
+          "severity": "minor",
+          "title": "Image far larger than its display size",
+          "detail": "",
+          "location": "#site-head > div.wrap.head-in > a.brand > picture > img @ 390px",
+          "value": "644px natural vs 132px displayed"
+        },
+        {
+          "severity": "minor",
+          "title": "Image far larger than its display size",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-home:nth-of-type(1) > div.container > div.row.ethc-hero__grid > div.col:nth-of-type(2) > div.ethc-hero__media.et-reveal > img.et-media-img @ 390px",
+          "value": "1024px natural vs 333px displayed"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-home:nth-of-type(1) > div.container > div.row.ethc-hero__grid > div.col:nth-of-type(2) > div.ethc-hero__media.et-reveal > div.ethc-hero__badge > span:nth-of-type(2) > span @ 390px",
+          "value": "11.84px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-home:nth-of-type(1) @ 390px",
+          "value": "1323px in 1203px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-home:nth-of-type(4) @ 390px",
+          "value": "1614px in 1468px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-home:nth-of-type(11) @ 390px",
+          "value": "498px in 453px"
+        }
+      ]
+    },
+    {
+      "name": "Viewport 768px",
+      "findings": [
+        {
+          "severity": "minor",
+          "title": "Image far larger than its display size",
+          "detail": "",
+          "location": "#site-head > div.wrap.head-in > a.brand > picture > img @ 768px",
+          "value": "988px natural vs 190px displayed"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-home:nth-of-type(1) > div.container > div.row.ethc-hero__grid > div.col:nth-of-type(2) > div.ethc-hero__media.et-reveal > div.ethc-hero__badge > span:nth-of-type(2) > span @ 768px",
+          "value": "11.84px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-home:nth-of-type(1) @ 768px",
+          "value": "1305px in 1186px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-home:nth-of-type(4) @ 768px",
+          "value": "1569px in 1426px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-home:nth-of-type(11) @ 768px",
+          "value": "446px in 405px"
+        }
+      ]
+    },
+    {
+      "name": "Viewport 1024px",
+      "findings": [
+        {
+          "severity": "minor",
+          "title": "Image far larger than its display size",
+          "detail": "",
+          "location": "#site-head > div.wrap.head-in > a.brand > picture > img @ 1024px",
+          "value": "988px natural vs 190px displayed"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(1) > div.container > div.row.tib-hero__grid > div.col:nth-of-type(1) > div.tib-hero__media > div.tib-hero__chip > span:nth-of-type(2) > span @ 1024px",
+          "value": "11.84px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(2) > div.container > div.row.row--svc:nth-of-type(2) > div.col:nth-of-type(2) > article.et-frame.et-reveal > div.et-frame__body:nth-of-type(2) > span.et-frame__brand:nth-of-type(1) @ 1024px",
+          "value": "10.56px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(2) > div.container > div.row.row--svc:nth-of-type(2) > div.col:nth-of-type(3) > article.et-frame.et-reveal > div.et-frame__body:nth-of-type(2) > span.et-frame__brand:nth-of-type(1) @ 1024px",
+          "value": "10.56px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(4) > div.container > div.row.row--head:nth-of-type(2) > div.col.col--full > p.tib-subhead @ 1024px",
+          "value": "11.2px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(6) @ 1024px",
+          "value": "1233px in 1121px"
+        }
+      ]
+    },
+    {
+      "name": "Viewport 1440px",
+      "findings": [
+        {
+          "severity": "minor",
+          "title": "Image far larger than its display size",
+          "detail": "",
+          "location": "#site-head > div.wrap.head-in > a.brand > picture > img @ 1440px",
+          "value": "988px natural vs 190px displayed"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(1) > div.container > div.row.tib-hero__grid > div.col:nth-of-type(1) > div.tib-hero__media > div.tib-hero__chip > span:nth-of-type(2) > span @ 1440px",
+          "value": "11.84px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(2) > div.container > div.row.row--svc:nth-of-type(2) > div.col:nth-of-type(2) > article.et-frame.et-reveal > div.et-frame__body:nth-of-type(2) > span.et-frame__brand:nth-of-type(1) @ 1440px",
+          "value": "10.56px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(2) > div.container > div.row.row--svc:nth-of-type(2) > div.col:nth-of-type(3) > article.et-frame.et-reveal > div.et-frame__body:nth-of-type(2) > span.et-frame__brand:nth-of-type(1) @ 1440px",
+          "value": "10.56px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(4) > div.container > div.row.row--head:nth-of-type(2) > div.col.col--full > p.tib-subhead @ 1440px",
+          "value": "11.2px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(6) @ 1440px",
+          "value": "979px in 890px"
+        }
+      ]
+    },
+    {
+      "name": "Viewport 390px",
+      "findings": [
+        {
+          "severity": "minor",
+          "title": "Image far larger than its display size",
+          "detail": "",
+          "location": "#site-head > div.wrap.head-in > a.brand > picture > img @ 390px",
+          "value": "644px natural vs 132px displayed"
+        },
+        {
+          "severity": "minor",
+          "title": "Image far larger than its display size",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(1) > div.container > div.row.tib-hero__grid > div.col:nth-of-type(1) > div.tib-hero__media > img.et-media-img @ 390px",
+          "value": "1200px natural vs 333px displayed"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(1) > div.container > div.row.tib-hero__grid > div.col:nth-of-type(1) > div.tib-hero__media > div.tib-hero__chip > span:nth-of-type(2) > span @ 390px",
+          "value": "11.84px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(2) > div.container > div.row.row--svc:nth-of-type(2) > div.col:nth-of-type(2) > article.et-frame.et-reveal > div.et-frame__body:nth-of-type(2) > span.et-frame__brand:nth-of-type(1) @ 390px",
+          "value": "10.56px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(2) > div.container > div.row.row--svc:nth-of-type(2) > div.col:nth-of-type(3) > article.et-frame.et-reveal > div.et-frame__body:nth-of-type(2) > span.et-frame__brand:nth-of-type(1) @ 390px",
+          "value": "10.56px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(4) > div.container > div.row.row--head:nth-of-type(2) > div.col.col--full > p.tib-subhead @ 390px",
+          "value": "11.2px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(6) @ 390px",
+          "value": "1229px in 1118px"
+        }
+      ]
+    },
+    {
+      "name": "Viewport 768px",
+      "findings": [
+        {
+          "severity": "minor",
+          "title": "Image far larger than its display size",
+          "detail": "",
+          "location": "#site-head > div.wrap.head-in > a.brand > picture > img @ 768px",
+          "value": "988px natural vs 190px displayed"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(1) > div.container > div.row.tib-hero__grid > div.col:nth-of-type(1) > div.tib-hero__media > div.tib-hero__chip > span:nth-of-type(2) > span @ 768px",
+          "value": "11.84px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(2) > div.container > div.row.row--svc:nth-of-type(2) > div.col:nth-of-type(2) > article.et-frame.et-reveal > div.et-frame__body:nth-of-type(2) > span.et-frame__brand:nth-of-type(1) @ 768px",
+          "value": "10.56px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(2) > div.container > div.row.row--svc:nth-of-type(2) > div.col:nth-of-type(3) > article.et-frame.et-reveal > div.et-frame__body:nth-of-type(2) > span.et-frame__brand:nth-of-type(1) @ 768px",
+          "value": "10.56px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(4) > div.container > div.row.row--head:nth-of-type(2) > div.col.col--full > p.tib-subhead @ 768px",
+          "value": "11.2px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(6) @ 768px",
+          "value": "1210px in 1100px"
+        }
+      ]
+    },
+    {
+      "name": "Viewport 1024px",
+      "findings": [
+        {
+          "severity": "minor",
+          "title": "Image far larger than its display size",
+          "detail": "",
+          "location": "#site-head > div.wrap.head-in > a.brand > picture > img @ 1024px",
+          "value": "988px natural vs 190px displayed"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > section.rw-sec.et-band:nth-of-type(1) > div.container > div.row.row--head:nth-of-type(1) > div.col.col--measure > form.search-form > label.sr-only @ 1024px",
+          "value": "25px in 1px"
+        }
+      ]
+    },
+    {
+      "name": "Viewport 1440px",
+      "findings": [
+        {
+          "severity": "minor",
+          "title": "Image far larger than its display size",
+          "detail": "",
+          "location": "#site-head > div.wrap.head-in > a.brand > picture > img @ 1440px",
+          "value": "988px natural vs 190px displayed"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > section.rw-sec.et-band:nth-of-type(1) > div.container > div.row.row--head:nth-of-type(1) > div.col.col--measure > form.search-form > label.sr-only @ 1440px",
+          "value": "25px in 1px"
+        }
+      ]
+    },
+    {
+      "name": "Viewport 390px",
+      "findings": [
+        {
+          "severity": "minor",
+          "title": "Image far larger than its display size",
+          "detail": "",
+          "location": "#site-head > div.wrap.head-in > a.brand > picture > img @ 390px",
+          "value": "644px natural vs 132px displayed"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > section.rw-sec.et-band:nth-of-type(1) > div.container > div.row.row--head:nth-of-type(1) > div.col.col--measure > form.search-form > label.sr-only @ 390px",
+          "value": "25px in 1px"
+        }
+      ]
+    },
+    {
+      "name": "Viewport 768px",
+      "findings": [
+        {
+          "severity": "minor",
+          "title": "Image far larger than its display size",
+          "detail": "",
+          "location": "#site-head > div.wrap.head-in > a.brand > picture > img @ 768px",
+          "value": "988px natural vs 190px displayed"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > section.rw-sec.et-band:nth-of-type(1) > div.container > div.row.row--head:nth-of-type(1) > div.col.col--measure > form.search-form > label.sr-only @ 768px",
+          "value": "25px in 1px"
+        }
+      ]
+    },
+    {
+      "name": "Viewport 1024px",
+      "findings": [
+        {
+          "severity": "minor",
+          "title": "Image far larger than its display size",
+          "detail": "",
+          "location": "#site-head > div.wrap.head-in > a.brand > picture > img @ 1024px",
+          "value": "988px natural vs 190px displayed"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(1) > div.container > div.row.row--split > div.col:nth-of-type(2) > div.dc-hero__media.et-reveal > div.dc-chip > span:nth-of-type(2) > span.dc-chip__l:nth-of-type(2) @ 1024px",
+          "value": "11.52px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(6) > div.container > div.row.row--split-media > div.col:nth-of-type(1) > div.et-reveal.reveal > figure.dc-frame.dc-frame--tall > div.dc-doctor__badge > span @ 1024px",
+          "value": "10.88px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(8) > div.container > div.row:nth-of-type(2) > div.col.col--full > a.dc-relhub.et-reveal > span.dc-relhub__txt:nth-of-type(1) > span.dc-relhub__ey:nth-of-type(1) @ 1024px",
+          "value": "10.88px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(10) > div.container > div.row.row--split > div.col:nth-of-type(2) > div.dc-visit.et-reveal > figure.ct-map > div.ct-map__frame.ct-find > span.ct-find__tag @ 1024px",
+          "value": "11px"
+        }
+      ]
+    },
+    {
+      "name": "Viewport 1440px",
+      "findings": [
+        {
+          "severity": "minor",
+          "title": "Image far larger than its display size",
+          "detail": "",
+          "location": "#site-head > div.wrap.head-in > a.brand > picture > img @ 1440px",
+          "value": "988px natural vs 190px displayed"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(1) > div.container > div.row.row--split > div.col:nth-of-type(2) > div.dc-hero__media.et-reveal > div.dc-chip > span:nth-of-type(2) > span.dc-chip__l:nth-of-type(2) @ 1440px",
+          "value": "11.52px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(6) > div.container > div.row.row--split-media > div.col:nth-of-type(1) > div.et-reveal.reveal > figure.dc-frame.dc-frame--tall > div.dc-doctor__badge > span @ 1440px",
+          "value": "10.88px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(8) > div.container > div.row:nth-of-type(2) > div.col.col--full > a.dc-relhub.et-reveal > span.dc-relhub__txt:nth-of-type(1) > span.dc-relhub__ey:nth-of-type(1) @ 1440px",
+          "value": "10.88px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(10) > div.container > div.row.row--split > div.col:nth-of-type(2) > div.dc-visit.et-reveal > figure.ct-map > div.ct-map__frame.ct-find > span.ct-find__tag @ 1440px",
+          "value": "11px"
+        }
+      ]
+    },
+    {
+      "name": "Viewport 390px",
+      "findings": [
+        {
+          "severity": "minor",
+          "title": "Image far larger than its display size",
+          "detail": "",
+          "location": "#site-head > div.wrap.head-in > a.brand > picture > img @ 390px",
+          "value": "644px natural vs 132px displayed"
+        },
+        {
+          "severity": "minor",
+          "title": "Image far larger than its display size",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(1) > div.container > div.row.row--split > div.col:nth-of-type(2) > div.dc-hero__media.et-reveal > figure.dc-frame.dc-frame--tall > img.dc-frame__img @ 390px",
+          "value": "1024px natural vs 333px displayed"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(1) > div.container > div.row.row--split > div.col:nth-of-type(2) > div.dc-hero__media.et-reveal > div.dc-chip > span:nth-of-type(2) > span.dc-chip__l:nth-of-type(2) @ 390px",
+          "value": "11.52px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(6) > div.container > div.row.row--split-media > div.col:nth-of-type(1) > div.et-reveal.reveal > figure.dc-frame.dc-frame--tall > div.dc-doctor__badge > span @ 390px",
+          "value": "10.88px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(8) > div.container > div.row:nth-of-type(2) > div.col.col--full > a.dc-relhub.et-reveal > span.dc-relhub__txt:nth-of-type(1) > span.dc-relhub__ey:nth-of-type(1) @ 390px",
+          "value": "10.88px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(10) > div.container > div.row.row--split > div.col:nth-of-type(2) > div.dc-visit.et-reveal > figure.ct-map > div.ct-map__frame.ct-find > span.ct-find__tag @ 390px",
+          "value": "11px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(4) @ 390px",
+          "value": "515px in 468px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text clipped by overflow:hidden",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(6) @ 390px",
+          "value": "1197px in 1088px"
+        }
+      ]
+    },
+    {
+      "name": "Viewport 768px",
+      "findings": [
+        {
+          "severity": "minor",
+          "title": "Image far larger than its display size",
+          "detail": "",
+          "location": "#site-head > div.wrap.head-in > a.brand > picture > img @ 768px",
+          "value": "988px natural vs 190px displayed"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(1) > div.container > div.row.row--split > div.col:nth-of-type(2) > div.dc-hero__media.et-reveal > div.dc-chip > span:nth-of-type(2) > span.dc-chip__l:nth-of-type(2) @ 768px",
+          "value": "11.52px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(6) > div.container > div.row.row--split-media > div.col:nth-of-type(1) > div.et-reveal.reveal > figure.dc-frame.dc-frame--tall > div.dc-doctor__badge > span @ 768px",
+          "value": "10.88px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(8) > div.container > div.row:nth-of-type(2) > div.col.col--full > a.dc-relhub.et-reveal > span.dc-relhub__txt:nth-of-type(1) > span.dc-relhub__ey:nth-of-type(1) @ 768px",
+          "value": "10.88px"
+        },
+        {
+          "severity": "minor",
+          "title": "Text under 12px",
+          "detail": "",
+          "location": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(10) > div.container > div.row.row--split > div.col:nth-of-type(2) > div.dc-visit.et-reveal > figure.ct-map > div.ct-map__frame.ct-find > span.ct-find__tag @ 768px",
+          "value": "11px"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "schema": "site-reforge/reforge-verify@1",
+  "generated": "2026-09-14T12:19:33.958Z",
+  "pages": 44,
+  "refsChecked": 6273,
+  "assets": 187,
+  "orphans": [],
+  "findings": [],
+  "contentRecall": {
+    "floor": 0.95,
+    "mean": 0.9998842994330673,
+    "belowFloor": [],
+    "worst": [
+      {
+        "route": "/",
+        "pct": 0.995
+      },
+      {
+        "route": "/accessibility",
+        "pct": 1
+      },
+      {
+        "route": "/disclaimer",
+        "pct": 1
+      },
+      {
+        "route": "/eye-doctor-clear-lake",
+        "pct": 1
+      },
+      {
+        "route": "/eye-health",
+        "pct": 1
+      },
+      {
+        "route": "/insurance",
+        "pct": 1
+      }
+    ]
+  }
+}

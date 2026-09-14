@@ -1,0 +1,73 @@
+{
+  "schema": "site-reforge/sweep@1",
+  "url": "http://127.0.0.1:8781/products/designer-frames/",
+  "capturedAt": "2026-09-14T02:29:51.180Z",
+  "viewport": {
+    "w": 1440,
+    "h": 900,
+    "dpr": 1.3499999046325684
+  },
+  "documentScrollWidth": 1423,
+  "counts": {
+    "blocker": 0,
+    "major": 0,
+    "minor": 6,
+    "nit": 0
+  },
+  "findings": [
+    {
+      "check": "img-oversized",
+      "severity": "minor",
+      "title": "Image far larger than its display size",
+      "detail": "",
+      "selector": "#site-head > div.wrap.head-in > a.brand > picture > img",
+      "value": "988px natural vs 190px displayed",
+      "pageLevel": false
+    },
+    {
+      "check": "font-too-small",
+      "severity": "minor",
+      "title": "Text under 12px",
+      "detail": "",
+      "selector": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(1) > div.container > div.row.tib-hero__grid > div.col:nth-of-type(1) > div.tib-hero__media > div.tib-hero__chip > span:nth-of-type(2) > span",
+      "value": "11.84px",
+      "pageLevel": false
+    },
+    {
+      "check": "font-too-small",
+      "severity": "minor",
+      "title": "Text under 12px",
+      "detail": "",
+      "selector": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(2) > div.container > div.row.row--svc:nth-of-type(2) > div.col:nth-of-type(2) > article.et-frame.et-reveal > div.et-frame__body:nth-of-type(2) > span.et-frame__brand:nth-of-type(1)",
+      "value": "10.56px",
+      "pageLevel": false
+    },
+    {
+      "check": "font-too-small",
+      "severity": "minor",
+      "title": "Text under 12px",
+      "detail": "",
+      "selector": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(2) > div.container > div.row.row--svc:nth-of-type(2) > div.col:nth-of-type(3) > article.et-frame.et-reveal > div.et-frame__body:nth-of-type(2) > span.et-frame__brand:nth-of-type(1)",
+      "value": "10.56px",
+      "pageLevel": false
+    },
+    {
+      "check": "font-too-small",
+      "severity": "minor",
+      "title": "Text under 12px",
+      "detail": "",
+      "selector": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(4) > div.container > div.row.row--head:nth-of-type(2) > div.col.col--full > p.tib-subhead",
+      "value": "11.2px",
+      "pageLevel": false
+    },
+    {
+      "check": "text-clipped",
+      "severity": "minor",
+      "title": "Text clipped by overflow:hidden",
+      "detail": "",
+      "selector": "#main > div.rw-sec.rw-p-designer-frames:nth-of-type(6)",
+      "value": "979px in 890px",
+      "pageLevel": false
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "schema": "site-reforge/generated-decor@1",
+  "generated": "2026-09-14T06:05:34.893Z",
+  "model": "fal-ai/flux/dev",
+  "policy": "Abstract decorative art only — light, glass and optics. No person, premises or clinical result, so no image here can be read as documentary evidence about this practice.",
+  "images": [
+    {
+      "file": "aurora-hero",
+      "bytes": 827368,
+      "w": 1920,
+      "h": 1072,
+      "seed": 101725050,
+      "prompt": "a soft flowing aurora gradient mesh in deep teal, mint green and warm gold on an off-white field, silky blurred colour bands, luminous, airy, very subtle film grain, abstract, non-representational, no people, no faces, no text, no lettering, no logos, no watermark, clean, high detail, smooth gradients, cinematic lighting, premium editorial art direction",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "aurora-dark",
+      "bytes": 707589,
+      "w": 1920,
+      "h": 1072,
+      "seed": 877669227,
+      "prompt": "a dark aurora gradient field in near-black teal with emerald and amber light ribbons, deep shadow, glowing volumetric haze, rich and moody, abstract, non-representational, no people, no faces, no text, no lettering, no logos, no watermark, clean, high detail, smooth gradients, cinematic lighting, premium editorial art direction",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "lens-macro",
+      "bytes": 710674,
+      "w": 1600,
+      "h": 1200,
+      "seed": 791224672,
+      "prompt": "extreme macro of the polished edge of an optical lens, caustic light refraction, thin rainbow fringe, shallow depth of field on a dark teal background, abstract, non-representational, no people, no faces, no text, no lettering, no logos, no watermark, clean, high detail, smooth gradients, cinematic lighting, premium editorial art direction",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "bokeh-teal",
+      "bytes": 677134,
+      "w": 1600,
+      "h": 992,
+      "seed": 1557166974,
+      "prompt": "out-of-focus circular bokeh lights in teal, mint and warm gold on a dark field, soft glowing orbs, lens blur, dreamy, abstract, non-representational, no people, no faces, no text, no lettering, no logos, no watermark, clean, high detail, smooth gradients, cinematic lighting, premium editorial art direction",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "glass-panes",
+      "bytes": 677371,
+      "w": 1600,
+      "h": 1200,
+      "seed": 2013392728,
+      "prompt": "abstract frosted glass panes floating and overlapping at soft angles, translucent, pale mint and gold light passing through, gentle shadows, minimalist composition, abstract, non-representational, no people, no faces, no text, no lettering, no logos, no watermark, clean, high detail, smooth gradients, cinematic lighting, premium editorial art direction",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "optic-rings",
+      "bytes": 1368866,
+      "w": 1392,
+      "h": 1392,
+      "seed": 1912155455,
+      "prompt": "concentric thin rings and arcs like an optical lens diagram, fine line work, teal and gold on cream, geometric, precise, generous negative space, abstract, non-representational, no people, no faces, no text, no lettering, no logos, no watermark, clean, high detail, smooth gradients, cinematic lighting, premium editorial art direction",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "light-prism",
+      "bytes": 515680,
+      "w": 1600,
+      "h": 992,
+      "seed": 1988939415,
+      "prompt": "a single beam of white light dispersing through a prism into a soft spectrum, on a deep near-black teal background, elegant and restrained, abstract, non-representational, no people, no faces, no text, no lettering, no logos, no watermark, clean, high detail, smooth gradients, cinematic lighting, premium editorial art direction",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "mesh-warm",
+      "bytes": 699304,
+      "w": 1600,
+      "h": 992,
+      "seed": 1562857986,
+      "prompt": "a warm gradient mesh in cream, soft gold and pale sand, gently flowing colour fields, very soft, no hard edges, luxurious and calm, abstract, non-representational, no people, no faces, no text, no lettering, no logos, no watermark, clean, high detail, smooth gradients, cinematic lighting, premium editorial art direction",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "caustics",
+      "bytes": 854402,
+      "w": 1600,
+      "h": 992,
+      "seed": 470136912,
+      "prompt": "water caustic light patterns rippling across a pale surface, teal and gold tinted, delicate wavering lines of focused light, serene, abstract, non-representational, no people, no faces, no text, no lettering, no logos, no watermark, clean, high detail, smooth gradients, cinematic lighting, premium editorial art direction",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "grid-glow",
+      "bytes": 769226,
+      "w": 1920,
+      "h": 1072,
+      "seed": 512063701,
+      "prompt": "a faint technical grid of thin lines fading into darkness with a soft teal glow blooming from one corner, minimal, futuristic, mostly empty space, abstract, non-representational, no people, no faces, no text, no lettering, no logos, no watermark, clean, high detail, smooth gradients, cinematic lighting, premium editorial art direction",
+      "model": "fal-ai/flux/dev"
+    }
+  ],
+  "failures": []
+}

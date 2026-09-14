@@ -1,0 +1,21 @@
+{
+  "schema": "site-reforge/cutout@1",
+  "generated": "2026-09-14T08:56:25.438Z",
+  "operation": "background-removal",
+  "isGeneratedImagery": false,
+  "note": "Transformation of the client's own photograph of a real person. Not generated. The subject is unchanged; only the backdrop is removed.",
+  "model": "fal-ai/birefnet/v2",
+  "input": {
+    "file": "assets/source/5904c4d2-dr-hyder-portrait.webp",
+    "bytes": 23624,
+    "w": 511,
+    "h": 560,
+    "origin": "https://eyetrendsclearlake.com/sites/sgen_eyetrendsclearlake_com/uploads/2026/08/dr-hyder-portrait.webp"
+  },
+  "output": {
+    "file": "assets/img/dr-hyder-cutout.png",
+    "bytes": 152942,
+    "w": 511,
+    "h": 560
+  }
+}

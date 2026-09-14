@@ -1,0 +1,159 @@
+{
+  "schema": "site-reforge/generated-images@1",
+  "generated": "2026-09-14T02:03:23.916Z",
+  "model": "fal-ai/flux/dev",
+  "policy": "Object studies only. No generated person, premises or clinical result. Trademarks and the doctor portrait keep their original photograph.",
+  "images": [
+    {
+      "file": "designer-frames",
+      "dest": "assets\\generated\\designer-frames.jpg",
+      "bytes": 458339,
+      "w": 1024,
+      "h": 768,
+      "seed": 838640788,
+      "prompt": "a curated row of premium designer eyeglass frames standing on a walnut display shelf, acetate and thin titanium, tortoiseshell olive and crystal tones, editorial product photography, natural soft window light, shallow depth of field, muted deep-teal and warm gold accents, walnut wood and off-white surfaces, clean minimal composition, photorealistic, high detail, no text, no lettering, no logos, no watermarks, no brand names, no people",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "sunglasses",
+      "dest": "assets\\generated\\sunglasses.jpg",
+      "bytes": 503246,
+      "w": 1024,
+      "h": 768,
+      "seed": 112813819,
+      "prompt": "premium designer sunglasses arranged on a walnut display shelf, polarized lenses in bronze and green-grey, metal and acetate temples, editorial product photography, natural soft window light, shallow depth of field, muted deep-teal and warm gold accents, walnut wood and off-white surfaces, clean minimal composition, photorealistic, high detail, no text, no lettering, no logos, no watermarks, no brand names, no people",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "all-eyewear-flatlay",
+      "dest": "assets\\generated\\all-eyewear-flatlay.jpg",
+      "bytes": 761235,
+      "w": 896,
+      "h": 896,
+      "seed": 1514511065,
+      "prompt": "an overhead flat-lay of eyeglass frames and sunglasses arranged in a neat grid on a warm off-white linen surface, varied acetate and metal styles, editorial product photography, natural soft window light, shallow depth of field, muted deep-teal and warm gold accents, walnut wood and off-white surfaces, clean minimal composition, photorealistic, high detail, no text, no lettering, no logos, no watermarks, no brand names, no people",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "acetate-detail",
+      "dest": "assets\\generated\\acetate-detail.jpg",
+      "bytes": 554796,
+      "w": 1200,
+      "h": 896,
+      "seed": 1894354828,
+      "prompt": "extreme close-up of a hand-finished acetate eyeglass frame in tortoiseshell and olive, showing the polished bevel, hinge and temple tip, on walnut, editorial product photography, natural soft window light, shallow depth of field, muted deep-teal and warm gold accents, walnut wood and off-white surfaces, clean minimal composition, photorealistic, high detail, no text, no lettering, no logos, no watermarks, no brand names, no people",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "polarized-detail",
+      "dest": "assets\\generated\\polarized-detail.jpg",
+      "bytes": 645464,
+      "w": 1200,
+      "h": 896,
+      "seed": 2085175202,
+      "prompt": "extreme close-up of two polarized sunglass lenses, one green-grey and one bronze tint, catching the light on a dark walnut surface, editorial product photography, natural soft window light, shallow depth of field, muted deep-teal and warm gold accents, walnut wood and off-white surfaces, clean minimal composition, photorealistic, high detail, no text, no lettering, no logos, no watermarks, no brand names, no people",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "kids-glasses",
+      "dest": "assets\\generated\\kids-glasses.jpg",
+      "bytes": 540121,
+      "w": 896,
+      "h": 1184,
+      "seed": 643432047,
+      "prompt": "a vertical arrangement of colourful durable children eyeglass frames in teal coral and navy, bendable temples, on a soft off-white surface, editorial product photography, natural soft window light, shallow depth of field, muted deep-teal and warm gold accents, walnut wood and off-white surfaces, clean minimal composition, photorealistic, high detail, no text, no lettering, no logos, no watermarks, no brand names, no people",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "kids-frames-display",
+      "dest": "assets\\generated\\kids-frames-display.jpg",
+      "bytes": 853695,
+      "w": 1600,
+      "h": 880,
+      "seed": 218252684,
+      "prompt": "a wide shelf of colourful children eyeglass frames neatly displayed in rows on pale wood, bright cheerful colours, optical shop shelving, editorial product photography, natural soft window light, shallow depth of field, muted deep-teal and warm gold accents, walnut wood and off-white surfaces, clean minimal composition, photorealistic, high detail, no text, no lettering, no logos, no watermarks, no brand names, no people",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "kids-flex-detail",
+      "dest": "assets\\generated\\kids-flex-detail.jpg",
+      "bytes": 500537,
+      "w": 1200,
+      "h": 896,
+      "seed": 1366536440,
+      "prompt": "close-up of a flexible children eyeglass frame with a springy bendable temple arm being gently flexed, showing the hinge detail, on a bright surface, editorial product photography, natural soft window light, shallow depth of field, muted deep-teal and warm gold accents, walnut wood and off-white surfaces, clean minimal composition, photorealistic, high detail, no text, no lettering, no logos, no watermarks, no brand names, no people",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "contact-lenses-tile",
+      "dest": "assets\\generated\\contact-lenses-tile.jpg",
+      "bytes": 539840,
+      "w": 896,
+      "h": 1184,
+      "seed": 392650954,
+      "prompt": "a clear soft contact lens on a fingertip beside an open contact lens case and solution bottle, clean clinical still life on a pale surface, editorial product photography, natural soft window light, shallow depth of field, muted deep-teal and warm gold accents, walnut wood and off-white surfaces, clean minimal composition, photorealistic, high detail, no text, no lettering, no logos, no watermarks, no brand names, no people",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "fitting-bench",
+      "dest": "assets\\generated\\fitting-bench.jpg",
+      "bytes": 605213,
+      "w": 1200,
+      "h": 896,
+      "seed": 540953983,
+      "prompt": "contact lens trial vials, a lens case, solution and a small mirror laid out on a walnut worktop, optometry fitting bench still life, editorial product photography, natural soft window light, shallow depth of field, muted deep-teal and warm gold accents, walnut wood and off-white surfaces, clean minimal composition, photorealistic, high detail, no text, no lettering, no logos, no watermarks, no brand names, no people",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "dry-eye-care",
+      "dest": "assets\\generated\\dry-eye-care.jpg",
+      "bytes": 556416,
+      "w": 896,
+      "h": 1184,
+      "seed": 155332073,
+      "prompt": "a folded warm compress cloth, a bottle of lubricating eye drops and a small ceramic dish arranged on a pale linen tray, calm dry eye care still life, editorial product photography, natural soft window light, shallow depth of field, muted deep-teal and warm gold accents, walnut wood and off-white surfaces, clean minimal composition, photorealistic, high detail, no text, no lettering, no logos, no watermarks, no brand names, no people",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "retinal-check",
+      "dest": "assets\\generated\\retinal-check.jpg",
+      "bytes": 465425,
+      "w": 896,
+      "h": 1184,
+      "seed": 1491603569,
+      "prompt": "a condensing lens held in a gloved hand at the exam light of a slit lamp, glowing rim, dark clinical background, optometric instrument close-up, editorial product photography, natural soft window light, shallow depth of field, muted deep-teal and warm gold accents, walnut wood and off-white surfaces, clean minimal composition, photorealistic, high detail, no text, no lettering, no logos, no watermarks, no brand names, no people",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "sunglass-display",
+      "dest": "assets\\generated\\sunglass-display.jpg",
+      "bytes": 865732,
+      "w": 1600,
+      "h": 880,
+      "seed": 1476326787,
+      "prompt": "designer sunglasses lined up on a polished brass display rail against a warm neutral wall, boutique optical retail detail, editorial product photography, natural soft window light, shallow depth of field, muted deep-teal and warm gold accents, walnut wood and off-white surfaces, clean minimal composition, photorealistic, high detail, no text, no lettering, no logos, no watermarks, no brand names, no people",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "bg-dark",
+      "dest": "assets\\generated\\bg-dark.jpg",
+      "bytes": 654727,
+      "w": 1920,
+      "h": 1072,
+      "seed": 1425269337,
+      "prompt": "an abstract dark teal background texture with soft out-of-focus lens flare and a faint concentric optical lens pattern, deep shadow, very subtle, no subject, editorial product photography, natural soft window light, shallow depth of field, muted deep-teal and warm gold accents, walnut wood and off-white surfaces, clean minimal composition, photorealistic, high detail, no text, no lettering, no logos, no watermarks, no brand names, no people",
+      "model": "fal-ai/flux/dev"
+    },
+    {
+      "file": "kids-eyewear",
+      "dest": "assets\\generated\\kids-eyewear.jpg",
+      "bytes": 538401,
+      "w": 1024,
+      "h": 768,
+      "seed": 956642505,
+      "prompt": "a bright display of colourful childrens eyeglass frames arranged on a light wood shelf with a soft pastel background, playful optical shop detail, editorial product photography, natural soft window light, shallow depth of field, muted deep-teal and warm gold accents, walnut wood and off-white surfaces, clean minimal composition, photorealistic, high detail, no text, no lettering, no logos, no watermarks, no brand names, no people",
+      "model": "fal-ai/flux/dev"
+    }
+  ],
+  "failures": []
+}

@@ -1,0 +1,15 @@
+{
+  "schema": "site-reforge/scroll-capture@1",
+  "url": "https://eyetrendsclearlake.com/",
+  "capturedAt": "2026-09-14T01:47:45.781Z",
+  "viewport": {
+    "w": 1280,
+    "h": 529
+  },
+  "scrollHeight": 10982,
+  "elementsScanned": 459,
+  "revealCount": 0,
+  "reveals": [],
+  "isInAfterScroll": 0,
+  "note": "Stepped full-page scroll, scroll-behavior forced auto, 1.2s settle. IntersectionObserver had full opportunity to fire."
+}

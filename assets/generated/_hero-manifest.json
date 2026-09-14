@@ -1,0 +1,18 @@
+{
+  "schema": "site-reforge/generated-hero@1",
+  "generated": "2026-09-14T07:03:48.859Z",
+  "model": "fal-ai/flux/dev",
+  "note": "Replaces a documentary photo of the client exam room at the client's request. The alt text for this slot is rewritten so the image does not claim to be their premises.",
+  "images": [
+    {
+      "file": "hero-exam-room",
+      "bytes": 1380742,
+      "w": 2048,
+      "h": 1440,
+      "seed": 424161109,
+      "prompt": "a serene modern optometry examination room, a phoropter on its arm beside a reclining exam chair, soft daylight falling through a tall window with sheer curtains, deep teal and soft mint walls with warm cream and walnut accents, polished floor, clean minimal clinical interior, wide establishing shot, calm and premium, photorealistic architectural interior photography, natural light, shallow depth of field, high detail, crisp, editorial, no people, no faces, no text, no lettering, no signage, no logos, no watermark",
+      "model": "fal-ai/flux/dev"
+    }
+  ],
+  "failures": []
+}

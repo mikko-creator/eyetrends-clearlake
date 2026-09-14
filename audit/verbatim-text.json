@@ -1,0 +1,286 @@
+{
+  "schema": "site-reforge/verbatim-text@1",
+  "generated": "2026-09-14T10:52:53.920Z",
+  "totalPhrases": 2075,
+  "totalMissing": 0,
+  "totalExcused": 4,
+  "totalRemoved": 3,
+  "declaredChanges": [
+    "client asked for em-dashes out of section titles; the dash becomes a colon so the sentence still reads"
+  ],
+  "declaredEdits": [
+    {
+      "route": "/",
+      "why": "client: \"remove these 2 boxes ... Move the More about Dr. Hyder button below the Dr. Hyder image\"",
+      "removed": [
+        "42 yrs Eye exams and medical eye care in Clear Lake",
+        "30 min Unhurried appointments, we talk and we visit"
+      ],
+      "moved": [
+        "More about Dr. Hyder"
+      ]
+    }
+  ],
+  "verbatimRate": 1,
+  "pagesWithLoss": 0,
+  "pages": [
+    {
+      "route": "/",
+      "phrases": 56,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/accessibility",
+      "phrases": 21,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/disclaimer",
+      "phrases": 29,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/eye-doctor-clear-lake",
+      "phrases": 121,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/eye-health",
+      "phrases": 38,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/insurance",
+      "phrases": 32,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/our-doctor",
+      "phrases": 45,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/patient-forms",
+      "phrases": 32,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/privacy-policy",
+      "phrases": 27,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/products",
+      "phrases": 27,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/products/contact-lenses",
+      "phrases": 29,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/products/designer-frames",
+      "phrases": 35,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/products/kids-eyewear",
+      "phrases": 35,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/products/sunglasses",
+      "phrases": 33,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/reviews",
+      "phrases": 88,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services",
+      "phrases": 55,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/adult-eye-exams",
+      "phrases": 56,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/back-to-school-eye-exams",
+      "phrases": 49,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/cataract-co-management",
+      "phrases": 52,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/childrens-contact-lenses",
+      "phrases": 58,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/childrens-eye-care",
+      "phrases": 23,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/comprehensive-eye-exams",
+      "phrases": 28,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/contact-lens-exams",
+      "phrases": 32,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/diabetic-eye-exams",
+      "phrases": 48,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/dry-eye-treatment",
+      "phrases": 57,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/emergency-eye-care",
+      "phrases": 32,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/flashes-floaters",
+      "phrases": 55,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/foreign-body-removal",
+      "phrases": 67,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/gas-permeable-contacts",
+      "phrases": 57,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/glaucoma-management",
+      "phrases": 55,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/lasik-co-management",
+      "phrases": 53,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/macular-degeneration",
+      "phrases": 52,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/medical-eye-care",
+      "phrases": 32,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/multifocal-contacts",
+      "phrases": 61,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/myopia-management",
+      "phrases": 55,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/pediatric-eye-exams",
+      "phrases": 51,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/pink-eye-conjunctivitis",
+      "phrases": 65,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/red-eye-treatment",
+      "phrases": 64,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/same-day-contacts",
+      "phrases": 52,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/senior-eye-exams",
+      "phrases": 59,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/specialty-contacts",
+      "phrases": 57,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/services/toric-contacts",
+      "phrases": 64,
+      "missing": 0,
+      "examples": []
+    },
+    {
+      "route": "/terms",
+      "phrases": 38,
+      "missing": 0,
+      "examples": []
+    }
+  ]
+}

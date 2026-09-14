@@ -1,0 +1,171 @@
+{
+  "schema": "site-reforge/scripts@1",
+  "generated": "2026-09-14T01:37:10.145Z",
+  "note": "Same-origin <script src> only. A third-party script is an outbound dependency of the site, not an asset of it; vendoring one would change what the page does.",
+  "discovered": [
+    "https://eyetrendsclearlake.com/assets/front/js/sg-analytics.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+    "https://eyetrendsclearlake.com/assets/front/js/sg-404-source.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+    "https://eyetrendsclearlake.com/assets/defaults/js/lucide.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+    "https://eyetrendsclearlake.com/assets/defaults/sgen/assets/js/sg-drawer.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+    "https://eyetrendsclearlake.com/assets/front/js/locations.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+    "https://eyetrendsclearlake.com/assets/front/js/locations-picker.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+    "https://eyetrendsclearlake.com/assets/front/js/sgen-accessibility.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+    "https://eyetrendsclearlake.com/assets/defaults/js/plugins.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+    "https://eyetrendsclearlake.com/assets/front/js/forms.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+    "https://eyetrendsclearlake.com/assets/front/js/sessionAttributerForms.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+    "https://eyetrendsclearlake.com/assets/front/js/plugins.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+    "https://eyetrendsclearlake.com/assets/front/js/sgbuilder.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+    "https://eyetrendsclearlake.com/assets/front/js/main.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+    "https://eyetrendsclearlake.com/assets/front/js/sgen-mobile-menu.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+    "https://eyetrendsclearlake.com/assets/front/js/lazyLoad.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+    "https://eyetrendsclearlake.com/assets/front/js/sessionAttributerPhoneTaps.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e"
+  ],
+  "saved": [
+    {
+      "url": "https://eyetrendsclearlake.com/assets/front/js/sg-404-source.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+      "savedAs": "aae0ccce-sg-404-source.js",
+      "bytes": 7195
+    },
+    {
+      "url": "https://eyetrendsclearlake.com/assets/front/js/sg-analytics.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+      "savedAs": "b1d92006-sg-analytics.js",
+      "bytes": 11239
+    },
+    {
+      "url": "https://eyetrendsclearlake.com/assets/defaults/sgen/assets/js/sg-drawer.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+      "savedAs": "76a2e97a-sg-drawer.js",
+      "bytes": 3954
+    },
+    {
+      "url": "https://eyetrendsclearlake.com/assets/front/js/locations.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+      "savedAs": "732749af-locations.min.js",
+      "bytes": 3821
+    },
+    {
+      "url": "https://eyetrendsclearlake.com/assets/defaults/js/lucide.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+      "savedAs": "ca61d4b8-lucide.min.js",
+      "bytes": 386702
+    },
+    {
+      "url": "https://eyetrendsclearlake.com/assets/front/js/locations-picker.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+      "savedAs": "7ed680ed-locations-picker.js",
+      "bytes": 8745
+    },
+    {
+      "url": "https://eyetrendsclearlake.com/assets/front/js/sgen-accessibility.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+      "savedAs": "f69d0671-sgen-accessibility.min.js",
+      "bytes": 21993
+    },
+    {
+      "url": "https://eyetrendsclearlake.com/assets/defaults/js/plugins.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+      "savedAs": "cbf923d1-plugins.min.js",
+      "bytes": 5543
+    },
+    {
+      "url": "https://eyetrendsclearlake.com/assets/front/js/forms.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+      "savedAs": "ad4f489d-forms.min.js",
+      "bytes": 27607
+    },
+    {
+      "url": "https://eyetrendsclearlake.com/assets/front/js/sessionAttributerForms.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+      "savedAs": "796295cf-sessionAttributerForms.min.js",
+      "bytes": 4290
+    },
+    {
+      "url": "https://eyetrendsclearlake.com/assets/front/js/plugins.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+      "savedAs": "f181a935-plugins.min.js",
+      "bytes": 27854
+    },
+    {
+      "url": "https://eyetrendsclearlake.com/assets/front/js/sgbuilder.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+      "savedAs": "61ddbdeb-sgbuilder.min.js",
+      "bytes": 9544
+    },
+    {
+      "url": "https://eyetrendsclearlake.com/assets/front/js/main.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+      "savedAs": "d7f7d82b-main.min.js",
+      "bytes": 13753
+    },
+    {
+      "url": "https://eyetrendsclearlake.com/assets/front/js/sgen-mobile-menu.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+      "savedAs": "20ec09c3-sgen-mobile-menu.js",
+      "bytes": 9986
+    },
+    {
+      "url": "https://eyetrendsclearlake.com/assets/front/js/lazyLoad.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+      "savedAs": "31d0e167-lazyLoad.min.js",
+      "bytes": 1412
+    },
+    {
+      "url": "https://eyetrendsclearlake.com/assets/front/js/sessionAttributerPhoneTaps.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e",
+      "savedAs": "77450893-sessionAttributerPhoneTaps.min.js",
+      "bytes": 5246
+    }
+  ],
+  "map": {
+    "https://eyetrendsclearlake.com/assets/front/js/sg-404-source.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/aae0ccce-sg-404-source.js",
+    "//eyetrendsclearlake.com/assets/front/js/sg-404-source.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/aae0ccce-sg-404-source.js",
+    "/assets/front/js/sg-404-source.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/aae0ccce-sg-404-source.js",
+    "/assets/front/js/sg-404-source.js": "/scripts/aae0ccce-sg-404-source.js",
+    "https://eyetrendsclearlake.com/assets/front/js/sg-analytics.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/b1d92006-sg-analytics.js",
+    "//eyetrendsclearlake.com/assets/front/js/sg-analytics.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/b1d92006-sg-analytics.js",
+    "/assets/front/js/sg-analytics.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/b1d92006-sg-analytics.js",
+    "/assets/front/js/sg-analytics.js": "/scripts/b1d92006-sg-analytics.js",
+    "https://eyetrendsclearlake.com/assets/defaults/sgen/assets/js/sg-drawer.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/76a2e97a-sg-drawer.js",
+    "//eyetrendsclearlake.com/assets/defaults/sgen/assets/js/sg-drawer.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/76a2e97a-sg-drawer.js",
+    "/assets/defaults/sgen/assets/js/sg-drawer.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/76a2e97a-sg-drawer.js",
+    "/assets/defaults/sgen/assets/js/sg-drawer.js": "/scripts/76a2e97a-sg-drawer.js",
+    "https://eyetrendsclearlake.com/assets/front/js/locations.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/732749af-locations.min.js",
+    "//eyetrendsclearlake.com/assets/front/js/locations.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/732749af-locations.min.js",
+    "/assets/front/js/locations.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/732749af-locations.min.js",
+    "/assets/front/js/locations.min.js": "/scripts/732749af-locations.min.js",
+    "https://eyetrendsclearlake.com/assets/defaults/js/lucide.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/ca61d4b8-lucide.min.js",
+    "//eyetrendsclearlake.com/assets/defaults/js/lucide.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/ca61d4b8-lucide.min.js",
+    "/assets/defaults/js/lucide.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/ca61d4b8-lucide.min.js",
+    "/assets/defaults/js/lucide.min.js": "/scripts/ca61d4b8-lucide.min.js",
+    "https://eyetrendsclearlake.com/assets/front/js/locations-picker.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/7ed680ed-locations-picker.js",
+    "//eyetrendsclearlake.com/assets/front/js/locations-picker.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/7ed680ed-locations-picker.js",
+    "/assets/front/js/locations-picker.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/7ed680ed-locations-picker.js",
+    "/assets/front/js/locations-picker.js": "/scripts/7ed680ed-locations-picker.js",
+    "https://eyetrendsclearlake.com/assets/front/js/sgen-accessibility.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/f69d0671-sgen-accessibility.min.js",
+    "//eyetrendsclearlake.com/assets/front/js/sgen-accessibility.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/f69d0671-sgen-accessibility.min.js",
+    "/assets/front/js/sgen-accessibility.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/f69d0671-sgen-accessibility.min.js",
+    "/assets/front/js/sgen-accessibility.min.js": "/scripts/f69d0671-sgen-accessibility.min.js",
+    "https://eyetrendsclearlake.com/assets/defaults/js/plugins.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/cbf923d1-plugins.min.js",
+    "//eyetrendsclearlake.com/assets/defaults/js/plugins.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/cbf923d1-plugins.min.js",
+    "/assets/defaults/js/plugins.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/cbf923d1-plugins.min.js",
+    "/assets/defaults/js/plugins.min.js": "/scripts/cbf923d1-plugins.min.js",
+    "https://eyetrendsclearlake.com/assets/front/js/forms.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/ad4f489d-forms.min.js",
+    "//eyetrendsclearlake.com/assets/front/js/forms.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/ad4f489d-forms.min.js",
+    "/assets/front/js/forms.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/ad4f489d-forms.min.js",
+    "/assets/front/js/forms.min.js": "/scripts/ad4f489d-forms.min.js",
+    "https://eyetrendsclearlake.com/assets/front/js/sessionAttributerForms.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/796295cf-sessionAttributerForms.min.js",
+    "//eyetrendsclearlake.com/assets/front/js/sessionAttributerForms.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/796295cf-sessionAttributerForms.min.js",
+    "/assets/front/js/sessionAttributerForms.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/796295cf-sessionAttributerForms.min.js",
+    "/assets/front/js/sessionAttributerForms.min.js": "/scripts/796295cf-sessionAttributerForms.min.js",
+    "https://eyetrendsclearlake.com/assets/front/js/plugins.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/f181a935-plugins.min.js",
+    "//eyetrendsclearlake.com/assets/front/js/plugins.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/f181a935-plugins.min.js",
+    "/assets/front/js/plugins.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/f181a935-plugins.min.js",
+    "/assets/front/js/plugins.min.js": "/scripts/f181a935-plugins.min.js",
+    "https://eyetrendsclearlake.com/assets/front/js/sgbuilder.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/61ddbdeb-sgbuilder.min.js",
+    "//eyetrendsclearlake.com/assets/front/js/sgbuilder.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/61ddbdeb-sgbuilder.min.js",
+    "/assets/front/js/sgbuilder.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/61ddbdeb-sgbuilder.min.js",
+    "/assets/front/js/sgbuilder.min.js": "/scripts/61ddbdeb-sgbuilder.min.js",
+    "https://eyetrendsclearlake.com/assets/front/js/main.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/d7f7d82b-main.min.js",
+    "//eyetrendsclearlake.com/assets/front/js/main.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/d7f7d82b-main.min.js",
+    "/assets/front/js/main.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/d7f7d82b-main.min.js",
+    "/assets/front/js/main.min.js": "/scripts/d7f7d82b-main.min.js",
+    "https://eyetrendsclearlake.com/assets/front/js/sgen-mobile-menu.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/20ec09c3-sgen-mobile-menu.js",
+    "//eyetrendsclearlake.com/assets/front/js/sgen-mobile-menu.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/20ec09c3-sgen-mobile-menu.js",
+    "/assets/front/js/sgen-mobile-menu.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/20ec09c3-sgen-mobile-menu.js",
+    "/assets/front/js/sgen-mobile-menu.js": "/scripts/20ec09c3-sgen-mobile-menu.js",
+    "https://eyetrendsclearlake.com/assets/front/js/lazyLoad.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/31d0e167-lazyLoad.min.js",
+    "//eyetrendsclearlake.com/assets/front/js/lazyLoad.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/31d0e167-lazyLoad.min.js",
+    "/assets/front/js/lazyLoad.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/31d0e167-lazyLoad.min.js",
+    "/assets/front/js/lazyLoad.min.js": "/scripts/31d0e167-lazyLoad.min.js",
+    "https://eyetrendsclearlake.com/assets/front/js/sessionAttributerPhoneTaps.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/77450893-sessionAttributerPhoneTaps.min.js",
+    "//eyetrendsclearlake.com/assets/front/js/sessionAttributerPhoneTaps.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/77450893-sessionAttributerPhoneTaps.min.js",
+    "/assets/front/js/sessionAttributerPhoneTaps.min.js?v=7e1415b66b082c7a8d8035cfdda8a6ea91621e5e": "/scripts/77450893-sessionAttributerPhoneTaps.min.js",
+    "/assets/front/js/sessionAttributerPhoneTaps.min.js": "/scripts/77450893-sessionAttributerPhoneTaps.min.js"
+  }
+}

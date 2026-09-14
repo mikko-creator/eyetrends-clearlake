@@ -1,0 +1,64 @@
+{
+  "schema": "site-reforge/sweep@1",
+  "url": "http://127.0.0.1:8781/services/dry-eye-treatment/",
+  "capturedAt": "2026-09-14T02:30:16.751Z",
+  "viewport": {
+    "w": 768,
+    "h": 900,
+    "dpr": 1.3499999046325684
+  },
+  "documentScrollWidth": 751,
+  "counts": {
+    "blocker": 0,
+    "major": 0,
+    "minor": 5,
+    "nit": 0
+  },
+  "findings": [
+    {
+      "check": "img-oversized",
+      "severity": "minor",
+      "title": "Image far larger than its display size",
+      "detail": "",
+      "selector": "#site-head > div.wrap.head-in > a.brand > picture > img",
+      "value": "988px natural vs 190px displayed",
+      "pageLevel": false
+    },
+    {
+      "check": "font-too-small",
+      "severity": "minor",
+      "title": "Text under 12px",
+      "detail": "",
+      "selector": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(1) > div.container > div.row.row--split > div.col:nth-of-type(2) > div.dc-hero__media.et-reveal > div.dc-chip > span:nth-of-type(2) > span.dc-chip__l:nth-of-type(2)",
+      "value": "11.52px",
+      "pageLevel": false
+    },
+    {
+      "check": "font-too-small",
+      "severity": "minor",
+      "title": "Text under 12px",
+      "detail": "",
+      "selector": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(6) > div.container > div.row.row--split-media > div.col:nth-of-type(1) > div.et-reveal.reveal > figure.dc-frame.dc-frame--tall > div.dc-doctor__badge > span",
+      "value": "10.88px",
+      "pageLevel": false
+    },
+    {
+      "check": "font-too-small",
+      "severity": "minor",
+      "title": "Text under 12px",
+      "detail": "",
+      "selector": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(8) > div.container > div.row:nth-of-type(2) > div.col.col--full > a.dc-relhub.et-reveal > span.dc-relhub__txt:nth-of-type(1) > span.dc-relhub__ey:nth-of-type(1)",
+      "value": "10.88px",
+      "pageLevel": false
+    },
+    {
+      "check": "font-too-small",
+      "severity": "minor",
+      "title": "Text under 12px",
+      "detail": "",
+      "selector": "#main > div.rw-sec.rw-p-dry-eye-treatment:nth-of-type(10) > div.container > div.row.row--split > div.col:nth-of-type(2) > div.dc-visit.et-reveal > figure.ct-map > div.ct-map__frame.ct-find > span.ct-find__tag",
+      "value": "11px",
+      "pageLevel": false
+    }
+  ]
+}

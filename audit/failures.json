@@ -1,0 +1,14 @@
+{
+  "schema": "site-reforge/failures@1",
+  "items": [
+    {
+      "stage": "assets:data",
+      "target": "https://eyetrendsclearlake.com/do_ada_consent/ada",
+      "reason": "status 400",
+      "at": "2026-09-14T01:37:10.673Z",
+      "accepted": true,
+      "acceptedAt": "2026-09-14T02:06:19.945Z",
+      "acceptedReason": "Platform ADA-consent widget endpoint. The widget and its CSS/JS are deliberately removed from this build (see change-control.json reforge/remove#cookie-settings): it existed to gate the platform analytics and trackers, which are also removed. Nothing in dist/ requests this URL (verified: 0 references in audit/reforge-verify.json refs scan), so the 400 cannot affect the rebuild."
+    }
+  ]
+}

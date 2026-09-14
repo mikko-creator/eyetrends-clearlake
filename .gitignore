@@ -1,0 +1,42 @@
+# ---------------------------------------------------------------------------
+# Build outputs that duplicate the repo
+# ---------------------------------------------------------------------------
+# Each handoff archive contains a full second copy of everything below.
+*.zip
+
+# ---------------------------------------------------------------------------
+# Third-party code that is not ours to redistribute
+# ---------------------------------------------------------------------------
+# The previous CMS vendor's front-end runtime (SGEN/SGB), captured by the crawl.
+# Verified unreferenced: nothing in dist/, src/, tools/ or docs/ loads any of it,
+# and the rebuild does not read it. The client licensed the USE of that platform,
+# not the right to republish its source.
+assets/js/
+audit/css/
+
+# Google Fonts binaries harvested during the crawl. Also verified unreferenced:
+# the built site loads its faces from fonts.googleapis.com / fonts.gstatic.com,
+# so these 4.8 MB are dead weight, and redistributing them without the OFL text
+# would be wrong anyway.
+assets/fonts/
+
+# ---------------------------------------------------------------------------
+# Machine scratch
+# ---------------------------------------------------------------------------
+# Browser-collected measurement payloads from the build session. Nothing reads
+# them; the reports that matter live in audit/ proper.
+audit/collected/
+
+node_modules/
+.DS_Store
+Thumbs.db
+.tmp/
+*.log
+
+# ---------------------------------------------------------------------------
+# Deliberately NOT ignored — these look ignorable and are not
+# ---------------------------------------------------------------------------
+# dist/          the deliverable, and what GitHub Pages serves
+# audit/raw/     a BUILD INPUT, not just evidence: build.mjs extracts each
+#                page's sections from it. Without it the build emits 0 pages.
+# assets/source/ the 169 image masters the build reads via the inventory.

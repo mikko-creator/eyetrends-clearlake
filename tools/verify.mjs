@@ -127,7 +127,13 @@ for (const jsFile of all.filter((x) => x.endsWith('.js'))) {
 
 // --- orphans: a shipped asset nothing points at ---------------------------
 const assetFiles = all.filter((f) => !f.endsWith('.html') && !f.endsWith('_generated-manifest.json'));
-const orphans = assetFiles.filter((f) => !referenced.has(path.resolve(f)));
+// Some root files are conventions, not references: a crawler looks for them at
+// a fixed path and no page ever links to them. Reporting robots.txt and
+// sitemap.xml as unreferenced would be an argument for deleting the two files
+// that exist precisely so a crawler can find them.
+const ROOT_CONVENTIONS = new Set(['robots.txt', 'sitemap.xml', '.nojekyll', 'favicon.ico']);
+const orphans = assetFiles.filter((f) => !referenced.has(path.resolve(f))
+  && !ROOT_CONVENTIONS.has(rel(f)));
 
 // --- content survival: source text vs rebuilt text ------------------------
 const content = readJSON(path.join(ROOT, 'audit', 'content-inventory.json'));

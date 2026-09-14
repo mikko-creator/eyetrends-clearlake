@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# The search page renders results client-side and has no content of its own.
+Disallow: /search/
+
+Sitemap: https://eyetrendsclearlake.com/sitemap.xml

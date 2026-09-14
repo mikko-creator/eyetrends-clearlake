@@ -31,7 +31,8 @@ fi
 echo "  authenticated as: $(gh api user --jq .login)"
 
 # --- 1 · the Pages build must match the current dist ------------------------
-say "1. refreshing the Pages build from dist/"
+say "1. refreshing sitemap, robots and the Pages build from dist/"
+node tools/build-sitemap.mjs
 MSYS_NO_PATHCONV=1 node tools/build-pages.mjs "/$REPO"
 if [ ! -f "$PAGES_DIR/index.html" ]; then
   echo "  Pages build produced no index.html — aborting"; exit 1

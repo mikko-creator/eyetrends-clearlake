@@ -55,6 +55,7 @@ page and asset in `dist/`, so you can prove nothing changed in transit.
 ```bash
 node tools/build.mjs          # regenerates dist/ from src/ + audit/ inventories
 node tools/build-search.mjs   # writes dist/search-index.json  <-- REQUIRED, see below
+node tools/build-sitemap.mjs  # writes dist/sitemap.xml and dist/robots.txt
 node tools/verify.mjs         # refs, orphans, content recall
 node tools/verify-text.mjs    # every source phrase, verbatim
 ```
@@ -142,7 +143,7 @@ the practice, its premises or its people.
 |---|---|
 | **Form backend** | must be wired before launch — see above |
 | **No `404.html`** | the build does not generate one; add a page and point your host at it |
-| **No sitemap and no robots.txt** | Neither is generated. `dist/` root holds only `index.html` and `search-index.json`. Verified by a live 404 on `/sitemap.xml` after publishing. Worth adding before launch: 44 routes are listed in `audit/routes.json` |
+| ~~No sitemap and no robots.txt~~ **fixed** | `tools/build-sitemap.mjs` now writes both, listing 43 of the 44 routes (`/search/` is excluded: it renders results client-side and has no content of its own). The `<loc>` entries use the production origin so they agree with the canonical tags. |
 | **`--ds-glass-blur`** | referenced by `layout.css`, never defined. A blur, not spacing — harmless, but it means that one backdrop-filter is inert |
 | **2 parity minors** | one is 14 images with empty `alt` — the logo marquee's decorative duplicates, which are `aria-hidden` on purpose. The other is one `<h1>` where an em-dash became a colon at the client's request |
 | **Gate is 26/28** | `C22` is pixel-parity with the ORIGINAL site, which a deliberate redesign must fail. `C28` is compose-from-presets, and this design layer is hand-authored. Both are recorded overrides in `HANDOFF-MANIFEST.json`, not unnoticed failures |

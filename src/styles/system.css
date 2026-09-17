@@ -763,6 +763,45 @@ blockquote, .et-review__q, .bw-quote {
 }
 
 /* =========================================================================
+   22 · THE HERO PROOF ROW ON A PHONE
+   =========================================================================
+   .ethc-hero__proof is a wrapping flex row. That is right on a wide screen and
+   wrong on a narrow one: each stat wraps onto its own line at its own content
+   width, so the three boxes measured 190, 206 and 164 wide inside a 339px
+   column - a ragged left edge that reads as broken rather than designed - and
+   together they ate 324px of vertical space in a hero that was already 1153px
+   tall at 390px.
+
+   Three equal columns instead. The labels are short enough to take it, and the
+   numbers stay the loudest thing in the row.
+
+   Compound selector, not descendant: .ethc-hero sits ON the .rw-sec element,
+   so `.rw-sec .ethc-hero` matches nothing at all. Same trap as .et-doctor in
+   revision 8 - written once, repeated here, caught by measuring the computed
+   display rather than by reading the file back. */
+@media (max-width: 640px) {
+  .rw-sec.ethc-hero .ethc-hero__proof {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .rw-sec.ethc-hero .ethc-hero__stat {
+    min-width: 0;
+    padding: 10px 9px;
+    gap: 1px;
+  }
+  .rw-sec.ethc-hero .ethc-hero__k {
+    font-size: clamp(19px, 5.6vw, 25px);
+    line-height: 1.1;
+  }
+  .rw-sec.ethc-hero .ethc-hero__l {
+    font-size: 9.5px;
+    line-height: 1.3;
+    letter-spacing: .05em;
+  }
+}
+
+/* =========================================================================
    21 · MOBILE TOUCH SPACING
    =========================================================================
    Adjacent pills and go-links measured ~7.5px apart on a phone, which is under

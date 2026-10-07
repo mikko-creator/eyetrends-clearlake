@@ -1005,7 +1005,7 @@ scores face SSIM 0.905 against the original. Record: `assets/edited/README.md`.
 | Layout | Full-bleed at 1025, 1280, 1440, 1920 and 2560. A frameless full-width band at 1024, 768 and 390 |
 | File chosen | Desktop at 1x gets the 2560 file and 1.5–2x gets the 3840: 0.68–1.02x of the painted size, so no upscaling |
 | His face | 0% covered by any text element, at 9 widths from 320 to 2560. A box placed on the face as a control read 100% |
-| Text over the photo | Mean contrast at 1025–2560: heading 9.9–10.2:1, paragraph 10.6–11.0:1, eyebrow 10.8–13.2:1, name 7.3–7.5:1, role 6.8–7.2:1, link 6.1–11.5:1, pills 7.2–9.1:1, chip 13–14:1. A white box behind the paragraph as a control read 1.11:1. The gradient-filled "eye doctor" cannot be measured this way and is the site's existing accent |
+| Text over the photo | Mean contrast at 1025–2560: heading 9.9–10.2:1, paragraph 10.6–11.0:1, eyebrow 10.8–13.1:1, name 7.3–7.5:1, role 6.8–7.2:1, link 11.2–12.0:1, pills 7.2–9.1:1, chip 13–14:1. These were re-measured in revision 14 with the corrected probe. The first pass gave the link 6.1–11.5:1, because its colour transition was still fading the text when the probe captured it. A control painting the paragraph's own text colour behind it read 1:1. The gradient-filled "eye doctor" cannot be measured this way and is the site's existing accent |
 | Scope | Only `index.html` (the `<picture>`) and `system.css` (+85 / −0, §24) changed; 6 files added; 234 identical |
 | Refs / text | 6,396 refs: 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |
 
@@ -1050,7 +1050,8 @@ that card is untouched. The other 11 pages are untouched too.
 |---|---|
 | Glasses vs the card | Clear at 1200, 1280, 1366, 1440, 1600, 1920 and 2560, with gaps of 114–255px; the frames are 100% inside the section. A card stretched across the section as a control reported the overlap |
 | Stacked layouts | At 1100, 1024, 768 and 390 the card sits above the band, and the frames fill about 70% of the band's width, 100% visible |
-| Text on the card | Mean contrast at 1200 / 1440 / 1920: heading 13.3–13.5:1, paragraph 5.9–6.0:1, eyebrow 5.9:1, the three points about 10:1, the button 15.45:1. A control painting the paragraph's own colour behind it read 1:1. "grow up with" is gradient text and is not measurable this way |
+| Text on the card | Mean contrast at 1200, 1440, 1920 and 390: heading 13.3–13.7:1, paragraph 5.9–6.0:1, eyebrow 5.9–6.1:1, the three points 9.8–10.1:1, the button 15.1–15.5:1. A control painting the paragraph's own colour behind it read 1:1. "grow up with" is gradient text and is not measurable this way |
+| The probe itself | Four faults were found and fixed before these numbers were trusted: a smooth scroll still moving at capture time; colour transitions fading the "hidden" text (one button read 7.1, 5.5 and 2.4:1 across three widths, and 15.45:1 once fixed); a white-box control that cannot fail on dark text; and a driver `close()` that could hang |
 | Files | Desktop 960–3840 (7–57 KB), with the 2560 file loaded at 1x. Crop 480–1794 (5–34 KB) |
 | Scope | `index.html` changed in one contiguous span inside this section's media block (`<picture>`, image, alt). `system.css` +79 / −0 (§25). 11 files added; 240 identical |
 | Refs / text | 6,402 refs: 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |

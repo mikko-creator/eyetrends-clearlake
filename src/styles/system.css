@@ -970,6 +970,18 @@ blockquote, .et-review__q, .bw-quote {
           backdrop-filter: none;
   transform: none;
 }
+/* The wordmark is an <img>, and components.css lists .ethc-house__logo with the photo frames
+   (audit/redesign-brief.json filed it under mediaFrames), so every logo carried a photograph's
+   rim: a 32px radius, a 1px border, the glass shadow and overflow:hidden. With overflow:hidden
+   that radius trims the image itself, and at 24-32px tall it is a full pill: it cut 0.6-7.7% of
+   each logo's ink (Lindberg's L and its glasses mark, the O of Oliver Peoples) and drew a faint
+   frame round every one. A logo is not a photo, so the rim comes off here. components.css is
+   generated and then post-processed, so it is not edited; .rw-sec outranks its bare class. */
+.rw-sec .ethc-house__logo {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
 .rw-sec .ethc-marquee .ethc-house__logo {
   height: clamp(24px, 2.5vw, 32px);
   width: auto;

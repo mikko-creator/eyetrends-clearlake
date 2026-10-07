@@ -155,6 +155,18 @@ On the **home page** that section shows the photo as a full-bleed background (re
 
 The other seven pages with this component keep the framed portrait.
 
+The home page's **kids section** ("The eye doctor your kids will grow up with") was redesigned
+in revision 14:
+- **Desktop (1200px and up):** a full-bleed 16:9 still life, with the text on a frosted-glass
+  card.
+- **Below 1200px:** a full-width 4:3 crop of the same image.
+- **Image:** AI re-rendered from the source's 1024x768 photo (`kids-eyewear-*-hf`, `data-edited`).
+- **Alt:** rewritten to describe the frames actually shown.
+- **CSS:** `system.css` §25.
+
+The other 12 usages of that image are unchanged. One of them is the home page's own kids card in
+the optical section, which shows the generated stand-in.
+
 ---
 
 ## Known gaps

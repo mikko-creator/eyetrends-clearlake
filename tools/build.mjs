@@ -361,6 +361,64 @@ const PORTRAIT_SWAP = (() => {
   };
 })();
 
+// The home page's kids section ("The eye doctor your kids will grow up with")
+// shows its photograph as a full-bleed background (operator, 2026-10-07:
+// "redesign this section, enhance the image resolution and make it full width
+// too" - system.css §25). The source's largest copy is 1024x768. Higgsfield
+// Marketing Studio 2.5 Sunburst re-rendered it at 3840x2160 from a 16:9 layout
+// sketch: the source photo on the right, its own wall and tabletop stretched
+// left. It keeps the three frames and drops the pseudo-text the source printed
+// on the teal arm. Record in assets/edited/README.md.
+// B3: the source alt here, "A child in durable, colorful kids' eyeglass frames
+// at Eye Trends", describes a child the photograph never showed. The new image
+// shows the three frames, so the alt says exactly that, in the wording
+// /services/back-to-school-eye-exams/ already carries. Stamped data-edited.
+// Home section only; the other 12 usages of this base are unchanged (11 pages
+// show the source photo or its generated stand-in, as before).
+const KIDS_SWAP = (() => {
+  const dir = path.join(ROOT, 'assets', 'edited');
+  const renditions = fs.readdirSync(dir)
+    .filter((f) => /^kids-eyewear-wide-hf(-\d+)?\.webp$/.test(f))
+    .map((f) => {
+      const d = webpSize(path.join(dir, f));
+      if (!d) throw new Error('kids image unreadable: assets/edited/' + f);
+      return { file: f, href: '/assets/img/' + f, w: d.w, h: d.h };
+    })
+    .sort((a, b) => a.w - b.w);
+  if (renditions.length < 2) throw new Error('kids image renditions missing in assets/edited/');
+  // Below 1200px the section stacks and the photo is a 4:3 band; the wide frame
+  // would leave the glasses small at its right edge, so those widths get a 4:3
+  // crop of the same render centred on the frames (they fill 70% of its width).
+  const crop = fs.readdirSync(dir)
+    .filter((f) => /^kids-eyewear-crop-hf(-\d+)?\.webp$/.test(f))
+    .map((f) => {
+      const d = webpSize(path.join(dir, f));
+      if (!d) throw new Error('kids crop unreadable: assets/edited/' + f);
+      return { file: f, href: '/assets/img/' + f, w: d.w, h: d.h };
+    })
+    .sort((a, b) => a.w - b.w);
+  if (crop.length < 2) throw new Error('kids crop renditions missing in assets/edited/');
+  fs.mkdirSync(path.join(DIST, 'assets', 'img'), { recursive: true });
+  for (const r of renditions.concat(crop)) fs.copyFileSync(path.join(dir, r.file), path.join(DIST, 'assets', 'img', r.file));
+  return {
+    crop,
+    cropMedia: '(max-width: 1199px)',
+    from: 'kids-eyewear',
+    // The home page uses this base TWICE: the kids section (rw-s5) and the kids
+    // category card in the optical section (rw-s6, the generated stand-in). Only
+    // the section's slot is swapped; its source alt identifies it.
+    fromAlt: /^A child in durable, colou?rful kids/i,
+    model: 'higgsfield/marketing-studio/image/sunburst',
+    renditions,
+    largest: renditions[renditions.length - 1],
+    // desktop only (below 1200px the <source> serves the 4:3 crop at 100vw):
+    // the section is held at about 16:9, so the photo paints at the section's
+    // width; 1960px covers the case where content makes it a little taller.
+    sizes: '(max-width: 1960px) 1960px, 100vw',
+    alt: "Three pairs of round children's eyeglass frames in lilac with teal arms, grey, and yellow, on a pale mint and yellow studio backdrop",
+  };
+})();
+
 function rewriteImages(html, stats, url) {
   const isHome = !!url && new URL(url).pathname === '/';
   return html.replace(/<img\b[^>]*>/gi, (tag) => {
@@ -417,6 +475,27 @@ function rewriteImages(html, stats, url) {
           + '" sizes="' + PORTRAIT_SWAP.wideSizes + '">' + out + '</picture>';
       }
       return out;
+    }
+
+    // Home kids section: the 16:9 still life (KIDS_SWAP), with an alt that describes it.
+    if (isHome && base === KIDS_SWAP.from && KIDS_SWAP.fromAlt.test((/\salt="([^"]*)"/i.exec(tag) || [])[1] || '')) {
+      stats.kidsSwapped++;
+      const top = KIDS_SWAP.largest;
+      let out = tag
+        .replace(/\ssrcset="[^"]*"/gi, '').replace(/\ssizes="[^"]*"/gi, '')
+        .replace(/\ssrc="[^"]*"/i, ' src="' + top.href + '"')
+        .replace(/\swidth="[^"]*"/gi, '').replace(/\sheight="[^"]*"/gi, '')
+        .replace(/\salt="[^"]*"/i, ' alt="' + KIDS_SWAP.alt + '"');
+      const set = KIDS_SWAP.renditions.map((r) => r.href + ' ' + r.w + 'w').join(', ');
+      out = out.replace(/<img\b/i, '<img data-edited="' + KIDS_SWAP.model + '" width="' + top.w + '" height="' + top.h + '"'
+        + ' srcset="' + set + '" sizes="' + KIDS_SWAP.sizes + '"');
+      if (!/\sloading=/i.test(out)) out = out.replace(/<img\b/i, '<img loading="lazy"');
+      if (!/\sdecoding=/i.test(out)) out = out.replace(/<img\b/i, '<img decoding="async"');
+      stats.imgMapped++;
+      stats.srcsetAdded++;
+      const cset = KIDS_SWAP.crop.map((r) => r.href + ' ' + r.w + 'w').join(', ');
+      return '<picture class="et-kids__picture"><source media="' + KIDS_SWAP.cropMedia + '" srcset="' + cset
+        + '" sizes="100vw">' + out + '</picture>';
     }
 
     let rec = imageMap.get(base);
@@ -850,7 +929,7 @@ const stats = { pages: 0, sections: 0, imgMapped: 0, imgUnmapped: [], linksRewri
   platformBytesRemoved: 0, formsNeutralised: [], missingRaw: [],
   assetUrlsRewritten: 0, assetUrlUnmapped: [],
   generatedKept: 0, generatedRevertedToOriginal: [], headingDashesRemoved: [],
-  heroSwapped: 0, portraitAdded: 0, portraitSwapped: 0, portraitAltsRewritten: 0, portraitWide: 0, marqueesBuilt: 0, marqueeLogos: 0,
+  heroSwapped: 0, portraitAdded: 0, portraitSwapped: 0, portraitAltsRewritten: 0, portraitWide: 0, kidsSwapped: 0, marqueesBuilt: 0, marqueeLogos: 0,
   doctorStatsRemoved: [], doctorLinkMoved: 0, srcsetAdded: 0 };
 
 const pageRecords = [];
@@ -1133,6 +1212,8 @@ console.log('  hero image swapped ' + stats.heroSwapped + '  (client-supplied ph
 console.log('  portrait added     ' + stats.portraitAdded);
 console.log('  portrait swapped   ' + stats.portraitSwapped + '  (AI-edited photo, ' + PORTRAIT_SWAP.renditions.length
   + ' widths, data-edited; alts rewritten ' + stats.portraitAltsRewritten + '; full-bleed <picture> ' + stats.portraitWide + ')');
+console.log('  kids image swapped ' + stats.kidsSwapped + '  (home only; AI-edited 16:9 still life, ' + KIDS_SWAP.renditions.length
+  + ' widths, data-edited, alt rewritten to describe it)');
 console.log('  srcset added       ' + stats.srcsetAdded + '  (' + variantsCopied + ' variant files, '
   + (variantBytes / 1024).toFixed(0) + ' KB)');
 console.log('  doctor stats out   ' + stats.doctorStatsRemoved.length + '  (declared removal)');

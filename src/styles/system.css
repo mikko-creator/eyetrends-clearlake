@@ -1392,3 +1392,82 @@ blockquote, .et-review__q, .bw-quote {
     margin-inline: calc(50% - 50vw);
   }
 }
+
+/* =========================================================================
+   25 · THE HOME KIDS SECTION: A FULL-BLEED STILL LIFE, THE TEXT ON GLASS
+   =========================================================================
+   Operator, 2026-10-07: "redesign this section, enhance the image resolution
+   and make it full width too". Home only (.rw-p-home.rw-s5).
+
+   Desktop (1200px and up): the 16:9 still life (tools/build.mjs, KIDS_SWAP)
+   covers the band; its three frames sit in the right half, its left half is
+   an empty butter-yellow wall over a mint tabletop. This section's container
+   is not positioned, so .ethc-media, made absolute, covers the section itself.
+   The text sits on that calm left half in a frosted-glass card (white glass,
+   the site's --glass-* shadow and edge), and the right column is left empty
+   for the glasses. The reveal slide is switched off for the background - a
+   26px shift would open a gap at the section's top edge.
+
+   Below 1200px the section stacks - text on the band's cream, then the
+   photograph as a full-width 4:3 band, served by <picture> as a crop centred
+   on the frames. 1025-1199px is forced to one column here: two columns that
+   narrow cannot keep the glasses clear of the card.
+
+   The geometry that keeps the glasses out from under the card: the photo is
+   cover-fitted and anchored right (object-position 100%), so the frames'
+   left edge always sits 0.676 section-heights in from the right edge (they
+   span x 62-95% of the 16:9 image). The section is held near 16:9
+   (row min-height 56.25vw minus its 64px top and bottom padding), and the card
+   is capped at clamp(480px, 40vw, 600px). Measured clearance between the
+   card and the frames: see the change log (revision 14). */
+@media (min-width: 1200px) {
+  .rw-sec.rw-p-home.rw-s5 { padding-block: 64px; }
+  .rw-sec.rw-p-home.rw-s5 .row--split {
+    grid-template-columns: minmax(0, clamp(480px, 40vw, 600px)) 1fr;
+    align-items: center;
+    min-height: calc(56.25vw - 128px);
+  }
+  .rw-sec.rw-p-home.rw-s5 .ethc-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: auto;
+    max-height: none;
+    aspect-ratio: auto;
+    transform: none;
+  }
+  .rw-sec.rw-p-home.rw-s5 .ethc-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 100% 50%;
+    transform: none;
+  }
+  .rw-sec.rw-p-home.rw-s5 .row--split > .col:first-child {
+    position: relative;
+    z-index: 1;
+  }
+  .rw-sec.rw-p-home.rw-s5 .row--split > .col:first-child > .et-reveal {
+    padding: clamp(28px, 2.6vw, 40px);
+    background: color-mix(in srgb, var(--c-1) 64%, transparent);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid color-mix(in srgb, var(--c-1) 80%, transparent);
+    border-radius: var(--r-lg);
+    box-shadow: var(--glass-shadow), var(--glass-edge);
+  }
+}
+@media (min-width: 1025px) and (max-width: 1199px) {
+  .rw-sec.rw-p-home.rw-s5 .row--split { grid-template-columns: 1fr; }
+}
+@media (max-width: 1199px) {
+  .rw-sec.rw-p-home.rw-s5 .ethc-media {
+    width: auto;
+    max-width: none;
+    margin-inline: calc(50% - 50vw);
+    aspect-ratio: 4 / 3;
+    max-height: none;
+  }
+  /* the <source> serves a 4:3 crop centred on the frames at these widths */
+  .rw-sec.rw-p-home.rw-s5 .ethc-media img { object-position: 50% 50%; }
+}

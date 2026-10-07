@@ -1008,3 +1008,49 @@ scores face SSIM 0.905 against the original. Record: `assets/edited/README.md`.
 | Text over the photo | Mean contrast at 1025–2560: heading 9.9–10.2:1, paragraph 10.6–11.0:1, eyebrow 10.8–13.2:1, name 7.3–7.5:1, role 6.8–7.2:1, link 6.1–11.5:1, pills 7.2–9.1:1, chip 13–14:1. A white box behind the paragraph as a control read 1.11:1. The gradient-filled "eye doctor" cannot be measured this way and is the site's existing accent |
 | Scope | Only `index.html` (the `<picture>`) and `system.css` (+85 / −0, §24) changed; 6 files added; 234 identical |
 | Refs / text | 6,396 refs: 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |
+
+---
+
+# Revision 14 — the home kids section: a full-bleed still life, the text on glass
+
+> *"redesign this section, enhance the image resolution and make it full width too"*
+
+"The eye doctor your kids will grow up with" was a text column beside a framed 1024x768 photo.
+It is now a full-bleed still life: three children's frames on a pastel set. The text sits in a
+frosted-glass card on the calm left of the photo, and the glasses stay clear on the right. Below
+1200px the section stacks: the text on the band's cream, then the photo as a full-width band.
+
+**The image.** The source photo is 1024x768 and looks AI-made itself; its teal arm carried
+pseudo-text. Higgsfield re-rendered it at 3840x2160 (Sunburst, 4k, 16:9) from a layout sketch:
+the source photo on the right, and its own wall and tabletop stretched left. The render keeps the
+three frames and removes the lettering. A first attempt placed the frames large (46–95% of the
+width). When the photo filled a section taller than 16:9, cover scaling slid them under the card.
+The used version groups them smaller, at 62–95%. Below 1200px a `<picture>` source serves a 4:3
+crop of the same render, centred on the frames (they fill 70% of its width). Record:
+`assets/edited/README.md`.
+
+**The alt.** The source alt here, "A child in durable, colorful kids' eyeglass frames at Eye
+Trends", describes a child the photo never showed. It now says what the image shows, in the
+wording `/services/back-to-school-eye-exams/` already used. Only this slot changed. The home page
+uses the same base again for the kids card in the optical section (the generated stand-in), and
+that card is untouched. The other 11 pages are untouched too.
+
+**The geometry that keeps the glasses clear** (`system.css` §25):
+- The photo is anchored right (`object-position: 100%`), so the frames' left edge always sits
+  0.676 section-heights in from the right edge.
+- The section is held near 16:9: the row's min-height is 56.25vw minus its 64px top and bottom
+  padding.
+- The card is capped at `clamp(480px, 40vw, 600px)`.
+- Between 1025 and 1199px the section stacks, because two columns that narrow cannot keep the
+  frames clear.
+
+## Re-verified
+
+| check | result |
+|---|---|
+| Glasses vs the card | Clear at 1200, 1280, 1366, 1440, 1600, 1920 and 2560, with gaps of 114–255px; the frames are 100% inside the section. A card stretched across the section as a control reported the overlap |
+| Stacked layouts | At 1100, 1024, 768 and 390 the card sits above the band, and the frames fill about 70% of the band's width, 100% visible |
+| Text on the card | Mean contrast at 1200 / 1440 / 1920: heading 13.3–13.5:1, paragraph 5.9–6.0:1, eyebrow 5.9:1, the three points about 10:1, the button 15.45:1. A control painting the paragraph's own colour behind it read 1:1. "grow up with" is gradient text and is not measurable this way |
+| Files | Desktop 960–3840 (7–57 KB), with the 2560 file loaded at 1x. Crop 480–1794 (5–34 KB) |
+| Scope | `index.html` changed in one contiguous span inside this section's media block (`<picture>`, image, alt). `system.css` +79 / −0 (§25). 11 files added; 240 identical |
+| Refs / text | 6,402 refs: 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |

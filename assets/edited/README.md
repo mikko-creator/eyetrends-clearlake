@@ -58,7 +58,20 @@ The sharp vertical crease between his brows is in the original photograph too. I
 | fidelity of the shipped file | face SSIM **0.905** / NCC 0.961, glasses 0.857, hands 0.917, against the original photo (aligned at scale 1.003) |
 | files | `dr-hyder-wide-hf-master.webp` (3840x2160, q90) and renditions 960, 1280, 1600, 1920, 2560 and 3840 (the unsuffixed file), q80. Only the home page uses them, through `<picture>` at 1025px and up (`tools/build.mjs`, `PORTRAIT_SWAP.wide`) |
 
-The background is generated. It is **not** the Eye Trends office, so no caption may say it is.
+## kids-eyewear-wide-hf*.webp and kids-eyewear-crop-hf*.webp — the home page's kids section
+
+| | |
+|---|---|
+| requested | operator, 2026-10-07: *"redesign this section, enhance the image resolution and make it full width too"* (home, "The eye doctor your kids will grow up with") |
+| source | `assets/source/aef3df2e-kids-eyewear.webp`, 1024x768, the largest copy the source site published. It is a studio still life of three children's frames (lilac with teal arms, grey, yellow) on a pale yellow wall and a mint tabletop. It looks AI-made itself, down to the pseudo-text printed on the teal arm |
+| sketch | `prep-kids.py` v2: the source scaled x2.01 so the frames span 62-95% of a 5120x2880 canvas, horizon at 52%. Its own wall and tabletop are stretched across the rest, then blurred. v1 (frames at 46-95%, x3) made the frames so large that a height-scaled cover slid them under the text card; it was not used |
+| renders | Higgsfield, 4k, 16:9, quality high, 2026-10-07. v2 Sunburst `34e928cc-8369-4783-855c-aee34d29bbdf` (**used**), v2 Flare `8d10d878-b0d8-4f05-9093-9556c609510f` (a small mark on the teal arm). v1 Sunburst `af342317-3824-4bea-b93f-ec462b175bc6` and v1 Flare `966ff05b-3d5a-47aa-8482-a59ea4f77892` were not used |
+| what changed | 3840x2160 instead of 1024x768. The same three frames, plain, with the pseudo-text gone. The set is extended to 16:9 with the frames grouped on the right |
+| desktop files | `kids-eyewear-wide-hf-master.webp` (q90), and 960, 1280, 1600, 1920, 2560 and 3840 (the unsuffixed file) at q82. The frames' box in the image, measured: x 0.622-0.949, y 0.447-0.617 |
+| small-screen files | `kids-eyewear-crop-hf*`: a 4:3 crop of the same render at x 2046, y 477, 1794x1346, centred on the frames (they fill 70% of its width). Served at 480, 720, 960, 1280 and 1794 (the unsuffixed file) through `<picture>` below 1200px |
+| alt | The source alt here, "A child in durable, colorful kids' eyeglass frames at Eye Trends", describes a child the photo never showed. It is replaced with what the image shows, in the wording `/services/back-to-school-eye-exams/` already used. Only the home section's slot changes; the other 12 usages keep the source photo |
+
+The doctor's background is generated. It is **not** the Eye Trends office, so no caption may say it is.
 One alt did ("in his Clear Lake optometry practice") and is rewritten in `tools/build.mjs`
 (`PORTRAIT_SWAP`). The output PNG carried no C2PA or other provenance chunks, so the WebP
 re-encode lost none. The provenance lives in the `data-edited` attribute and in this file.

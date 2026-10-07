@@ -74,7 +74,9 @@ a bright 1px rim, a two-stop ink-tinted shadow, and an inset top highlight. Dark
 the inverse: `color-mix(--c-3 58%)` with a light rim.
 
 **Type.** Space Grotesk display at `clamp(36px, 5.1vw, 68px)` with `-0.035em` tracking;
-Inter body. Accent words inside headings take a teal→gold gradient fill.
+Inter body. Accent words inside headings take a teal→gold gradient fill. One face is added on the
+home page only: Instrument Serif italic, for the accent word of the "In Dr. Hyder's words" quote
+(revision 16, `system.css` §26). No other page requests it.
 
 **Motion.** Reveal is blur-in: `opacity 0 → 1`, `translateY(26px) → 0`, `blur(10px) → 0`
 over 0.72s with a 90ms sibling stagger.

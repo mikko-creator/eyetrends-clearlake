@@ -1110,3 +1110,75 @@ re-measured in the built page at 390, 768, 1024 and 1440. The longer row is stil
 | Scope | `system.css` +12 / −0. `index.html` differs only in the `sizes` of the 21 logo images, the other 43 pages only in the `system.css?v=` hash, and `search-index.json` only in its timestamp. 253 files before and after |
 | Refs / text | 6,402 refs: 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |
 | Live preview | After the Pages build (`546764b`), the home page, `system.css`, the search index and `/products/designer-frames/` are byte-identical to the build. The probe on the live page at 390–1920: no rim, 0 clipped, 0 pixels differ; its control still read 198 |
+
+# Revision 16 — the home quote section: his photograph, and the quote set with accents
+
+> *"let's redesign this section too, I want to use the same enhanced photo of dr. jerry hyder in
+> the first section we revised. And then put some flare in the text not just plain text in here
+> that's too boring"*
+
+"In Dr. Hyder's words" was a 511px background-removed cut-out of his source photo, its right
+edge cutting through his arm, beside the quote in plain 17px body text.
+
+**The photograph.** It now uses the approved edited portrait from revision 12: the existing
+renditions, `data-edited`, no new image.
+- **Desktop (1025px and up):** a panel on the right 45% of the section, full height, cropped on
+  his face. Its left edge is masked into the band, so the band's own gradients show through. The
+  doctor section above shows a wide shot with him on the left; this is a closer one on the right.
+- **Phones and tablets:** a full-width band above the quote, its bottom masked into the band.
+- **Where it sits:** a direct child of the section, not of the quote block. The block's blur-in
+  reveal applies a transform and a filter, and either would make the block the photo's
+  containing block mid-animation.
+- **Removed:** the old cut-out rules (`system.css` section d). The three cut-out PNGs drop out of
+  `dist/`.
+
+**The type** (`system.css` §26):
+- the quote in the display face, Space Grotesk 500, at 25–40px;
+- an oversized opening mark: the display face's own “ at 120–176px in a teal-to-gold gradient,
+  drawn by `::before`, so it is not text;
+- "relationship" in gold Instrument Serif italic, the one new face. Only the home page requests
+  it; every other page's font request is unchanged;
+- gold-to-teal underlines under "30 unhurried minutes," and "42 years.", which draw in after the
+  block reveals and stop short of the comma and the full stop;
+- "big-box counter." held on one line (it broke at the hyphen on phones);
+- the name under a 48px gradient rule.
+
+**The words are unchanged.** Four phrases are wrapped in spans. Each span boundary sits on an
+existing space or after the phrase's own punctuation, because `verify-text.mjs` reads every tag as
+a space: "42 years</span>." would read "42 years .". The build asserts that each phrase occurs
+once and that the tag-stripped text is identical, and stops otherwise.
+
+**How it was designed.** Three rounds were prototyped in the browser on the old build, before any
+source edit:
+- The first mark was Instrument Serif's. It rendered small and split into a teal comma and a gold
+  comma, because a block-level gradient spans the whole line. The display face's bolder “ with
+  `width: fit-content` fixed both.
+- A colour gradient over the photo's edge was replaced by a mask, because no flat colour matches
+  the band's gradients.
+
+## Re-verified
+
+| check | result |
+|---|---|
+| Layout, desktop | At 1025, 1280, 1440, 1920 and 2560 the panel is 45% of the section, its full height (inside the section's 1px border) and flush right. The text column ends 44–79px before it and is centred vertically to the pixel. The section's padding is unchanged (106.56px at 1440) |
+| Layout, phones | At 360, 390, 768 and 1024 the band sits at the section top at full width, and the text starts 18–34px below it |
+| His face | Inside the panel, and clear of the mask's fade and of every text box, at all nine widths |
+| Image | 1.06–1.39 file pixels per painted pixel at 1x (720w at 1440, 480w at 390), and 1.17 and 1.28 at 2x (1600w at 1440, 960w at 390). `sizes` names the painted width, because cover paints 546–1145px wide on desktop |
+| Fonts | Space Grotesk for the quote and the mark. Instrument Serif italic is loaded for "relationship" |
+| Contrast | Quote 11.3–11.8:1 mean and 7.6–8.6:1 worst. Underlined phrases 11.7–16.3:1 mean. Eyebrow 11.4–14.3:1. Name 11.5–15.0:1. "relationship" is gradient text, measured at its darker stop: 6.3–7.2:1 mean, 4.7–7.0:1 worst. A control painting the quote's own colour behind it read 1.23:1 |
+| The probe itself | Two faults were fixed before these numbers were trusted. The name read 2.22:1 because its element box held the gold rule beside it; the backdrop is now captured from the text's own box. The panel also seemed to move 13px during the reveal, but it was the section moving as content above settled; measured against its section, the panel holds still |
+| Reveal | The photo fades in (0 → 1) and settles from 106% scale without moving. Under reduced motion it is shown at once, and the underlines are drawn |
+| Text | `verify-text`: **100.000% verbatim**. The quote's text in the DOM is identical |
+| Scope | `index.html` changed in four places: the font request; the section tag and its new figure; the quote block's class and its removed figure; and the four spans. `system.css` +160 / −69, `tools/build.mjs` +85 / −43. The other 43 pages differ only in the `system.css?v=` hash, and three cut-out PNGs are removed. 6,405 refs: 0 blockers, 0 majors, 0 orphans |
+| Live preview | After the Pages build (`0669c50`), the home page, `system.css`, two portrait files, the search index and `/our-doctor/` are byte-identical to the build, and the cut-out returns 404. The check on the live page at 1440 and 390 read the same layout, image, fonts and contrast, and its control read 1.23:1 |
+
+**Found while checking, and left as it is.** Below 1200px, `scrollWidth` reports the page 8px
+wider than the window. The cause is the full-bleed photo bands of revisions 13 and 14
+(`calc(50% - 50vw)`): `100vw` includes a classic scrollbar.
+- **Pre-existing:** the old build measures the same.
+- **Not visible:** `body { overflow-x: hidden }` gives the window no horizontal scrollbar, and a
+  real sideways wheel gesture does not move the page.
+- **Control:** with that rule removed, a 15px scrollbar appears and the same gesture scrolls 8px.
+- **Remaining effect:** only a script's `scrollTo` can shift it.
+
+This is recorded in HANDOFF's known gaps.

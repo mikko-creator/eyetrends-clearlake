@@ -16,6 +16,7 @@ resized only). In the built pages they carry `data-edited="<model>"`.
 | what was kept | the man: face, glasses, expression, hair, shirt, hands and ring, pose, size and position |
 | crop | the 2880 output back to the source's exact framing: x 123, y 0, 2628x2880 (`dr-hyder-portrait-hf-master.webp`, q92) |
 | renditions | 480, 720, 960, 1280, 1600 and 1920 wide (the 1920 is the unsuffixed file). Heights are rounded from 2880/2628 so every file keeps the 511:560 ratio within 0.025%. `cwebp -crop 123 0 2628 2880 -resize W H -q 82 -m 6 -sharp_yuv -metadata none` |
+| used by | every page that showed his source portrait (`tools/build.mjs`, `PORTRAIT_SWAP`), and since revision 16 the home quote section ("In Dr. Hyder's words") as its photo panel (`QUOTE_PHOTO_SIZES`), where it replaced the background-removed cut-out |
 
 **Fidelity check (he is a real person).** The output was aligned to the original on the man
 himself, using SIFT matches inside the original's area and a RANSAC similarity transform. The

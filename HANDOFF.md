@@ -130,9 +130,8 @@ for character, with three declared exceptions, all listed in `tools/verify-text.
 proves it and fails if anything else drifts.
 
 **Generated imagery is labelled.** Anything produced by an image model carries
-`data-generated`. The client-supplied hero carries `data-supplied`. The circular portrait
-beside "In Dr. Hyder's words" carries `data-cutout` — it is his real photograph with the
-background removed, not a generated likeness. No generated image is ever used where the alt
+`data-generated`. The client-supplied hero carries `data-supplied`. Real photographs edited by
+an image model carry `data-edited` (below). No generated image is ever used where the alt
 text makes a claim about the practice, its premises or its people.
 
 **Dr. Hyder's main portrait is an AI-edited photograph** (38 pages, revision 12). At the
@@ -167,6 +166,19 @@ in revision 14:
 The other 12 usages of that image are unchanged. One of them is the home page's own kids card in
 the optical section, which shows the generated stand-in.
 
+The home page's **quote section** ("In Dr. Hyder's words") was redesigned in revision 16:
+- **Photo:** the same edited portrait (`data-edited`, no new image). On desktop it is a panel on
+  the right 45% of the section, masked into the band; on phones it is a full-width band above
+  the quote.
+- **What it replaced:** a background-removed cut-out of his source photo (`data-cutout`). The
+  cut-out is no longer used, and its files stay in `assets/img/`.
+- **Type:** the quote in Space Grotesk at 25–40px, with a teal-to-gold opening mark,
+  "relationship" in Instrument Serif italic (requested by the home page only), and underlines
+  under "30 unhurried minutes," and "42 years.".
+- **The words are unchanged:** the build wraps four phrases in spans and stops if the
+  tag-stripped text differs.
+- **CSS:** `system.css` §26.
+
 ---
 
 ## Known gaps
@@ -179,13 +191,15 @@ the optical section, which shows the generated stand-in.
 | **`--ds-glass-blur`** | Referenced by 7 chip rules in `layout.css` and never defined, so their own `backdrop-filter` is inert. Five chips get their glass elsewhere: `components.css` for `.ia-portrait__badge` and `.tib-creed__badge`; `system.css` §19 for `.ethc-hero__badge` and `.tib-hero__chip`; `system.css` §23 for `.et-doctor__badge` and `.dc-doctor__badge`, which had no plate at all until revision 12. `.dc-chip` was not re-checked |
 | **2 parity minors** | one is 14 images with empty `alt` — the logo marquee's decorative duplicates, which are `aria-hidden` on purpose. The other is one `<h1>` where an em-dash became a colon at the client's request |
 | **Gate is 26/28** | `C22` is pixel-parity with the ORIGINAL site, which a deliberate redesign must fail. `C28` is compose-from-presets, and this design layer is hand-authored. Both are recorded overrides in `HANDOFF-MANIFEST.json`, not unnoticed failures |
+| **Full-bleed bands overshoot by half a scrollbar** | The home page's doctor and kids photo bands (revisions 13 and 14) reach the screen edges with `calc(50% - 50vw)`, and `100vw` includes a classic scrollbar, so below 1200px the page is 8px wider than the window. It is invisible because `body` sets `overflow-x: hidden`: no horizontal scrollbar, and a sideways wheel gesture does not move the page (measured; with that rule removed, a 15px scrollbar appears). Only a script's `scrollTo` can shift it. Keep that rule, or clip those two sections, if you change it |
 
 ---
 
 ## Browser support
 
 Modern evergreen browsers. The design layer uses `color-mix()`, `:has()`, `aspect-ratio`,
-`backdrop-filter` and CSS nesting-free custom properties. No polyfills are included.
+`backdrop-filter`, `mask-image`, `background-clip: text` and CSS nesting-free custom properties.
+No polyfills are included.
 `prefers-reduced-motion` is honoured throughout — the logo marquee stops and becomes a
 hand-scrollable row, and every scroll reveal is disabled.
 

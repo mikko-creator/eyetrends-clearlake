@@ -965,3 +965,4 @@ each product page states "since 1984" / "42 years" 3 to 5 times in its text. See
 | Badges over his face | 66 readings (6 routes × 11 widths, 320–1440): **0%**. A chip forced onto the face as a control read 67.7% |
 | Scope | 191 files byte-identical. 38 pages changed only inside the portrait `<img>`. `system.css` +61 / −0 lines (§23). 3 old portrait files pruned, 6 added |
 | Refs / text | 6,390 refs: 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |
+| Live preview | After the Pages build (`f39c882`), the home page, `/our-doctor/`, `system.css` and a portrait file are byte-identical to the build. 10 placements load. Badges cover 0% of his face at 360/390/1440 on 4 routes |

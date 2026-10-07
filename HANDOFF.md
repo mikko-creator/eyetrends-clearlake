@@ -146,6 +146,15 @@ Every usage carries `data-edited`. The one alt that described the room ("in his 
 optometry practice") was rewritten. Provenance, prompt settings and the fidelity numbers are in
 `assets/edited/README.md`. The practice should approve the edited likeness before launch.
 
+On the **home page** that section shows the photo as a full-bleed background (revision 13):
+- **Source:** a 16:9 version (`dr-hyder-wide-hf*`), with the room extended by Higgsfield and his
+  approved pixels stitched back in.
+- **How it is served:** a `<picture>` at 1025px and up, so it applies only on desktop.
+- **Below 1025px:** the portrait version, shown as a full-width band.
+- **CSS:** `system.css` §24.
+
+The other seven pages with this component keep the framed portrait.
+
 ---
 
 ## Known gaps

@@ -320,13 +320,40 @@ const PORTRAIT_SWAP = (() => {
     })
     .sort((a, b) => a.w - b.w);
   if (renditions.length < 2) throw new Error('edited portrait renditions missing in assets/edited/');
+  // The home page's doctor section shows the photograph as a full-bleed
+  // background on desktop (operator, 2026-10-07: "make the image you edited a
+  // full width background image of that section? It looks weird in it's
+  // frame" - system.css §24). A 511:560 portrait cannot cover a ~1.6:1 band
+  // without cropping him to a strip, so a 16:9 version was made: the approved
+  // Sunburst render placed in the left third of a 16:9 canvas, the room
+  // extended by Marketing Studio 2.5 Flare, and the APPROVED pixels stitched
+  // back over the man along a least-difference seam - his likeness is the
+  // checked one (face SSIM 0.905 against the original). Record in
+  // assets/edited/README.md. Desktop gets it through <picture>; below 1025px
+  // the section stacks and the portrait version becomes a full-width band.
+  const wide = fs.readdirSync(dir)
+    .filter((f) => /^dr-hyder-wide-hf(-\d+)?\.webp$/.test(f))
+    .map((f) => {
+      const d = webpSize(path.join(dir, f));
+      if (!d) throw new Error('wide portrait unreadable: assets/edited/' + f);
+      return { file: f, href: '/assets/img/' + f, w: d.w, h: d.h };
+    })
+    .sort((a, b) => a.w - b.w);
+  if (wide.length < 2) throw new Error('wide portrait renditions missing in assets/edited/');
   fs.mkdirSync(path.join(DIST, 'assets', 'img'), { recursive: true });
-  for (const r of renditions) fs.copyFileSync(path.join(dir, r.file), path.join(DIST, 'assets', 'img', r.file));
+  for (const r of renditions.concat(wide)) fs.copyFileSync(path.join(dir, r.file), path.join(DIST, 'assets', 'img', r.file));
   return {
     from: 'dr-hyder-portrait',
     model: 'higgsfield/marketing-studio/image/sunburst',
     renditions,
     largest: renditions[renditions.length - 1],
+    wide,
+    wideMedia: '(min-width: 1025px)',     // where .row--split-media stops stacking (layout.css)
+    // The section is taller than 16:9 on desktop, so cover scales the photo to
+    // the section's HEIGHT: it paints 1742-1968px wide at 1025-1920 (measured),
+    // wider than 100vw. `sizes` must name the painted width, or the browser
+    // picks a file 1.2-1.4x too small and he goes soft.
+    wideSizes: '(max-width: 1960px) 1960px, 100vw',
     altRewrites: new Map([
       ['Dr. Jerry Hyder, OD, in his Clear Lake optometry practice',
        'Dr. Jerry Hyder, OD, Clear Lake optometrist since 1984'],
@@ -334,7 +361,8 @@ const PORTRAIT_SWAP = (() => {
   };
 })();
 
-function rewriteImages(html, stats) {
+function rewriteImages(html, stats, url) {
+  const isHome = !!url && new URL(url).pathname === '/';
   return html.replace(/<img\b[^>]*>/gi, (tag) => {
     const srcM = /\ssrc="([^"]*)"/i.exec(tag);
     if (!srcM) return tag;
@@ -379,6 +407,15 @@ function rewriteImages(html, stats) {
       if (!/\sdecoding=/i.test(out)) out = out.replace(/<img\b/i, '<img decoding="async"');
       stats.imgMapped++;
       if (sz) stats.srcsetAdded++;
+      // Home doctor section: the 16:9 version as a full-bleed background on
+      // desktop (wideSizes), the portrait as a full-width band below 1025px (100vw).
+      if (isHome) {
+        stats.portraitWide++;
+        out = out.replace(/\ssizes="[^"]*"/i, ' sizes="100vw"');
+        const wset = PORTRAIT_SWAP.wide.map((r) => r.href + ' ' + r.w + 'w').join(', ');
+        out = '<picture class="et-doctor__picture"><source media="' + PORTRAIT_SWAP.wideMedia + '" srcset="' + wset
+          + '" sizes="' + PORTRAIT_SWAP.wideSizes + '">' + out + '</picture>';
+      }
       return out;
     }
 
@@ -813,7 +850,7 @@ const stats = { pages: 0, sections: 0, imgMapped: 0, imgUnmapped: [], linksRewri
   platformBytesRemoved: 0, formsNeutralised: [], missingRaw: [],
   assetUrlsRewritten: 0, assetUrlUnmapped: [],
   generatedKept: 0, generatedRevertedToOriginal: [], headingDashesRemoved: [],
-  heroSwapped: 0, portraitAdded: 0, portraitSwapped: 0, portraitAltsRewritten: 0, marqueesBuilt: 0, marqueeLogos: 0,
+  heroSwapped: 0, portraitAdded: 0, portraitSwapped: 0, portraitAltsRewritten: 0, portraitWide: 0, marqueesBuilt: 0, marqueeLogos: 0,
   doctorStatsRemoved: [], doctorLinkMoved: 0, srcsetAdded: 0 };
 
 const pageRecords = [];
@@ -829,7 +866,7 @@ for (const p of seo.pages) {
 
   let body = secs.map((s) => s.html).join('\n');
   body = stripPlatform(body, stats);
-  body = rewriteImages(body, stats);
+  body = rewriteImages(body, stats, p.url);
   body = rewriteLinks(body, stats);
   body = neutraliseForms(body, stats);
   body = marqueeHouses(body, stats);
@@ -1095,7 +1132,7 @@ console.log('  forms neutralised  ' + stats.formsNeutralised.length);
 console.log('  hero image swapped ' + stats.heroSwapped + '  (client-supplied photo, resized; dimensions read from file, alt rewritten)');
 console.log('  portrait added     ' + stats.portraitAdded);
 console.log('  portrait swapped   ' + stats.portraitSwapped + '  (AI-edited photo, ' + PORTRAIT_SWAP.renditions.length
-  + ' widths, data-edited; alts rewritten ' + stats.portraitAltsRewritten + ')');
+  + ' widths, data-edited; alts rewritten ' + stats.portraitAltsRewritten + '; full-bleed <picture> ' + stats.portraitWide + ')');
 console.log('  srcset added       ' + stats.srcsetAdded + '  (' + variantsCopied + ' variant files, '
   + (variantBytes / 1024).toFixed(0) + ' KB)');
 console.log('  doctor stats out   ' + stats.doctorStatsRemoved.length + '  (declared removal)');

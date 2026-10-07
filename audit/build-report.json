@@ -1,6 +1,6 @@
 {
   "schema": "site-reforge/reforge-build@1",
-  "generated": "2026-10-07T02:05:49.339Z",
+  "generated": "2026-10-07T02:52:48.628Z",
   "dist": "C:\\Users\\Dell\\site-reforge\\eyetrendsclearlake-com\\dist",
   "pages": 43,
   "sections": 327,
@@ -20,7 +20,7 @@
       "route": "/",
       "file": "index.html",
       "sections": 12,
-      "bytes": 64497,
+      "bytes": 64819,
       "title": "Eye Trends Vision & Glasses Center | Clear Lake Optometrist"
     },
     {

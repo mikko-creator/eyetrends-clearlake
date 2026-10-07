@@ -1307,3 +1307,88 @@ blockquote, .et-review__q, .bw-quote {
 @media (max-width: 359px) {
   .rw-sec .tib-creed__badge { display: none; }
 }
+
+/* =========================================================================
+   24 · THE HOME DOCTOR SECTION: HIS PHOTOGRAPH AS THE BACKGROUND
+   =========================================================================
+   Operator, 2026-10-07: "make the image you edited a full width background
+   image of that section? It looks weird in it's frame". Home page only
+   (.rw-p-home); the seven other pages that use this component keep the frame.
+
+   Desktop (1025px and up, where the two columns sit side by side):
+   · The frame's boxes are dissolved (display:contents on the left column and
+     on .et-doctor__media). .et-doctor__portrait - which holds the <picture>
+     with the 16:9 version (tools/build.mjs, PORTRAIT_SWAP) - covers the whole
+     band. It is still inside .container (position:relative, z-index:1), so it
+     is pulled out to the section's edges with the full-bleed offsets:
+     50% - 50vw sideways, the band's own --et-flow padding up and down. The
+     section's overflow:hidden clips the scrollbar's few pixels.
+   · object-position puts his face at 27% of the width, over the left column,
+     and a gradient in the band's dark --c-3 (::after) darkens the right side
+     behind the text.
+   · What sat under the frame - the "42 years" chip, his name, role and link -
+     moves into the right column under the text, so nothing covers him.
+   Below 1025px the section stacks, and the frame becomes a full-width band:
+   the portrait version, no frame, his face large.
+   Scoped by .rw-p-home, NOT body.is-homepage: layout.css's body.is-homepage
+   rules never match (the home <body> is class="pg pg-home"). */
+@media (min-width: 1025px) {
+  .rw-sec.rw-p-home.et-doctor .row--split-media {
+    row-gap: 0;
+    align-content: center;
+    min-height: clamp(560px, 44vw, 760px);
+  }
+  .rw-sec.rw-p-home.et-doctor .row--split-media > .col:first-child,
+  .rw-sec.rw-p-home.et-doctor .et-doctor__media { display: contents; }
+  .rw-sec.rw-p-home.et-doctor .row--split-media > .col:last-child { grid-column: 2; grid-row: 1; }
+  .rw-sec.rw-p-home.et-doctor .et-doctor__portrait {
+    position: absolute;
+    top: calc(-1 * var(--et-flow));
+    bottom: calc(-1 * var(--et-flow));
+    left: calc(50% - 50vw);
+    right: calc(50% - 50vw);
+    z-index: 0;
+  }
+  .rw-sec.rw-p-home.et-doctor .et-doctor__portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 27% 22%;
+    transform: none;
+  }
+  .rw-sec.rw-p-home.et-doctor .et-doctor__portrait::after {
+    content: "";
+    background:
+      linear-gradient(90deg,
+        color-mix(in srgb, var(--c-3) 0%, transparent) 0%,
+        color-mix(in srgb, var(--c-3) 0%, transparent) 36%,
+        color-mix(in srgb, var(--c-3) 55%, transparent) 46%,
+        color-mix(in srgb, var(--c-3) 82%, transparent) 56%,
+        color-mix(in srgb, var(--c-3) 88%, transparent) 100%),
+      linear-gradient(180deg,
+        color-mix(in srgb, var(--c-3) 30%, transparent) 0%,
+        transparent 16%,
+        transparent 84%,
+        color-mix(in srgb, var(--c-3) 40%, transparent) 100%);
+  }
+  .rw-sec.rw-p-home.et-doctor .et-doctor__badge,
+  .rw-sec.rw-p-home.et-doctor .et-doctor__name,
+  .rw-sec.rw-p-home.et-doctor .et-doctor__role {
+    grid-column: 2;
+    position: relative;
+    z-index: 1;
+  }
+  .rw-sec.rw-p-home.et-doctor .et-doctor__badge {
+    inset: auto;
+    justify-self: start;
+    margin-top: 32px;
+  }
+  .rw-sec.rw-p-home.et-doctor .et-doctor__name { margin-top: 16px; }
+}
+@media (max-width: 1024px) {
+  .rw-sec.rw-p-home.et-doctor .et-doctor__media {
+    width: auto;
+    max-width: none;
+    margin-inline: calc(50% - 50vw);
+  }
+}

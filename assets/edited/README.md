@@ -45,6 +45,19 @@ Five other renders were rejected:
 
 The sharp vertical crease between his brows is in the original photograph too. It is not an artifact.
 
+## dr-hyder-wide-hf*.webp — the same portrait at 16:9, for the home page's doctor section
+
+| | |
+|---|---|
+| requested | operator, 2026-10-07: *"make the image you edited a full width background image of that section? It looks weird in it's frame"* |
+| why a new file | the 511:560 portrait cannot cover a ~1.6:1 section without cropping him to a strip under the text |
+| sketch | the approved 2880x2880 Sunburst render placed at the LEFT of a 5120x2880 canvas (he lands at 28% of the width, over the left column), the right 2240 px a blurred stretch of the render's own right edge |
+| renders | three jobs, 4k, 16:9, quality high, 2026-10-07: Sunburst `d806f0cb-0061-4b06-a8fa-94bddbd92b31`; Sunburst + the original photo as a second, identity-only reference `3be0eda1-8cd8-4b49-ad7a-7e7e5562d425`; Flare `8a9057bc-52cf-41c4-8ee0-5d0fa89b2c67` (used for the room) |
+| why a composite | re-rendering him a second time cost likeness: face SSIM against the original 0.834–0.844 (the approved render scores 0.882 by the same method) |
+| composite | the APPROVED render warped onto the Flare render (SIFT + RANSAC on the man: scale 0.748, rotation 0.01°), then stitched along the least-colour-difference vertical seam inside x 1840–2130, to the right of him in the shelf column. A 16 px feather: left of the seam, approved pixels (him and the near room); right of it, Flare's extension. The seam is invisible at full size, and the room is softly out of focus there |
+| fidelity of the shipped file | face SSIM **0.905** / NCC 0.961, glasses 0.857, hands 0.917, against the original photo (aligned at scale 1.003) |
+| files | `dr-hyder-wide-hf-master.webp` (3840x2160, q90) and renditions 960, 1280, 1600, 1920, 2560 and 3840 (the unsuffixed file), q80. Only the home page uses them, through `<picture>` at 1025px and up (`tools/build.mjs`, `PORTRAIT_SWAP.wide`) |
+
 The background is generated. It is **not** the Eye Trends office, so no caption may say it is.
 One alt did ("in his Clear Lake optometry practice") and is rewritten in `tools/build.mjs`
 (`PORTRAIT_SWAP`). The output PNG carried no C2PA or other provenance chunks, so the WebP

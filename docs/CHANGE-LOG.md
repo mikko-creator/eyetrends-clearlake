@@ -966,3 +966,45 @@ each product page states "since 1984" / "42 years" 3 to 5 times in its text. See
 | Scope | 191 files byte-identical. 38 pages changed only inside the portrait `<img>`. `system.css` +61 / −0 lines (§23). 3 old portrait files pruned, 6 added |
 | Refs / text | 6,390 refs: 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |
 | Live preview | After the Pages build (`f39c882`), the home page, `/our-doctor/`, `system.css` and a portrait file are byte-identical to the build. 10 placements load. Badges cover 0% of his face at 360/390/1440 on 4 routes |
+
+---
+
+# Revision 13 — the home doctor section: his photograph as the background
+
+> *"make the image you edited a full width background image of that section? It looks weird
+> in it's frame"*
+
+The section "The unhurried medical depth of a real eye doctor" on the home page now uses the
+photograph as a full-bleed background, edge to edge. He stands on the left, and the text sits on
+the right over a gradient in the band's dark `--c-3`. The "42 years" chip, his name, role and link
+moved under the text, so nothing covers him. Below 1025px the section stacks as before, and the
+photo becomes a full-width band without the frame. The seven other pages that use this component
+are unchanged.
+
+**A 16:9 version was needed.** The portrait is 511:560, so covering a ~1.6:1 band would crop him to
+a strip under the text. Higgsfield extended the room to 16:9 around the approved render (Flare,
+4k). Re-rendering him a second time cost likeness (face SSIM 0.834–0.844), so the approved pixels
+were stitched back over him along a least-difference seam in the shelf column. The shipped file
+scores face SSIM 0.905 against the original. Record: `assets/edited/README.md`.
+
+**How it is built:**
+- `tools/build.mjs` wraps the home page's portrait in a `<picture>`: the 16:9 files at 1025px and
+  up, the portrait files below.
+- `system.css` §24 dissolves the frame (`display:contents`). It pulls `.et-doctor__portrait` out
+  to the section's edges with full-bleed offsets, and places his face at 27% of the width.
+- Two traps were met on the way:
+  - The first attempt copied `layout.css`'s `body.is-homepage` selectors. They never match: the
+    home `<body>` is `class="pg pg-home"`. §24 is scoped by `.rw-p-home` instead.
+  - With `sizes="100vw"`, the cover crop painted the image 1742–1968px wide from a 1280–1600 file,
+    1.2–1.4x upscaled. The desktop source now declares `(max-width: 1960px) 1960px, 100vw`.
+
+## Re-verified
+
+| check | result |
+|---|---|
+| Layout | Full-bleed at 1025, 1280, 1440, 1920 and 2560. A frameless full-width band at 1024, 768 and 390 |
+| File chosen | Desktop at 1x gets the 2560 file and 1.5–2x gets the 3840: 0.68–1.02x of the painted size, so no upscaling |
+| His face | 0% covered by any text element, at 9 widths from 320 to 2560. A box placed on the face as a control read 100% |
+| Text over the photo | Mean contrast at 1025–2560: heading 9.9–10.2:1, paragraph 10.6–11.0:1, eyebrow 10.8–13.2:1, name 7.3–7.5:1, role 6.8–7.2:1, link 6.1–11.5:1, pills 7.2–9.1:1, chip 13–14:1. A white box behind the paragraph as a control read 1.11:1. The gradient-filled "eye doctor" cannot be measured this way and is the site's existing accent |
+| Scope | Only `index.html` (the `<picture>`) and `system.css` (+85 / −0, §24) changed; 6 files added; 234 identical |
+| Refs / text | 6,396 refs: 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |

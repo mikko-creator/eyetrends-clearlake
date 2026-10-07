@@ -1055,3 +1055,58 @@ that card is untouched. The other 11 pages are untouched too.
 | Files | Desktop 960–3840 (7–57 KB), with the 2560 file loaded at 1x. Crop 480–1794 (5–34 KB) |
 | Scope | `index.html` changed in one contiguous span inside this section's media block (`<picture>`, image, alt). `system.css` +79 / −0 (§25). 11 files added; 240 identical |
 | Refs / text | 6,402 refs: 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |
+
+# Revision 15 — the designer-house logos, no longer cut by a frame
+
+> *"some of the logos here are being cutoff by a pill shaped frame. Make sure the logos display
+> fully"*
+
+Every logo in the "Designer houses we carry" marquee now shows in full, with no frame around it.
+
+**The cause.** Each logo is an `<img class="ethc-house__logo">`, and `components.css` lists
+`.ethc-house__logo` among its media frames (`audit/redesign-brief.json` filed it under
+`mediaFrames`). Those rules give a photograph its rim: a 32px radius, a 1px border, the glass
+shadow and `overflow: hidden`. Revision 6 removed the pill from the `.ethc-house` wrapper, but the
+image inside kept the photo rim. On a logo 24–32px tall the 32px radius collapses to a full pill,
+and with `overflow: hidden` it trims the image itself; the border and shadow drew the faint
+outline. Ink cut off, measured at 390, 768, 1024, 1280, 1440 and 1920:
+
+| logo | ink cut by the frame |
+|---|---|
+| Persol | 7.3–7.7% |
+| Lindberg | 4.8–5.1%: the L, and the glasses mark after the G |
+| Oliver Peoples | 3.2–3.4%: the edge of the O |
+| Maui Jim | 1.9–2.0% |
+| Tom Ford | 1.0–1.1% |
+| Ray-Ban | 0.7–0.8% |
+| Costa | 0.6–0.7% |
+
+**The fix.** `system.css` (section c, beside the marquee rules) sets `border: 0;
+border-radius: 0; box-shadow: none` on `.rw-sec .ethc-house__logo`, which outranks the generated
+bare class. `components.css` is not edited. It is generated and then post-processed by the colour
+and spacing tokenisers, so the generator alone, run in a scratch copy, did not reproduce it
+(colours and sizes came back as literals). The brief is left as it is, and the override holds if
+the file is ever regenerated.
+
+**The widths.** The logo box is as tall as before (24–32px), but the image used to sit inside a
+1px border and now fills the box, so each logo is 2px taller and 7–9% wider (Lindberg 348 → 369px
+at 1440). Their `sizes` come from `audit/image-widths.json`, so those seven entries were
+re-measured in the built page at 390, 768, 1024 and 1440. The longer row is still a seamless loop:
+- copy-to-copy drift is 0.000px from 390 to 2560 (a 10px flex gap injected as a control read
+  3.333px);
+- 1,464–2,122px of logos are still ahead of the band's right edge when it wraps;
+- the track travels one period per 32s, about 50px/s at desktop (it was 47.6).
+
+## Re-verified
+
+| check | result |
+|---|---|
+| The frame | On all 21 copies at 390, 768, 1024, 1280, 1440 and 1920: border 0, radius 0, no shadow (was 1px, 32px and the glass shadow) |
+| Ink | 0% of any logo clipped at any of the six widths (was 0.6–7.7%). Each image is redrawn at 4x its painted size and every inked pixel is tested against the box's clip. Every logo sits inside the band vertically |
+| Screenshot test | The marquee as served against the same marquee with every logo's rim forced off: 0 pixels differ at all six widths (was 220–595) |
+| Controls | A 12px radius with `overflow: hidden`, injected on the fixed build, reads 103–198 differing pixels and 0.2–7.7% clipped ink, so both tests can fail. The first control, a radius alone, was blind: that candidate also set `overflow: visible`, and current Chrome does not clip an `<img>` with `overflow: visible` to its radius. The shipped fix leaves `overflow` alone, and the control now forces both |
+| Reduced motion | The stopped, hand-scrollable row at 390 and 1440: no rim, 0 clipped, 0 pixels differ |
+| `sizes` | The 28 new widths (7 logos at 4 viewports) match the built page exactly |
+| Scope | `system.css` +12 / −0. `index.html` differs only in the `sizes` of the 21 logo images, the other 43 pages only in the `system.css?v=` hash, and `search-index.json` only in its timestamp. 253 files before and after |
+| Refs / text | 6,402 refs: 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |
+| Live preview | After the Pages build (`546764b`), the home page, `system.css`, the search index and `/products/designer-frames/` are byte-identical to the build. The probe on the live page at 390–1920: no rim, 0 clipped, 0 pixels differ; its control still read 198 |

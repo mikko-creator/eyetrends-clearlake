@@ -97,6 +97,9 @@ not cards; `.ethc-house` stays bare; `.ha-nap` is not glass.
 Current assignment: **27 glass surfaces · 16 media-frame rims · 13 CTA links · 8 pills ·
 11 hairline rows · 3 accordions · 9 stats · 10 eyebrows · 51 on-dark selectors.**
 
+One of the 16 rims is not a frame around a photo. `.ethc-house__logo` is the logo `<img>` itself,
+and the rim's radius clipped the artwork, so `system.css` takes that rim off (revision 15).
+
 Nothing in this file sets `position` or `display`, so `display:contents` re-parenting and
 absolutely-positioned inset media keep working.
 

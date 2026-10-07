@@ -1016,75 +1016,9 @@ blockquote, .et-review__q, .bw-quote {
 }
 
 /* --- d · the pull-quote portrait ------------------------------------------
-   The "In Dr. Hyder's words" section is a quote with no image in the source.
-   His portrait was added (tools/build.mjs) and, at the client's request, sits
-   BESIDE the quote rather than above it.
-
-   The image is the client's own photograph with the background cut away
-   (tools/cutout-portrait.mjs). Because it carries real alpha, the lift has to
-   be a drop-shadow filter: a box-shadow would trace the rectangular element
-   box and draw a hard edge through empty space. */
-.ethc-stance--split {
-  display: grid;
-  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
-  align-items: center;
-  gap: clamp(22px, 4vw, 56px);
-  text-align: left;
-}
-/* The source centres this block (col--measure col--center, and an inline
-   justify-content on the eyebrow that the builder drops). A two-column layout
-   needs the room back and needs the text ranged left. */
-.rw-sec .ethc-stance--split { text-align: left; }
-.rw-sec .col--measure:has(.ethc-stance--split) { max-width: min(1060px, 100%); }
-.ethc-stance--split .ethc-stance__body > * { text-align: left; }
-.rw-sec .ethc-stance--split .ethc-stance__q { margin-inline: 0; max-width: 24em; }
-.ethc-stance--split .et-eyebrow { justify-content: flex-start; }
-
-/* Measured from the cut-out's alpha channel: canvas 511x560, subject bounding
-   box x=127 y=50 w=239 h=510. The frame below is that box plus a little air,
-   and object-position 15% is what centres the subject inside it under cover.
-   Typed guesses drift; these came from sampling the pixels. */
-.ethc-stance__portrait {
-  width: clamp(190px, 25vw, 300px);
-  aspect-ratio: 279 / 530;
-  margin: 0;
-  position: relative;
-  isolation: isolate;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  overflow: visible;
-}
-/* a soft ground so the cut-out is anchored rather than floating on the band */
-.ethc-stance__portrait::before {
-  content: "";
-  position: absolute;
-  inset: -6% -20% -3%;
-  z-index: 0;
-  pointer-events: none;
-  background: radial-gradient(58% 50% at 50% 64%,
-    color-mix(in srgb, var(--g-teal-lit) 34%, transparent) 0%,
-    color-mix(in srgb, var(--g-teal-lit) 12%, transparent) 46%,
-    transparent 72%);
-}
-.ethc-stance__portrait img {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 15% 50%;
-  display: block;
-  filter: drop-shadow(0 24px 38px color-mix(in srgb, var(--c-3) 66%, transparent));
-}
-@media (max-width: 860px) {
-  .ethc-stance--split { grid-template-columns: minmax(0, 1fr); justify-items: center; }
-  .rw-sec .ethc-stance--split { text-align: center; }
-  .ethc-stance--split .ethc-stance__body > * { text-align: center; }
-  .rw-sec .ethc-stance--split .ethc-stance__q { margin-inline: auto; }
-  .ethc-stance--split .et-eyebrow { justify-content: center; }
-  .ethc-stance__portrait { width: clamp(168px, 46vw, 238px); }
-}
+   Until revision 16 this held the background-removed cut-out that sat beside
+   the "In Dr. Hyder's words" quote (.ethc-stance--split). The section now
+   shows the edited photograph as a photo panel, and its rules are §26. */
 
 /* =========================================================================
    19 · TEXT SITTING ON A PHOTOGRAPH
@@ -1482,4 +1416,161 @@ blockquote, .et-review__q, .bw-quote {
   }
   /* the <source> serves a 4:3 crop centred on the frames at these widths */
   .rw-sec.rw-p-home.rw-s5 .ethc-media img { object-position: 50% 50%; }
+}
+
+/* =========================================================================
+   26 · THE HOME QUOTE SECTION: HIS WORDS BESIDE HIS PHOTOGRAPH
+   =========================================================================
+   Operator, 2026-10-07: "let's redesign this section too, I want to use the
+   same enhanced photo of dr. jerry hyder in the first section we revised. And
+   then put some flare in the text not just plain text in here that's too
+   boring". Home page only. tools/build.mjs gives the section the et-quote
+   hook, puts the edited portrait in a figure that is a DIRECT child of the
+   section (not of the quote block, whose blur-in reveal would otherwise become
+   the photo's containing block mid-animation), and wraps four phrases of the
+   quote in accent spans without changing a word.
+
+   · Phones and tablets (the base rules): the photo is a full-width band at
+     the top of the section, its bottom masked into the band, and the quote
+     follows.
+   · 1025px and up: the photo is a panel on the right 45% of the section, full
+     height, cover-cropped on his face. A mask fades its left edge into the
+     band, so the band's own gradients show through rather than a colour that
+     would never match them. The quote takes the left and ends 40-80px short of
+     the panel. The section is held at 52vw (600-860px), the text centred in it.
+     Mobile-first on purpose: a max-width:1024px / min-width:1025px pair leaves
+     zoomed widths between the two (1/64px steps) with neither rule, and there
+     the photo would fall back to its full 1100px-tall intrinsic box.
+   · The type: the quote in the display face at 25-40px; an oversized
+     teal-to-gold opening mark (the display face's own "66", drawn by ::before,
+     so not text); "relationship" in gold Instrument Serif italic (the one new
+     face, requested on the home page only); gold-to-teal underlines under
+     "30 unhurried minutes," and "42 years." that draw in when the block
+     reveals and stop short of the comma and the full stop; "big-box counter."
+     kept on one line (it broke at the hyphen); the name under a gradient rule.
+   · Reduced motion: §14 makes every transition instant and shows every
+     reveal, so the underlines and the photo arrive in their final state. */
+.rw-sec.et-quote { padding-top: 0; }
+.rw-sec.et-quote .row--head { margin-bottom: 0; }
+.rw-sec.et-quote .col--measure { max-width: none; }
+.rw-sec.et-quote .ethc-stance { text-align: left; }
+.rw-sec.et-quote .et-eyebrow { justify-content: flex-start; text-align: left; }
+
+.rw-sec.et-quote .ethc-stance__photo {
+  position: relative;
+  z-index: 0;
+  height: clamp(340px, 92vw, 600px);
+  margin: 0 0 clamp(18px, 4vw, 34px);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, #000 68%, transparent 100%);
+          mask-image: linear-gradient(180deg, #000 68%, transparent 100%);
+}
+.rw-sec.et-quote .ethc-stance__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 14%;
+  /* settles in from 106% as the photo reveals */
+  transform: scale(1.06);
+  transition: transform 1.8s var(--ease);
+}
+.rw-sec.et-quote .ethc-stance__photo.in-view img { transform: none; }
+/* the global reveal fades, lifts and blurs; a photo panel only fades */
+.rw-sec.et-quote .ethc-stance__photo.reveal { transform: none; filter: none; }
+
+.rw-sec.et-quote .ethc-stance__q {
+  position: relative;
+  max-width: none;
+  margin: clamp(14px, 1.6vw, 22px) 0 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(25px, 1.15vw + 17px, 40px);
+  line-height: 1.22;
+  letter-spacing: -.018em;
+  color: color-mix(in srgb, var(--c-1) 88%, transparent);
+  text-align: left;
+  text-wrap: pretty;
+}
+.rw-sec.et-quote .ethc-stance__q::before {
+  content: "\201C";
+  display: block;
+  width: fit-content;            /* so the gradient spans the glyph, not the line */
+  height: .44em;
+  margin: 0 0 .1em -.05em;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(120px, 9vw, 176px);
+  line-height: .9;
+  background: linear-gradient(115deg, var(--g-teal-lit) 8%, var(--g-gold-lit) 62%, var(--g-gold) 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+}
+.rw-sec.et-quote .ethc-stance__word {
+  font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.22em;
+  line-height: 1;
+  letter-spacing: 0;
+  padding-inline-end: .06em;     /* keeps the italic's overhang inside the clip */
+  background: linear-gradient(100deg, var(--g-gold-lit) 20%, var(--g-gold) 90%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+}
+.rw-sec.et-quote .ethc-stance__fact {
+  color: var(--c-1);
+  font-weight: 600;
+  background-image: linear-gradient(90deg, var(--g-gold), var(--g-teal-lit));
+  background-repeat: no-repeat;
+  background-position: 0 96%;
+  /* the span ends on its comma or full stop (build.mjs); the line stops .32em short of it */
+  background-size: calc(100% - .32em) .085em;
+  padding-bottom: .05em;
+  transition: background-size 1.1s var(--ease) .55s;
+}
+.rw-sec.et-quote .ethc-stance__fact + .ethc-stance__fact { transition-delay: .85s; }
+.rw-sec.et-quote .reveal:not(.in-view) .ethc-stance__fact { background-size: 0 .085em; }
+.rw-sec.et-quote .ethc-stance__keep { white-space: nowrap; }
+.rw-sec.et-quote .ethc-stance__by {
+  margin-top: clamp(22px, 2.4vw, 34px);
+  gap: .85em;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(17px, .45vw + 12px, 21px);
+  letter-spacing: .01em;
+  color: var(--c-1);
+}
+.rw-sec.et-quote .ethc-stance__by::before {
+  content: "";
+  width: 48px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--g-gold), var(--g-teal-lit));
+}
+
+@media (min-width: 1025px) {
+  .rw-sec.et-quote {
+    display: grid;
+    align-content: center;
+    min-height: clamp(600px, 52vw, 860px);
+    padding-top: var(--et-flow);
+  }
+  .rw-sec.et-quote .ethc-stance__photo {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 45%;
+    height: auto;
+    margin: 0;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 17%);
+            mask-image: linear-gradient(90deg, transparent 0, #000 17%);
+  }
+  /* The panel starts 5vw right of the container's centre line (it is 45% of a
+     section the container is centred in), so the column ends that far past
+     the middle, less a 40-80px gap. */
+  .rw-sec.et-quote .ethc-stance__body { max-width: calc(50% + 5vw - clamp(40px, 4.4vw, 80px)); }
 }

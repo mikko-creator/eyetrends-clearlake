@@ -200,16 +200,15 @@ for (const [base, list] of variantsByBase) {
   }
 }
 
-// Two assets are authored outside the crawl inventory and so are not in
-// keptCopies: the client-supplied hero (resized, not generated) and the
-// background-removed portrait (a transformation of the client's own photo).
-// Both are copied in explicitly, and a missing one is a hard failure rather
-// than a silently broken <img> (B4).
+// Assets authored outside the crawl inventory are not in keptCopies: the
+// client-supplied hero (resized, not generated) and the header logo renditions
+// below. They are copied in explicitly, and a missing one is a hard failure
+// rather than a silently broken <img> (B4). The background-removed portrait
+// (assets/img/dr-hyder-cutout*.png) was copied here too until revision 16, when
+// the home quote section moved to the edited photograph; nothing uses it now,
+// and its files stay in assets/img.
 for (const rel of ['assets/supplied/hero-eyewear.webp',
                    'assets/supplied/hero-eyewear-1280.webp',
-                   'assets/img/dr-hyder-cutout.png',
-                   'assets/img/dr-hyder-cutout-256.png',
-                   'assets/img/dr-hyder-cutout-384.png',
                    // The header logo is authored in the chrome template, so it
                    // never passes through rewriteImages and never got a srcset.
                    // It is on all 44 pages and was shipping a 988px file for a
@@ -235,24 +234,36 @@ for (const rel of ['assets/supplied/hero-eyewear.webp',
 const DOCUMENTARY = /\b(team|staff|portrait|headshot|testimonial|client|patient|before|after|result|premises|store|clinic|office)\b/i;
 const PRACTICE = /Eye Trends|in Clear Lake|our (office|optical|practice|exam)/i;
 
-// The cut-out portrait. Dimensions are read from the PNG header at build time
-// rather than typed, because a typed pair drifts: the previous build declared
-// 511x639 for a 511x560 image and reserved the wrong box for it.
-// Read from the file: the header declared width="988" height="200" for an
-// image that is actually 988x176, which reserves the wrong box and shifts the
-// header as it loads.
+// The header logo. Read from the file: the header declared width="988"
+// height="200" for an image that is actually 988x176, which reserves the wrong
+// box and shifts the header as it loads.
 const BRAND_LOGO = (() => {
   const f = path.join(DIST, 'assets', 'img', 'eye-trends-vision-and-glasses-center.webp');
   const d = fs.existsSync(f) ? webpSize(f) : null;
   return d || { w: 988, h: 176 };
 })();
 
-const PORTRAIT = (() => {
-  const f = path.join(ROOT, 'assets', 'img', 'dr-hyder-cutout.png');
-  const b = fs.readFileSync(f);
-  if (b.readUInt32BE(0) !== 0x89504e47) throw new Error('portrait cutout is not a PNG');
-  return { file: f, w: b.readUInt32BE(16), h: b.readUInt32BE(20) };
-})();
+// The home quote section ("In Dr. Hyder's words", system.css §26). These four
+// phrases of the quote get accent spans; each must occur exactly once in the
+// block, and each ends on the phrase's own punctuation so no tag lands between
+// a word and its comma or full stop (verify-text reads a tag as a space).
+const QUOTE_ACCENTS = [
+  ['relationship', 'ethc-stance__word'],         // the serif italic accent
+  ['big-box counter.', 'ethc-stance__keep'],     // kept on one line: it broke at the hyphen
+  ['30 unhurried minutes,', 'ethc-stance__fact'], // the drawn underline
+  ['42 years.', 'ethc-stance__fact'],
+];
+// Its photo panel's painted width under object-fit: cover, measured on the
+// built page: the full width below 1025px (the photo is a band); from 1025px
+// the panel is 45% of the section, but cover scales the 511:560 portrait to
+// the panel's HEIGHT where the panel is narrower than that ratio, so it paints
+// 546-547px wide at 1025-1150 and 47-48vw above that (44.6vw at 1920, where
+// the height stops growing).
+const QUOTE_PHOTO_SIZES = '(max-width: 1024px) 100vw, (max-width: 1150px) 550px, 48vw';
+// The accent word is set in Instrument Serif italic (Google Fonts, OFL), the
+// one face the design system did not already load. Only the home page uses it,
+// so only the home page asks for it, in the same single fonts request.
+const HOME_EXTRA_FONT = '&family=Instrument+Serif:ital@1';
 
 // The homepage hero slot. exam-room.webp is 1024x576 and visibly pixelated
 // full-bleed, and no larger copy exists in the crawl. The client SUPPLIED the
@@ -954,15 +965,26 @@ for (const p of seo.pages) {
   body = body.replace(/\bet-reveal\b/g, 'et-reveal reveal');
 
   // ADDITION (client request): the "In Dr. Hyder's words" pull-quote carried no
-  // image in the source. His portrait is a REAL photograph of a real person -
-  // never generated. The background was cut away from that same photograph
-  // (tools/cutout-portrait.mjs); removing a backdrop transforms the asset, it
-  // does not invent one, so the documentary caption still holds.
+  // image in the source. His portrait was added BESIDE it, first as a
+  // background-removed cut-out of the source photograph.
   //
-  // The client asked for it BESIDE the quote rather than above it, so the block
-  // is rebuilt as two columns: the portrait figure, then the block's original
-  // children wrapped untouched in .ethc-stance__body. The children are MOVED,
-  // never rewritten - the text has to stay verbatim.
+  // Operator, 2026-10-07: "let's redesign this section too, I want to use the
+  // same enhanced photo of dr. jerry hyder in the first section we revised. And
+  // then put some flare in the text not just plain text in here that's too
+  // boring". The section now shows the APPROVED edited portrait (the
+  // PORTRAIT_SWAP renditions, data-edited: his likeness is the checked one) as
+  // a photo panel, and sets the quote as display type with accents
+  // (system.css §26):
+  // · The figure is a direct child of the SECTION, not of the quote block. The
+  //   block carries the blur-in reveal, and a transform or filter on an
+  //   ancestor would become the photo's containing block mid-animation. The
+  //   section gets the et-quote hook.
+  // · The quote's words are untouched. Four phrases are wrapped in spans for the
+  //   accents, each boundary on existing whitespace or after the phrase's own
+  //   punctuation, because tools/verify-text.mjs reads every tag as a space
+  //   ("42 years</span>." would read "42 years ."). Each phrase must occur
+  //   exactly once, and the tag-stripped text must come out identical, or the
+  //   build stops.
   //
   // The whole block is spliced by index. An earlier pass used body.replace() on
   // just the opening tag while returning a complete element, which left the
@@ -972,22 +994,41 @@ for (const p of seo.pages) {
     const whole = m ? sliceBalanced(body, m.index, 'div') : null;
     if (m && whole) {
       const inner = whole.slice(m[0].length, whole.length - '</div>'.length);
-      // The source centres this block with an inline style on the eyebrow. A
-      // side-by-side layout reads left-ranged, so that one inline declaration is
-      // dropped here - markup only, not a word of text touched.
-      const inner2 = inner.replace(/\s*style="justify-content:center"/i, '');
-      const rebuilt = '<div class="' + m[1] + ' ethc-stance--split"' + m[2] + '>'
-        + '<figure class="ethc-stance__portrait">'
-        + '<img src="/assets/img/dr-hyder-cutout.png" width="' + PORTRAIT.w + '" height="' + PORTRAIT.h + '"'
-      + ' srcset="/assets/img/dr-hyder-cutout-256.png 256w, /assets/img/dr-hyder-cutout-384.png 384w,'
-      + ' /assets/img/dr-hyder-cutout.png ' + PORTRAIT.w + 'w"'
-      + ' sizes="(max-width: 480px) 179px, (max-width: 820px) 238px, (max-width: 1200px) 256px, 300px"'
-        + ' loading="lazy" decoding="async" data-cutout="fal-ai/birefnet/v2"'
-        + ' alt="Dr. Jerry Hyder, OD, therapeutic optometrist at Eye Trends in Clear Lake">'
-        + '</figure>'
+      // The source centres this block with an inline style on the eyebrow. The
+      // quote reads left-ranged, so that one inline declaration is dropped here
+      // - markup only, not a word of text touched.
+      let inner2 = inner.replace(/\s*style="justify-content:center"/i, '');
+      const plain = (s) => s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+      const textBefore = plain(inner2);
+      for (const [phrase, cls] of QUOTE_ACCENTS) {
+        const n = inner2.split(phrase).length - 1;
+        if (n !== 1) throw new Error('quote accent "' + phrase + '" occurs ' + n + ' times in the quote block, expected 1');
+        inner2 = inner2.replace(phrase, '<span class="' + cls + '">' + phrase + '</span>');
+      }
+      if (plain(inner2) !== textBefore) throw new Error('the quote accents changed the quote text');
+      const rebuilt = '<div class="' + m[1] + ' ethc-stance--photo"' + m[2] + '>'
         + '<div class="ethc-stance__body">' + inner2 + '</div>'
         + '</div>';
       body = body.slice(0, m.index) + rebuilt + body.slice(m.index + whole.length);
+
+      // The enclosing section: the nearest .rw-sec opening tag before the block,
+      // and it has to contain the block, or the build stops.
+      const secStart = body.lastIndexOf('<div class="rw-sec', m.index);
+      const section = secStart < 0 ? null : sliceBalanced(body, secStart, 'div');
+      if (!section || secStart + section.length < m.index + rebuilt.length) {
+        throw new Error('the quote block is not inside a .rw-sec section');
+      }
+      const secTagEnd = body.indexOf('>', secStart) + 1;
+      const secTag = body.slice(secStart, secTagEnd).replace(/^(<div class="[^"]*)"/, '$1 et-quote"');
+      const top = PORTRAIT_SWAP.largest;
+      const set = PORTRAIT_SWAP.renditions.map((r) => r.href + ' ' + r.w + 'w').join(', ');
+      const figure = '<figure class="ethc-stance__photo reveal">'
+        + '<img src="' + top.href + '" width="' + top.w + '" height="' + top.h + '"'
+        + ' srcset="' + set + '" sizes="' + QUOTE_PHOTO_SIZES + '"'
+        + ' loading="lazy" decoding="async" data-edited="' + PORTRAIT_SWAP.model + '"'
+        + ' alt="Dr. Jerry Hyder, OD, therapeutic optometrist at Eye Trends in Clear Lake">'
+        + '</figure>';
+      body = body.slice(0, secStart) + secTag + figure + body.slice(secTagEnd);
       stats.portraitAdded++;
     }
   }
@@ -1036,7 +1077,7 @@ ${p.metaRobots ? `<meta name="robots" content="${p.metaRobots}">` : ''}
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Space+Mono:wght@400;700${route === '/' ? HOME_EXTRA_FONT : ''}&display=swap">
 <link rel="stylesheet" href="${cssHref('tokens.css')}">
 <link rel="stylesheet" href="${cssHref('layout.css')}">
 <link rel="stylesheet" href="${cssHref('system.css')}">
@@ -1209,7 +1250,8 @@ console.log('  asset urls fixed   ' + stats.assetUrlsRewritten + '  (unmapped ' 
 console.log('  platform bytes out ' + stats.platformBytesRemoved);
 console.log('  forms neutralised  ' + stats.formsNeutralised.length);
 console.log('  hero image swapped ' + stats.heroSwapped + '  (client-supplied photo, resized; dimensions read from file, alt rewritten)');
-console.log('  portrait added     ' + stats.portraitAdded);
+console.log('  quote portrait     ' + stats.portraitAdded + '  (home "In Dr. Hyder\'s words": the edited photo as a photo panel; '
+  + QUOTE_ACCENTS.length + ' accent spans, text unchanged)');
 console.log('  portrait swapped   ' + stats.portraitSwapped + '  (AI-edited photo, ' + PORTRAIT_SWAP.renditions.length
   + ' widths, data-edited; alts rewritten ' + stats.portraitAltsRewritten + '; full-bleed <picture> ' + stats.portraitWide + ')');
 console.log('  kids image swapped ' + stats.kidsSwapped + '  (home only; AI-edited 16:9 still life, ' + KIDS_SWAP.renditions.length

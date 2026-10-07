@@ -505,7 +505,11 @@ blockquote, .et-review__q, .bw-quote {
   border-radius: var(--r-md);
   box-shadow: var(--glass-shadow), var(--glass-edge);
 }
-.ethc-hero__ring {
+/* .rw-sec scoping: layout.css's `.ethc-hero__badge span { display: block }`
+   (0,1,1) outranked the bare `.ethc-hero__ring` (0,1,0), so the ring rendered
+   as a block, place-items never applied, and the check sat 7.5px left of and
+   6.9px above the ring's centre at every desktop width. */
+.rw-sec .ethc-hero__ring {
   display: grid; place-items: center;
   width: 34px; height: 34px; border-radius: 50%;
   color: var(--c-1);

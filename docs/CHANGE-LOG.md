@@ -829,3 +829,55 @@ the team can prove nothing changed in transit.
 | Parity | 0 blockers / 0 majors / 2 pre-existing minors |
 | Fabrication **SOURCED** · Decontamination **CLEAN** | |
 | Gate | 26/28 (C22 and C28 do not apply to this lane) |
+
+---
+
+# Revision 10 — the hero proof row on a phone
+
+> *"optimize mobile view for this"*
+
+The three hero stats sat in a wrapping flex row. Correct on a wide screen, wrong on a
+narrow one: each wrapped onto its own line at its own content width, a ragged left edge
+that reads as broken rather than designed. Under 640px they are now three equal columns
+(`system.css` section 22). Commit `0f9f9e8` carries the full measurements.
+
+| viewport | hero height | stats |
+|---|---|---|
+| 360 | 1204 → **956** (−248) | three equal columns, one row, 0 clipped |
+| 390 | 1153 → **906** (−247) | three equal columns, one row, 0 clipped |
+| 414 | 1124 → **879** (−245) | three equal columns, one row, 0 clipped |
+| 768, 1440 | unchanged | the rule is scoped under 640px |
+
+The selector needed the compound form: `.ethc-hero` sits on the `.rw-sec` element itself,
+so `.rw-sec .ethc-hero` matches nothing (the same trap as `.et-doctor` in revision 8).
+
+`tools/audit-space.js` now measures seams from the untransformed box. A section still
+carrying the scroll reveal's resting `translateY(26px)` read as a +26px gap above it and a
+−26px overlap below, which produced six phantom findings on `/services/` at every viewport.
+
+---
+
+# Revision 11 — the check in the hero badge
+
+> *"the check here is not centered"*
+
+The check mark in the home hero's "42 years, one doctor" badge sat in the top-left corner
+of its ring: **7.5px left of and 6.9px above centre**, at every desktop width.
+
+The ring rule asks for `display: grid; place-items: center`, but `layout.css` sets
+`display: block` on every `span` inside `.ethc-hero__badge` at specificity (0,1,1), which
+outranks the bare `.ethc-hero__ring` at (0,1,0). The ring is a span, so it rendered as a
+block and the centring never applied. The rule is now `.rw-sec .ethc-hero__ring` (0,2,0),
+the `.rw-sec` scoping described under *The stylesheet order matters* in `HANDOFF.md`. Any
+new rule for a span inside that badge needs the same scoping.
+
+## Re-verified
+
+| check | result |
+|---|---|
+| Check centre vs ring centre | **dx 0, dy −0.4px** at 1280×585, 1600×662, 1440×900, 1024×768 and 920×700 (was −7.5, −6.9). The 0.4px is the icon's own path, drawn half a unit high |
+| Positive control | translating the icon by (5px, 3px) moved the reading by exactly that |
+| The rest of the badge | badge, ring, title and subtitle boxes unchanged; the badge is still hidden at 900px and below |
+| Scope | 187 of 233 `dist/` files byte-identical; the 44 pages differ only in the `system.css?v=` hash, `search-index.json` only in its timestamp |
+| Refs / text | 6,273 refs: 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |
+| Live preview | measured again on the published page after the Pages build: dx 0, dy −0.4 |

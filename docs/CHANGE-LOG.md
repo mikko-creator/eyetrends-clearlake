@@ -881,3 +881,87 @@ new rule for a span inside that badge needs the same scoping.
 | Scope | 187 of 233 `dist/` files byte-identical; the 44 pages differ only in the `system.css?v=` hash, `search-index.json` only in its timestamp |
 | Refs / text | 6,273 refs: 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |
 | Live preview | measured again on the published page after the Pages build: dx 0, dy −0.4 |
+
+---
+
+# Revision 12 — Dr. Hyder's portrait, edited with Higgsfield
+
+> *"Use higgsfield ai to improve this photo of Dr. Jerry Hyder … Increase resolution of his
+> photo and perhaps use a better background, a clear eye clinic background. Make it very
+> professional looking suited for a high-end service"*
+
+The largest copy of his portrait that the source site published is 511×560. The layout paints it
+up to 927px wide, so it was soft wherever it was large. It appears 39 times on 38 pages.
+
+## How it was made
+
+Higgsfield Marketing Studio 2.5 Sunburst produced it at 4K, 1:1, from the 511×560 original
+centred on a square canvas. The 2880×2880 output was cropped back to the original's exact
+framing (2628×2880) and is served at six widths, 480 to 1920. Six renders across four models
+were compared. The full record is in `assets/edited/README.md`, and the build step is
+`PORTRAIT_SWAP` in `tools/build.mjs`.
+
+## He is a real person, so the edit was checked against the original
+
+The render was aligned to the original on the man himself, using SIFT matches and a RANSAC
+similarity transform: scale 1.001, shift under 1px. Each region was then compared at the
+original's own resolution:
+
+| region | SSIM | NCC | for scale |
+|---|---|---|---|
+| face | **0.874** | 0.949 | the original against a blurred, re-encoded copy of itself scores 0.849; a mirrored face scores 0.265 |
+| glasses | 0.825 | 0.865 | |
+| hands and ring | **0.915** | 0.992 | |
+
+The other five renders were rejected:
+- Flare scored 0.833 on the face.
+- Qwen Image 3 scored 0.813 and reframed him.
+- Grok Image 2.0 scored 0.796.
+- Two versions that kept his own office scored 0.788, and 0.872 with his hands changed.
+
+The sharp crease between his brows is in the original photograph too.
+
+## What the new background changes, and what it does not
+
+The room is **generated**. It is not the Eye Trends office. Every usage carries `data-edited`.
+One alt described the room, "in his Clear Lake optometry practice", and is rewritten to "Dr.
+Jerry Hyder, OD, Clear Lake optometrist since 1984". The other 38 name him, where he practises
+or his record, and the edit changes none of that.
+
+## The badges on the portrait were already broken
+
+Measuring the new photograph against every badge printed on it showed four badge families, on
+35 pages, that were wrong before this revision:
+
+| badge | pages | before | after |
+|---|---|---|---|
+| `.tib-creed__badge` | 4 product pages | a full-width bar across the top of the frame, **over his face**; the "42" in dark ink on the dark plate, 1.4:1 | a chip in the corner; light numeral; 5.2–10.4:1 |
+| `.ia-portrait__badge` | insurance, patient forms | the same full-width bar over his face, 42–94% of it | a chip in the corner; 5.9–13.2:1 |
+| `.et-doctor__badge` | 8 pages | no plate; white text on the bare photo, 3.1:1 (worst pixel 1.7) | dark glass; 4.9–8.0:1 |
+| `.dc-doctor__badge` | 21 service pages | no plate; the "42" fell to 1.8:1 on the new photo | dark glass; 4.8–7.3:1 |
+
+The "after" figures are mean contrast across 390, 768, 1024 and 1440 px. The worst pixel of
+every reading is 4.65:1 or better.
+
+Causes:
+- **The full-width bars.** The generated glass block in `components.css` sets `position:relative`
+  and beats `layout.css`'s `absolute`.
+- **The missing plates.** The `et-doctor` and `dc-doctor` rules read the undefined
+  `--ds-glass-blur`.
+- **The dark numeral.** It comes from `.site-content b`.
+
+On a phone the frame becomes a short landscape crop with his face under the top-right corner:
+80% of it was covered at 320px. Below 640px the badges now sit at the bottom corner. Below 360px
+the product badge is hidden, because nothing fits between his chin and the name caption, and
+each product page states "since 1984" / "42 years" 3 to 5 times in its text. See `system.css` §23.
+
+## Re-verified
+
+| check | result |
+|---|---|
+| Every placement | 27 measured (8 routes × 390/1024/1440), 0 broken. The browser now picks the 480 / 960 / 720 file, where it used to stretch the 511px one up to 927px |
+| Layout | Untransformed boxes are identical before and after. The services frame's scroll zoom (×1.059) was ruled out with a same-build control |
+| Badge text contrast | 44 readings, 390–1440, text measured against what is actually behind it: worst pixel **4.65:1 or better** |
+| Badges over his face | 66 readings (6 routes × 11 widths, 320–1440): **0%**. A chip forced onto the face as a control read 67.7% |
+| Scope | 191 files byte-identical. 38 pages changed only inside the portrait `<img>`. `system.css` +61 / −0 lines (§23). 3 old portrait files pruned, 6 added |
+| Refs / text | 6,390 refs: 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |

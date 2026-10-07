@@ -130,10 +130,21 @@ for character, with three declared exceptions, all listed in `tools/verify-text.
 proves it and fails if anything else drifts.
 
 **Generated imagery is labelled.** Anything produced by an image model carries
-`data-generated`. The client-supplied hero carries `data-supplied`. Dr. Hyder's portrait
-carries `data-cutout` — it is his real photograph with the background removed, not a
-generated likeness. No generated image is ever used where the alt text makes a claim about
-the practice, its premises or its people.
+`data-generated`. The client-supplied hero carries `data-supplied`. The circular portrait
+beside "In Dr. Hyder's words" carries `data-cutout` — it is his real photograph with the
+background removed, not a generated likeness. No generated image is ever used where the alt
+text makes a claim about the practice, its premises or its people.
+
+**Dr. Hyder's main portrait is an AI-edited photograph** (38 pages, revision 12). At the
+operator's request it was edited with Higgsfield Marketing Studio 2.5 Sunburst:
+- He is kept, checked against the original photo. Face SSIM is 0.874 at the original's
+  resolution, and his size and position are unchanged.
+- The background is a **generated** clinic interior. It is **not the Eye Trends office**.
+- Resolution went from 511x560 to 2628x2880, served at six widths.
+
+Every usage carries `data-edited`. The one alt that described the room ("in his Clear Lake
+optometry practice") was rewritten. Provenance, prompt settings and the fidelity numbers are in
+`assets/edited/README.md`. The practice should approve the edited likeness before launch.
 
 ---
 
@@ -144,7 +155,7 @@ the practice, its premises or its people.
 | **Form backend** | must be wired before launch — see above |
 | **No `404.html`** | the build does not generate one; add a page and point your host at it |
 | ~~No sitemap and no robots.txt~~ **fixed** | `tools/build-sitemap.mjs` now writes both, listing 43 of the 44 routes (`/search/` is excluded: it renders results client-side and has no content of its own). The `<loc>` entries use the production origin so they agree with the canonical tags. |
-| **`--ds-glass-blur`** | referenced by `layout.css`, never defined. A blur, not spacing — harmless, but it means that one backdrop-filter is inert |
+| **`--ds-glass-blur`** | Referenced by 7 chip rules in `layout.css` and never defined, so their own `backdrop-filter` is inert. Five chips get their glass elsewhere: `components.css` for `.ia-portrait__badge` and `.tib-creed__badge`; `system.css` §19 for `.ethc-hero__badge` and `.tib-hero__chip`; `system.css` §23 for `.et-doctor__badge` and `.dc-doctor__badge`, which had no plate at all until revision 12. `.dc-chip` was not re-checked |
 | **2 parity minors** | one is 14 images with empty `alt` — the logo marquee's decorative duplicates, which are `aria-hidden` on purpose. The other is one `<h1>` where an em-dash became a colon at the client's request |
 | **Gate is 26/28** | `C22` is pixel-parity with the ORIGINAL site, which a deliberate redesign must fail. `C28` is compose-from-presets, and this design layer is hand-authored. Both are recorded overrides in `HANDOFF-MANIFEST.json`, not unnoticed failures |
 

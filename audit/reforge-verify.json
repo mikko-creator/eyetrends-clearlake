@@ -1,9 +1,9 @@
 {
   "schema": "site-reforge/reforge-verify@1",
-  "generated": "2026-10-07T00:27:57.674Z",
+  "generated": "2026-10-07T02:05:51.735Z",
   "pages": 44,
-  "refsChecked": 6273,
-  "assets": 189,
+  "refsChecked": 6390,
+  "assets": 192,
   "orphans": [],
   "findings": [],
   "contentRecall": {

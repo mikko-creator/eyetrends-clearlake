@@ -1246,3 +1246,64 @@ blockquote, .et-review__q, .bw-quote {
   -webkit-backdrop-filter: blur(18px) saturate(165%);
   backdrop-filter: blur(18px) saturate(165%);
 }
+
+/* =========================================================================
+   23 · THE "42 YEARS" BADGES ON DR. HYDER'S PORTRAIT
+   =========================================================================
+   Four badge families sit on his photograph on 35 pages. When the portrait
+   was replaced (revision 12) every one of them was measured against his face
+   and against what is behind its text, and all four were wrong:
+
+   · .tib-creed__badge (4 product pages) and .ia-portrait__badge (insurance,
+     patient forms): the generated glass block in components.css sets
+     position:relative, loads after layout.css's position:absolute at the
+     same specificity, and wins - so each rendered as a FULL-WIDTH BAR across
+     the top of the frame, over his face (42-94% of it, at every width).
+   · .et-doctor__badge (8 pages) and .dc-doctor__badge (21 pages) were never
+     glass at all: they are not in components.css's lists, and their own
+     backdrop-filter reads the undefined --ds-glass-blur. White text sat on
+     the bare photograph: 3.1:1 (worst pixel 1.7) on the old photo, 2.9:1
+     (worst 1.09) on the new one.
+   · The numeral takes `.site-content b { color: var(--g-fg) }`, dark ink,
+     including on the dark plates: 1.4:1 on tib-creed.
+
+   Now: positioned, the standard dark glass that tib-creed already had, a
+   light numeral, and the one-line chips (dc-doctor 217px, ia-portrait on
+   /patient-forms/ 209px, both missing the <br> the others carry) wrapped to
+   two lines, which takes them off his ear at 1440. Measured after, text
+   against what is actually behind it: 4.65:1 or better at the worst pixel
+   (AA asks 4.5:1), 390 to 1440, 44 readings.
+
+   On a phone the frame becomes a short landscape crop with his face at the
+   top centre - exactly under the top-right corner: 80% of his face covered at
+   320px, 28% at 390. Below 640px the badges move to the bottom corner, over
+   his shirt; tib-creed rides above its name caption. At 320px nothing fits
+   between his chin and that caption, so the product badge is hidden below
+   360px - each product page states "since 1984" / "42 years" in its text 3
+   to 5 times. Face coverage after: 0% for every badge, 320 to 1440. */
+.rw-sec .tib-creed__badge,
+.rw-sec .ia-portrait__badge { position: absolute; }
+.rw-sec .et-doctor__badge,
+.rw-sec .dc-doctor__badge {
+  background: var(--glassd-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glassd-brd);
+  border-radius: var(--r-lg);
+  box-shadow: 0 24px 56px -26px color-mix(in srgb, var(--c-3) 60%, transparent), var(--glassd-edge);
+}
+.rw-sec .et-doctor__badge b,
+.rw-sec .dc-doctor__badge b,
+.rw-sec .tib-creed__badge b { color: var(--g-on-dark); }
+.rw-sec .dc-doctor__badge > span,
+.rw-sec .ia-portrait__badge > span { max-width: 5.5em; }
+@media (max-width: 639px) {
+  .rw-sec .et-doctor__badge,
+  .rw-sec .dc-doctor__badge,
+  .rw-sec .tib-creed__badge,
+  .rw-sec .ia-portrait__badge { top: auto; bottom: 12px; }
+  .rw-sec .tib-creed__badge { bottom: 58px; }
+}
+@media (max-width: 359px) {
+  .rw-sec .tib-creed__badge { display: none; }
+}

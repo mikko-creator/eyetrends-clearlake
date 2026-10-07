@@ -282,6 +282,58 @@ const HERO_SWAP = (() => {
   };
 })();
 
+// Dr. Hyder's portrait, on 38 pages. The crawl's largest copy is 511x560 and
+// it is painted up to 927px wide. At the operator's request (2026-10-07: "Use
+// higgsfield ai to improve this photo of Dr. Jerry Hyder ... Increase
+// resolution of his photo and perhaps use a better background, a clear eye
+// clinic background. Make it very professional looking suited for a high-end
+// service") the photograph was edited with Higgsfield Marketing Studio 2.5
+// Sunburst: the man is kept, the background is replaced by a generated clinic
+// interior. The 2880x2880 output is cropped back to the source's exact 511:560
+// framing (assets/edited/dr-hyder-portrait-hf-master.webp, 2628x2880) and
+// encoded at six widths.
+//
+// He is a real person, so the edit was checked against the real photograph
+// before it shipped: aligned on him with SIFT (scale 1.001, shift under 1px),
+// then compared at the original's resolution - face SSIM 0.874, hands 0.915,
+// above the 0.849 that a merely softened copy of the original scores. The
+// crease between his brows, rendered sharply here, is in the original too.
+//
+// The files keep "dr-hyder-portrait" in their names on purpose: layout.css
+// positions this photo with img[src*=dr-hyder-portrait] (50% 22%), and the
+// framing is unchanged, so that rule still lands on his face.
+//
+// Stamped data-edited, not data-generated: the subject is a photograph, the
+// room is not. B3 still governs the caption. One alt says the photo was taken
+// "in his Clear Lake optometry practice"; the room is now generated, so that
+// alt is rewritten to claim nothing about the premises. The others name him
+// and where he practises ("OD, at Eye Trends") or his record ("since 1984"),
+// which the edit does not change. Dimensions are read from the files.
+const PORTRAIT_SWAP = (() => {
+  const dir = path.join(ROOT, 'assets', 'edited');
+  const renditions = fs.readdirSync(dir)
+    .filter((f) => /^dr-hyder-portrait-hf(-\d+)?\.webp$/.test(f))
+    .map((f) => {
+      const d = webpSize(path.join(dir, f));
+      if (!d) throw new Error('edited portrait unreadable: assets/edited/' + f);
+      return { file: f, href: '/assets/img/' + f, w: d.w, h: d.h };
+    })
+    .sort((a, b) => a.w - b.w);
+  if (renditions.length < 2) throw new Error('edited portrait renditions missing in assets/edited/');
+  fs.mkdirSync(path.join(DIST, 'assets', 'img'), { recursive: true });
+  for (const r of renditions) fs.copyFileSync(path.join(dir, r.file), path.join(DIST, 'assets', 'img', r.file));
+  return {
+    from: 'dr-hyder-portrait',
+    model: 'higgsfield/marketing-studio/image/sunburst',
+    renditions,
+    largest: renditions[renditions.length - 1],
+    altRewrites: new Map([
+      ['Dr. Jerry Hyder, OD, in his Clear Lake optometry practice',
+       'Dr. Jerry Hyder, OD, Clear Lake optometrist since 1984'],
+    ]),
+  };
+})();
+
 function rewriteImages(html, stats) {
   return html.replace(/<img\b[^>]*>/gi, (tag) => {
     const srcM = /\ssrc="([^"]*)"/i.exec(tag);
@@ -302,6 +354,31 @@ function rewriteImages(html, stats) {
       if (!/\sfetchpriority=/i.test(out)) out = out.replace(/<img\b/i, '<img fetchpriority="high"');
       out = out.replace(/\sloading="lazy"/i, ' loading="eager"');
       stats.imgMapped++;
+      return out;
+    }
+
+    // Dr. Hyder's portrait: every usage takes the edited photograph (PORTRAIT_SWAP).
+    // `sizes` stays the measured one for this base - the framing did not change.
+    if (base === PORTRAIT_SWAP.from) {
+      stats.portraitSwapped++;
+      const top = PORTRAIT_SWAP.largest;
+      const sz = sizesAttr(base);
+      const alt = (/\salt="([^"]*)"/i.exec(tag) || [])[1] || '';
+      let out = tag
+        .replace(/\ssrcset="[^"]*"/gi, '').replace(/\ssizes="[^"]*"/gi, '')
+        .replace(/\ssrc="[^"]*"/i, ' src="' + top.href + '"')
+        .replace(/\swidth="[^"]*"/gi, '').replace(/\sheight="[^"]*"/gi, '');
+      if (PORTRAIT_SWAP.altRewrites.has(alt)) {
+        out = out.replace(/\salt="[^"]*"/i, ' alt="' + PORTRAIT_SWAP.altRewrites.get(alt) + '"');
+        stats.portraitAltsRewritten++;
+      }
+      const set = PORTRAIT_SWAP.renditions.map((r) => r.href + ' ' + r.w + 'w').join(', ');
+      out = out.replace(/<img\b/i, '<img data-edited="' + PORTRAIT_SWAP.model + '" width="' + top.w + '" height="' + top.h + '"'
+        + (sz ? ' srcset="' + set + '" sizes="' + sz + '"' : ''));
+      if (!/\sloading=/i.test(out)) out = out.replace(/<img\b/i, '<img loading="lazy"');
+      if (!/\sdecoding=/i.test(out)) out = out.replace(/<img\b/i, '<img decoding="async"');
+      stats.imgMapped++;
+      if (sz) stats.srcsetAdded++;
       return out;
     }
 
@@ -736,7 +813,7 @@ const stats = { pages: 0, sections: 0, imgMapped: 0, imgUnmapped: [], linksRewri
   platformBytesRemoved: 0, formsNeutralised: [], missingRaw: [],
   assetUrlsRewritten: 0, assetUrlUnmapped: [],
   generatedKept: 0, generatedRevertedToOriginal: [], headingDashesRemoved: [],
-  heroSwapped: 0, portraitAdded: 0, marqueesBuilt: 0, marqueeLogos: 0,
+  heroSwapped: 0, portraitAdded: 0, portraitSwapped: 0, portraitAltsRewritten: 0, marqueesBuilt: 0, marqueeLogos: 0,
   doctorStatsRemoved: [], doctorLinkMoved: 0, srcsetAdded: 0 };
 
 const pageRecords = [];
@@ -1017,6 +1094,8 @@ console.log('  platform bytes out ' + stats.platformBytesRemoved);
 console.log('  forms neutralised  ' + stats.formsNeutralised.length);
 console.log('  hero image swapped ' + stats.heroSwapped + '  (client-supplied photo, resized; dimensions read from file, alt rewritten)');
 console.log('  portrait added     ' + stats.portraitAdded);
+console.log('  portrait swapped   ' + stats.portraitSwapped + '  (AI-edited photo, ' + PORTRAIT_SWAP.renditions.length
+  + ' widths, data-edited; alts rewritten ' + stats.portraitAltsRewritten + ')');
 console.log('  srcset added       ' + stats.srcsetAdded + '  (' + variantsCopied + ' variant files, '
   + (variantBytes / 1024).toFixed(0) + ' KB)');
 console.log('  doctor stats out   ' + stats.doctorStatsRemoved.length + '  (declared removal)');

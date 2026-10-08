@@ -1226,3 +1226,71 @@ column. The DOM order, and so the reading order, is unchanged.
 | The probe itself | The figure model began as one rectangle, which flagged the eyebrow at 1025 where only his head is. It is now two boxes: his head, then his shoulders and arms. The overlap it still found under the paragraph was real, and the 30% position fixed it |
 | Refs / text | 6,447 refs: 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |
 | Live preview | After the Pages build (`0a9fa26`), the home page, the seven pages, `system.css` and the wide photo are byte-identical to the build. The check on the live medical eye care, products and services pages at 1025, 1440 and 390 read the same. Contrast at 1440 was 6.16:1 mean and 5.64:1 worst, and the control read 1.00:1 |
+
+# Revision 18 — wide screens: the layout grows with the window
+
+> *"I want you to run spacing and padding fixes. I want the elements of the whole site to be
+> responsive to all screen sizes. The problem is when it is viewed in a wider screen size, the
+> elements are too compressed that it leaves a huge space/gap on the sides and in correlation to
+> other elements."*
+
+**Measured before.** On every page the content was 1100px wide whatever the window. That left this
+much empty margin per side:
+
+| window | margin per side |
+|---|---|
+| 1440 | 163px |
+| 1920 | 403px |
+| 2560 | 723px |
+
+Nothing else grew either: type, gaps and section padding were all capped at their desktop values.
+
+**The change** (`system.css` §27, one `min-width: 1441px` block, so the design as tuned at 1280–1440
+cannot change). Above 1440 each value grows in a straight line from its 1440 value to a target at
+2560, and stops there:
+
+| value | 1440 → 2560 |
+|---|---|
+| container | 1180 → 1920px (content about 70–75% of the window, as at 1440) |
+| side padding | 40 → 68px |
+| section padding | 108 → 160px |
+| grid gaps | 30 → 46px |
+| `--ds-space` scale | ×1.33 |
+| body text | 17 → 19.5px |
+| other type | about ×1.15 |
+
+Margins per side are now 256px at 1920 and 381px at 2560.
+
+Along the way:
+- **Tokens shadowed inside sections.** `layout.css` re-declares its spacing tokens and a 1200px
+  `--ds-container-max` on EVERY section, so the `:root` values never reached inside one. They are
+  declared again at section level. That also put the service pages' hero copy back in line with
+  the sections below it: it had started 401px from the left at 1920 while the content below
+  started at 256.
+- **Reading measure.** The columns grow faster than the type (about ×1.6 against ×1.15), and 99
+  sections ran past 75 characters a line at 2560. Running text, ledes, FAQ answers and large quotes
+  get `em` caps of about 70, 63 and 56 characters. Plain paragraphs get theirs at zero specificity,
+  and where a cap already existed the new one is the smaller of the two, so nothing became wider.
+- **Fixed layout boxes.** Three boxes that `layout.css` fixes in px (the manifesto rows, the bio
+  card and the story timeline) keep the share of the container they had at 1440.
+- **Wide components.** The designer-house logos, the home kids section's glass card (its frames
+  stay clear, see below) and the home quote section's height grow with the window too.
+- **Images.** `sizes` gains `(max-width: 1440px)` and `(max-width: 1920px)` buckets, from painted
+  widths measured at 1920 and 2560 on all 44 pages (`audit/image-widths.json`, `sizesAttr` in
+  `tools/build.mjs`). Up to 1440 the attribute selects exactly as before.
+
+## Re-verified
+
+| check | result |
+|---|---|
+| 1440 and below unchanged | All 44 pages at 1440, 1280 and 390 lay out identically to the old build: every element's box to 0.25px, and its font size. A control adding 1px of padding to the first visible heading is caught on every page tested. Two controls were blind before that one: a 1px margin collapsed into the eyebrow's margin, and the first `<h2>` in the page sits in the hidden search panel |
+| Alignment | At 1920 and 2560, on all 44 pages, no section starts off the container's content edge (the service-page heroes did) |
+| Line length | At 1600, 1920 and 2560, no paragraph runs past 75 characters a line (99 sections did) |
+| Photo sections | The 8 doctor sections at 1920 and 2560 cover edge to edge, with his face and figure clear of the text and density at least 1. The quote section: panel 45%, face clear, density 1.1, quote contrast 7.8:1 worst. The kids section at 1600–2560: frames clear of the wider card by 155–377px, while a card stretched across the section reads as an overlap |
+| Scope | 250 files before and after. 38 pages changed, and only in `<img>` `sizes` (204 tags, 43 images), each keeping its old values up to 1440. `system.css` is the old file plus §27 (+149 lines). `tools/build.mjs` +12 / −1. Refs 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |
+| Live preview | After the Pages build (`cc5cdce`), six files are byte-identical. The live home, medical eye care and our-doctor pages measure 1393px of content at 1920 and 1783px at 2560 (margins 256 and 381), with none misaligned and none over 75 characters. At 1440 and 390 they lay out identically to the old build |
+
+**Found, not changed** (HANDOFF, known gaps):
+- Eight photos are painted wider than their largest file, three of them already 1.4–1.6× at 1440.
+- For 17 cover-cropped images the 390–1440 `sizes` record box width, not painted width.
+- 27 sections already ran past 75 characters a line at 1440.

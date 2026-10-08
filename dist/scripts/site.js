@@ -221,6 +221,93 @@
     });
   });
 
+  /* ---------------------------------------------- 8b · MEGA MENU AIM ----- */
+  // chrome.css opens a mega panel on :hover and lets a closing one linger (section 4). What CSS cannot see is
+  // direction. The straight line from "Services" down to its right-hand columns crosses the "Eyewear" link, and
+  // :hover alone hands the menu to Eyewear. A shallow path from "Eyewear" to its far-right card runs along
+  // "Insurance", and the menu closes on the way. A mouse that enters another nav link while moving DOWN, just
+  // after leaving an open menu, is aiming at that menu's panel. So the open item is held (.is-held), and a
+  // crossed mega item is kept shut (.is-shut), for as long as the crossing lasts. It ends when the pointer
+  // reaches the held item, turns straight down onto a nav link, moves along the nav, or pauses for 350ms. A
+  // move along the nav switches menus as before. Mouse only: touch and keyboard are untouched.
+  var megaItems = [].slice.call(document.querySelectorAll('.nv-has-mega'));
+  // The strip is the link's own ::before, so a click on it would follow the link. A click below the link's
+  // box landed on the strip: let it do nothing, as it did before the strip existed. Keyboard clicks carry
+  // no position (clientY 0) and pass.
+  megaItems.forEach(function (item) {
+    var link = item.querySelector('.nv-link');
+    if (link) link.addEventListener('click', function (e) {
+      if (e.clientY > link.getBoundingClientRect().bottom) e.preventDefault();
+    });
+  });
+  if (megaItems.length > 1 && window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    var trail = [];                       // recent mouse positions, the last 200ms
+    var held = null, shut = null, holdTimer = 0;
+    var lastLeft = null, lastLeftAt = 0;  // the mega item the mouse last left, and when
+    var release = function () {
+      if (held) held.classList.remove('is-held');
+      if (shut) shut.classList.remove('is-shut');
+      held = shut = null;
+      clearTimeout(holdTimer);
+    };
+    var movingDown = function () {        // down, at least 1 in 16 of the sideways travel
+      if (trail.length < 2) return false;  // (the shallowest Services paths at 1920 fall about 0.12)
+      var a = trail[0], b = trail[trail.length - 1];
+      var dy = b.y - a.y;
+      return dy > 0 && dy >= Math.abs(b.x - a.x) * 0.0625;
+    };
+    var throughSideways = function () {   // still crossing: down, but more sideways than down
+      if (trail.length < 2) return false;
+      var a = trail[0], b = trail[trail.length - 1];
+      var dy = b.y - a.y;
+      return dy > 0 && Math.abs(b.x - a.x) >= dy;
+    };
+    var renew = function () { clearTimeout(holdTimer); holdTimer = setTimeout(release, 350); };
+    document.addEventListener('pointermove', function (e) {
+      if (e.pointerType !== 'mouse') return;
+      trail.push({ x: e.clientX, y: e.clientY, t: e.timeStamp });
+      // 200ms of travel: on a slow, shallow path (120 px/s, falling 1 in 8) a shorter window holds about
+      // 1px of descent, which whole-pixel positions can round to none
+      while (trail.length > 2 && e.timeStamp - trail[0].t > 200) trail.shift();
+      if (!held) return;
+      // While held, the hold lasts as long as the crossing does. A slow pointer (120 px/s) takes about half a
+      // second to cross the link, longer than any fixed hold.
+      // - On a nav link (the crossed one, or the next, whose corner a shallow path clips): keep it while the
+      //   path runs on sideways and down. A turn straight down, a move along the nav (no downward travel) or a
+      //   pause (no move for 350ms) is a choice.
+      // - In the band below: keep it while moving down.
+      var over = e.target && e.target.closest ? e.target.closest('.nv-item') : null;
+      if (over) { if (throughSideways()) renew(); else release(); }
+      else if (movingDown()) renew();
+      else release();
+    }, { passive: true });
+    megaItems.forEach(function (item) {
+      item.addEventListener('pointerleave', function (e) {
+        if (e.pointerType !== 'mouse') return;
+        // only a menu that was open counts: an item merely crossed while shut never was
+        if (item === shut || item.classList.contains('is-shut')) return;
+        lastLeft = item; lastLeftAt = e.timeStamp;
+      });
+    });
+    // Entering ANY nav link right after leaving an open menu, moving down: the other mega link (whose own
+    // menu is kept shut), or one without a menu that a shallow path to a corner card runs along ("Insurance").
+    [].slice.call(document.querySelectorAll('.nv-item')).forEach(function (item) {
+      item.addEventListener('pointerenter', function (e) {
+        if (e.pointerType !== 'mouse') return;
+        if (item === held) { release(); return; }    // reached the held item's strip or panel
+        if (held || !movingDown()) return;
+        // The menu was left a moment ago, so its panel is still up. Don't read the panel to find that out:
+        // by now CSS may already have cancelled it for a newly hovered mega item (section 4, rule 3). 150ms
+        // covers the 2px gap between the links, and rules out a pointer that left upward and came back.
+        if (!lastLeft || lastLeft === item || e.timeStamp - lastLeftAt > 150) return;
+        held = lastLeft;
+        held.classList.add('is-held');
+        if (item.classList.contains('nv-has-mega')) { shut = item; shut.classList.add('is-shut'); }
+        renew();
+      });
+    });
+  }
+
   /* --------------------------------------------------- 9 · UNWIRED FORMS -- */
   // No backend here: a form must never post patient details somewhere wrong.
   [].slice.call(document.querySelectorAll('form[data-sr-unwired]')).forEach(function (form) {

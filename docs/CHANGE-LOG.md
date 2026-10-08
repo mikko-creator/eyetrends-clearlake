@@ -1317,3 +1317,118 @@ errors:
 - it gave the reading caps as estimated character counts, not measured ones.
 
 Each figure above was then checked against the saved probe output.
+
+
+# Revision 19 — the mega menus: a hover on the eyewear cards, and a way in that holds
+
+> *"fix the hover effects in the eyewear megamenu"*
+
+**Measured before.** A real pointer was driven through Chrome's DevTools protocol, so `:hover` was the browser's own.
+The probes and their saved output are in `.tmp/session-cc24e987/menu/`.
+- **The four eyewear cards had no hover at all.** `:hover` matched on each, and no property changed: background,
+  border, shadow, transform and text colour all stayed the same. A control that injects a hover background is
+  caught on every card.
+  - Their lift and border lived in `reforge.css`, which the build no longer ships (`build.mjs`: "base.css and
+    reforge.css are gone"). Nothing replaced them.
+  - The Services menu's links do react: they turn teal and slide 4px.
+- **The way into a panel crossed a dead band.** It was 26px with the header at rest and 19px with it stuck: the
+  header's padding under the link, then the panel's 10px margin. In it, neither the item nor its panel is hovered,
+  so the panel began to fade as soon as the pointer entered it.
+  - Straight down at 1280x585, it dipped to 0–50% opacity. At about 40–50 px/s it closed.
+  - Across a matrix of 612 paths (each trigger to every item, at 120, 450 and 900 px/s, at 1280, 1440 and 1920,
+    with the header at rest and stuck), the old build closed the menu on 64 paths, opened the other menu on 42,
+    and dipped below 90% on about 300.
+- **Switching menus could re-open the old one.** Moving from Eyewear to Services and down into its panel landed on
+  the closing Eyewear panel, which sits on top because it comes later in the page, and re-opened it. This
+  happened on 33 of 72 runs in the old build.
+
+**The change.** One block is inserted in `chrome.css` section 4 and one section in `site.js` (8b). Nothing is
+removed.
+1. **A strip under each mega link.** It is invisible, starts 2px below the link and reaches 48px down into the
+   panel, 180px to each side.
+   - It appears with the hover and stays until the panel has finished closing.
+   - It starts 2px down because at the exact edge, hit-testing gave it the last pixel row of the earlier nav links
+     (a click on the bottom row of "About Us" opened /services).
+   - The panel paints over its lower part.
+   - A click on the strip does nothing (`site.js`), as a click in that band did before.
+   - Under reduced motion it goes with the panel at 200ms.
+2. **Closing waits 200ms, then fades with a slow start** (ease-in). Opening keeps the site's quick ease.
+3. **Switching to the other mega item removes the old panel and its strip at once.** `transition: none` cancels the
+   running fade.
+4. **Menu aim** (`site.js` 8b, mouse only). CSS cannot tell these paths from choosing another link:
+   - the straight line from "Services" down to its right-hand columns crosses the "Eyewear" link;
+   - a shallow path from "Eyewear" to its far-right card runs along "Insurance".
+
+   A first version, CSS only, handed up to 19 such paths per screen size to the wrong menu, where the old build had
+   reached Services.
+   - **When it holds.** The pointer enters another nav link within 150ms of leaving an open menu, moving down (at
+     least 1 in 16 of its sideways travel, measured over the last 200ms). The script then holds the open menu
+     (`.is-held`) and keeps a crossed mega item shut (`.is-shut`).
+   - **Turns.** A turn straight down is read over the last 8px of movement, so it registers while the pointer is
+     still on the link it wants. This was found after the first publish: with only the 200ms window, 4 of 16 fast
+     "drift onto the other link, then go down" paths opened the menu that had been left. A 50ms window was too
+     jumpy: at 120 px/s it could hold two whole-pixel points 0px across and 1px down, and in 2 of 192 runs it read
+     a slow graze as a turn.
+   - **While it holds.** The hold runs for as long as the crossing does, over the links and down through the band.
+     It is renewed on every move while the path still descends (over 200ms) and has not turned straight down (over
+     its last 8px).
+   - **When it ends.** On reaching the held menu, a turn straight down, a move along the nav, or a pause of 350ms.
+     A plain move along the nav switches at once, as before.
+   - **Two traps found in testing.**
+     - The script must not read a panel to tell whether a menu is open: by the time it runs, CSS rule 3 has already
+       cancelled that panel.
+     - A link that was crossed while shut must never count as the menu that was left.
+5. **The cards get a hover**, for the pointer and for keyboard focus alike. It is the site's own card hover
+   (`--glass-bg-2`, a 45% teal edge), scaled down for a menu:
+   - a brighter glass tile and a teal ring drawn as an inset shadow;
+   - a soft drop shadow and a 3px lift, the lift removed under reduced motion;
+   - the title in the nav's hover teal.
+
+   Three details came from the checks:
+   - **Contrast.** A first version washed the tile with 8% teal, which darkened it: the teal title fell to
+     3.7–4.3:1. The brighter tile raises contrast instead.
+   - **Bottom edge.** A 3px strip under a hovered card keeps the pointer on it. Without it, the lift pulled the
+     card out from under a pointer on its bottom edge, flipping `:hover` 226 times on one sweep.
+   - **Ring.** The ring is a shadow, so a resting card keeps its exact box.
+
+   This is lighter than the page cards' 6px lift, large shadow and white sheen. Inside a menu the big shadow would
+   spill past the panel's edge, and the sheen would wash out the small text under the pointer.
+
+## Re-verified
+
+Three independent checkers worked from their own probes, each with controls, against the first version. They found
+the five defects described above, all fixed. Their probes were then re-run on this build. The numbers below are for
+the final build, with the 8px turn window.
+
+| check | result |
+|---|---|
+| Path matrix (612 paths, as above) | 606 clean, where the old build had 236: 204 of 204 at 1280 and at 1440, and 198 of 204 at 1920. None is worse than in the old build, and none ends in the other menu (old: 42). The 6 left at 1920 failed in the old build too. They are the shallowest Services targets, mostly at 120 px/s: 4 dim to 46–75% but stay open, and 2 close (Contact Lens Exams at 120 px/s, header at rest and stuck). At that speed the outcome varies from run to run: an in-page log of one such failure showed 352ms with no pointer event from the test driver, which the script read, as designed, as a pause |
+| Choosing paths | Moving along the nav onto the other mega link with a downward drift, then straight down, at 2 speeds, with and without a pause, both directions, at 1280 and 1920: 16 of 16 open the intended menu. The old build got 1 of 8 wrong at 1280, and the first publish 4 of 16 |
+| Services' right-hand columns, repeated | 8 targets × 3 speeds × header at rest and stuck × 2 runs (96 per size). At 1440, Services opens cleanly in 96 of 96; the old build managed 3 clean, 52 dipped, 19 ending in Eyewear and 22 with both closed. At 1920, Services opens in 90 (84 clean, 6 dipped), 4 close, and 2 end in Eyewear; the old build ended in Eyewear 37 times and closed 29. Both are the slowest, shallowest path (Emergency Eye Care at 120 px/s), the one whose logged failure showed a 352ms gap in the test driver's pointer events |
+| Switching | Eyewear to Services and down, and the reverse, at 2 speeds, 3 sizes, header at rest and stuck (72 runs): none ends in the wrong menu. The old panel is gone the frame the new link is reached. The old build ended wrong in 33 |
+| Card hover and keyboard focus | All 4 cards, at 1280, 1440 and 1920, by pointer and by keyboard (ArrowDown, then Tab): the brighter tile, the 45% teal ring, the 3px lift and the teal title. Keyboard focus adds a 3px outline at a 16px radius. Tabbing away closes the panel after 583ms, and Shift+Tab re-opens it |
+| Contrast, measured on rendered pixels | Hovered or focused, at 1280 and 1920: titles 5.27–5.42:1 (5.27 at the worst pixel); descriptions 5.85–6.01:1 (4.72–5.23 at the worst pixel). The first version's titles read 3.73–4.25:1. A title painted in its own background colour reads 1.00:1 |
+| Card bottom edge | A sweep along a card's bottom edge changes the hovered card twice (card, gap, card), as in the old build. The first version changed it 226 times. A slow drift along each card's bottom 1–4px rows keeps it hovered for 40 of 40 moves with 0 toggles; the first version toggled 25–35 times |
+| Hit-testing | `elementFromPoint` grids over the header and the 60px below it: 9 widths from 1041 to 2560, header at rest and stuck, menus closed, open and just left (90 states).<br>• The bottom rows of the brand, all 7 nav links, search and Book behave as in the old build in every state.<br>• With a strip live, a real click on the last pixel row of About Us, Services or Insurance follows that link, as in the old build. A copy with the strip at the link's edge sends it to /services or /products, so the check can fail.<br>• With menus closed, the only differences come from where the page's scroll came to rest on that load (591 against 600; every box matches) |
+| Leaving | Pointer away or up through the header: the panel reads closed after 546–596ms, where the old build took 335–384ms. The strip goes in the same frame, and nothing re-hovers |
+| Reduced motion | The panel and the strip both close at 198ms, with no frame of a strip without its panel, so the vanished panel no longer re-opens. Hovered cards keep the tile with no lift |
+| Narrow and mobile | At 1041px the strips stay inside the window (232–693 and 335–796 of 1026), and the page width does not change with a menu open. At 1040 and 390 there are no strips, and the burger menu opens and closes with Escape |
+| Rest state | 98 elements (top bar, header, both panels) at 1280 and 1920, closed and open: 0 box and 0 paint differences from the old build. The cards gain `position: relative`, and transitions change. The open panel's pixels are identical but for 117–124 pixels, each within 4 of 765 colour units, on the hovered link's underline row |
+| Scope | 250 files. 47 differ: the 44 pages only in their `chrome.css?v=` hash, `search-index.json` only in `generated`, `chrome.css` (+95 / −0) and `site.js` (+98 / −0). `src/` changes only in those two files. Refs 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |
+| Live preview | gh-pages `3dd048f`, from `1ca58e8`: 6 files byte-identical to the build. On the live site:<br>• **Choosing paths:** all 16 open the intended menu. The first publish (`c5c1cbc`) got 4 wrong, which is how the turn bug was found.<br>• **Path sample:** every target at 450 px/s, header at rest and stuck, at 1280 and 1920 (136 paths). 134 clean and 2 dip; none close or end in the wrong menu. The old build, on the same paths: 48 clean, 12 closed, 12 in the wrong menu.<br>• **Switching, header clicks and close time** (571–585ms) as on the local build |
+
+**Trade-offs, measured** (HANDOFF, known gaps):
+- After the pointer leaves, a panel takes about 0.55–0.6s to close (it was 0.34–0.40s).
+- Leaving Eyewear sideways onto "Insurance" and then moving straight down onto the page within about half a second
+  re-opens the panel. The old build did the same within 0.25s.
+- With a menu open, a pointer that crosses another nav link while heading down keeps the open menu. To switch,
+  move along the nav, turn straight down onto the link, or pause on it for 350ms.
+
+**Found, not changed:**
+- Escape does not close an open mega menu while focus is inside it, in either build.
+- The global focus outline (#16B393) is about 2:1 against the light glass.
+- At rest, the "Designer Frames" description is 4.46:1 on the glass panel (4.39 at its worst pixel). Hovering now
+  raises it.
+- At 1041px the header's nav row runs into the Book button.
+- `scripts/site.js` has no `?v=` cache-buster, unlike the stylesheets, so a returning visitor can run the old
+  script until their cache expires. The new CSS degrades without it.

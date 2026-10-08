@@ -140,6 +140,21 @@ Above 1440, `em` caps keep text to 75 characters a line or fewer. The measure is
 widest paragraph, as characters divided by lines, checked on all 44 pages at 1920 and 2560. Up
 to 1440px nothing changed: all 44 pages lay out identically at 1440, 1280 and 390.
 
+**The mega menus hold while you move into them** (revision 19, `chrome.css` section 4 and `site.js` 8b).
+- **A strip under each link.** Each menu link hangs an invisible strip from 2px below its bottom edge into its
+  panel, reaching 180px to each side. It is present only while that menu is open or closing. A click on it does
+  nothing.
+- **A gentle close.** A closing panel waits 200ms, then fades with a slow start.
+- **Switching.** Moving along the nav to the other menu removes the old panel at once.
+- **Menu aim.** A small mouse-only script reads the pointer's direction. Crossing another nav link while heading
+  down into an open panel keeps that panel; it doesn't switch.
+- **The Eyewear cards** take the site's card hover on pointer hover and keyboard focus: a brighter glass tile, a teal
+  edge, a 3px lift and a teal title. It is scaled down for a menu.
+
+Without JavaScript, everything but the menu aim still works. The measurements behind each value are in
+`docs/CHANGE-LOG.md`, revision 19. If the header changes, keep the strip's 180px below the gap between a menu link
+and the Book button (201px at 1041px wide).
+
 **Text is verbatim.** Every phrase on the source site appears in this rebuild character
 for character, with three declared exceptions, all listed in `tools/verify-text.mjs` under
 `DECLARED_EDITS` with the client's own words as the reason. `node tools/verify-text.mjs`
@@ -215,6 +230,8 @@ The home page's **quote section** ("In Dr. Hyder's words") was redesigned in rev
 | **Some photos are softer on wide screens** | Measured on 1x screens, eight images are painted wider than their largest file. **At 1440:** `hero-boutique`, `exam-room` and `kids-eyewear` have only 1024px files, stretched 1.4–1.6x (2.5x at 2560); `optical-interior` is 1.24x and `optical-showroom-wide` 1.12x. **At 2560 only:** `optical-showroom` (1.7x), `trust-banner` (1.59x) and `storefront` (1.11x). The fix is higher-resolution source images, or an AI upscale as used for the portrait |
 | **Some `sizes` values at 1440 are too small** | A re-check at 1440 on 2026-10-08 found 17 of 39 images declared in `audit/image-widths.json` narrower than they paint. The shortfall runs from 8px (the 530 vs 538 portraits) to 1464px (`optical-interior`, 513 vs 1977), so the browser can pick a smaller file than the screen needs. The likely cause is that the earlier measurement took the box width of cover-cropped images; this is not verified for each image. The 390–1024 values were not re-checked. The 1920 and 2560 values are painted widths. Re-measuring the lower buckets the same way would sharpen these images |
 | **Long lines at 1440 and below** | 30 sections on 20 pages already ran past 75 characters a line at 1440, the longest at 134 on `/eye-doctor-clear-lake/`. Above 1440 they are capped. At 1440 and below the original layout was kept as tuned |
+| **Mega menu edge cases** | Measured after revision 19 (`docs/CHANGE-LOG.md`). A panel takes about 0.55–0.6s to close after the pointer leaves (0.34–0.40s before). Leaving Eyewear sideways onto "Insurance" and then moving straight down onto the page within about half a second re-opens it; the old build did the same within 0.25s. With one menu open, crossing another nav link on a downward path keeps the open menu (menu aim). To switch, move along the nav, turn straight down onto the link, or pause on it for 350ms. At 1920px a few very slow (about 120 px/s), very shallow paths to the far-right Services columns still dim or close the panel: 6 of 204 in the path matrix. In 96 repeated runs, 4 closed and 2 ended in Eyewear. The old build failed all 6 matrix paths, and in the same repeats ended in Eyewear 37 times and closed 29. A logged failure traced to a 352ms gap in the headless test driver's pointer events, which the script reads, by design, as a pause. Escape does not close an open mega menu; it never did |
+| **`site.js` has no cache-buster** | The stylesheets are linked with `?v=<hash>`, but `/scripts/site.js` is not, and GitHub Pages serves it with `Cache-Control: max-age=600` (measured). After an update a returning visitor can run the old script for up to 10 minutes. Revision 19 is safe either way: its CSS works without the new script. Adding the same `?v=` to the script tag in `tools/build.mjs` would close this |
 | **Full-bleed bands overshoot by half a scrollbar** | The home page's doctor and kids photo bands (revisions 13 and 14) reach the screen edges with `calc(50% - 50vw)`, and `100vw` includes a classic scrollbar, so below 1200px the page is 8px wider than the window. It is invisible because `body` sets `overflow-x: hidden`: no horizontal scrollbar, and a sideways wheel gesture does not move the page (measured; with that rule removed, a 15px scrollbar appears). Only a script's `scrollTo` can shift it. Keep that rule, or clip those two sections, if you change it |
 
 ---
@@ -225,7 +242,8 @@ Modern evergreen browsers. The design layer uses `color-mix()`, `:has()`, `aspec
 `backdrop-filter`, `mask-image`, `background-clip: text` and CSS nesting-free custom properties.
 No polyfills are included.
 `prefers-reduced-motion` is honoured throughout — the logo marquee stops and becomes a
-hand-scrollable row, and every scroll reveal is disabled.
+hand-scrollable row, every scroll reveal is disabled, and the Eyewear menu cards keep their hover
+tile but drop the lift.
 
 ---
 

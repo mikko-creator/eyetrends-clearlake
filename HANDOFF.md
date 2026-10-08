@@ -145,14 +145,19 @@ Every usage carries `data-edited`. The one alt that described the room ("in his 
 optometry practice") was rewritten. Provenance, prompt settings and the fidelity numbers are in
 `assets/edited/README.md`. The practice should approve the edited likeness before launch.
 
-On the **home page** that section shows the photo as a full-bleed background (revision 13):
+All **eight doctor sections** show the photo as a full-bleed background: the home page since
+revision 13, and `/products/` plus six `/services/` pages since revision 17.
 - **Source:** a 16:9 version (`dr-hyder-wide-hf*`), with the room extended by Higgsfield and his
   approved pixels stitched back in.
-- **How it is served:** a `<picture>` at 1025px and up, so it applies only on desktop.
-- **Below 1025px:** the portrait version, shown as a full-width band.
+- **How it is served:** a `<picture>` at 1025px and up (`tools/build.mjs`, `reshapeDoctor`), so it
+  applies only on desktop.
+- **Below 1025px:** the portrait version, shown as a full-width band, with the photo first.
+- **The seven pages:**
+  - Their markup puts the text first, so CSS moves it to the right column: the photo has him on
+    the left, and it is not mirrored.
+  - Their three stat tiles share one row.
+  - Their sections are taller, so the `<source>` declares a 2360px painted width.
 - **CSS:** `system.css` §24.
-
-The other seven pages with this component keep the framed portrait.
 
 The home page's **kids section** ("The eye doctor your kids will grow up with") was redesigned
 in revision 14:

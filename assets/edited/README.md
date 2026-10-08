@@ -57,7 +57,7 @@ The sharp vertical crease between his brows is in the original photograph too. I
 | why a composite | re-rendering him a second time cost likeness: face SSIM against the original 0.834–0.844 (the approved render scores 0.882 by the same method) |
 | composite | the APPROVED render warped onto the Flare render (SIFT + RANSAC on the man: scale 0.748, rotation 0.01°), then stitched along the least-colour-difference vertical seam inside x 1840–2130, to the right of him in the shelf column. A 16 px feather: left of the seam, approved pixels (him and the near room); right of it, Flare's extension. The seam is invisible at full size, and the room is softly out of focus there |
 | fidelity of the shipped file | face SSIM **0.905** / NCC 0.961, glasses 0.857, hands 0.917, against the original photo (aligned at scale 1.003) |
-| files | `dr-hyder-wide-hf-master.webp` (3840x2160, q90) and renditions 960, 1280, 1600, 1920, 2560 and 3840 (the unsuffixed file), q80. Only the home page uses them, through `<picture>` at 1025px and up (`tools/build.mjs`, `PORTRAIT_SWAP.wide`) |
+| files | `dr-hyder-wide-hf-master.webp` (3840x2160, q90) and renditions 960, 1280, 1600, 1920, 2560 and 3840 (the unsuffixed file), q80. Every doctor section uses them (the home page since revision 13, `/products/` and six `/services/` pages since revision 17), through `<picture>` at 1025px and up (`tools/build.mjs`, `reshapeDoctor`, with `PORTRAIT_SWAP.wide`) |
 
 ## kids-eyewear-wide-hf*.webp and kids-eyewear-crop-hf*.webp — the home page's kids section
 

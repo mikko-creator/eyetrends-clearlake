@@ -1182,3 +1182,47 @@ wider than the window. The cause is the full-bleed photo bands of revisions 13 a
 - **Remaining effect:** only a script's `scrollTo` can shift it.
 
 This is recorded in HANDOFF's known gaps.
+
+# Revision 17 — the doctor section on seven more pages: his photograph as the background
+
+> *"apply the full-width doctor photo to the other 7 pages"*
+
+The home page's doctor section (revision 13) also runs on `/products/` and six `/services/` pages:
+`/services/` itself, children's eye care, comprehensive eye exams, contact lens exams, emergency
+eye care and medical eye care. These are the other uses of the component.
+
+**The markup.** These pages build the component differently. They use `.row--split`, with the text
+column first and the framed photo second; the home page has the photo first. The 16:9 photo has
+him on the left, and a real person's photograph is not mirrored, so CSS moves the text to the right
+column. The DOM order, and so the reading order, is unchanged.
+- **The wrap moved:** `tools/build.mjs` used to add the `<picture>` with the 16:9 source in a
+  home-only branch of `rewriteImages`. It is now added by `reshapeDoctor`, which sees the whole
+  section, so every doctor section gets it. The home page's markup is byte-identical to before. A
+  doctor section without the edited portrait stops the build.
+- **Taller sections:** these sections hold more text, so cover paints the photo up to 2347px wide
+  (measured). Their `<source>` declares `(max-width: 2360px) 2360px, 100vw`, and the home page keeps
+  its own value. At 1.25x the old value would have picked the 2560 file for a 2925px paint; the new
+  one picks the 3840.
+
+**The layout** (`system.css` §24, where each shared rule names both markups):
+- The text takes the right column at the home page's ratio, 1fr 1.05fr.
+- The three stat tiles share one row. Stacked, they made the section 1583px tall at 1440, so cover
+  drew him about 1.6 times the home page's size. In a row the section is 1077–1322px, against the
+  home page's 972–1107px.
+- The tiles get a darker tint behind them and 16px side padding.
+- At 1025–1099px the photo sits at 30% instead of 27%, because his arm reached 9–17px under the
+  first paragraph. The cost is up to 16px of his outer sleeve at the window's left edge at 1025.
+- On phones the photo band comes first, as on the home page.
+
+## Re-verified
+
+| check | result |
+|---|---|
+| Scope | 250 files before and after. On the seven pages only the doctor section changed, and inside it only the `<picture>` wrap: the `<img>` keeps everything but its `sizes`, which becomes `100vw`. The home page is byte-identical apart from the `system.css?v=` hash. `system.css` +85 / −22, `tools/build.mjs` +35 / −9 |
+| Layout, desktop | On the seven pages at 1025, 1050, 1075, 1099, 1100, 1280, 1440, 1920 and 2560, the photo covers the section edge to edge. His face is in view and touches no text, chip, tile or badge, and his figure reaches into no text box. Sections are 1077–1322px tall |
+| Layout, phones | At 390, 768 and 1024 the photo band comes first at full width, and his face is clear of the badge and the text |
+| Image | At least 1.0 file pixel per painted pixel at 1x on desktop (the 2560 file); 1.23–1.25 on phones; 1.31–1.39 at 1.25x |
+| Contrast | At 1025, 1440 and 1920 on all seven pages, every text element is at least 6.07:1 mean, with a worst pixel of 4.93–5.64:1. The stat labels were the weakest at first: worst 3.58:1 at 1025, where a light patch of the photo showed through the 7%-white glass, now fixed by the darker tint. On the old framed layout they measured 4.43–4.56:1 mean and 4.10–4.15:1 worst. A control painting the first paragraph's own colour behind it read 1.00:1 |
+| The probe itself | The figure model began as one rectangle, which flagged the eyebrow at 1025 where only his head is. It is now two boxes: his head, then his shoulders and arms. The overlap it still found under the paragraph was real, and the 30% position fixed it |
+| Refs / text | 6,447 refs: 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |
+| Live preview | After the Pages build (`0a9fa26`), the home page, the seven pages, `system.css` and the wide photo are byte-identical to the build. The check on the live medical eye care, products and services pages at 1025, 1440 and 390 read the same. Contrast at 1440 was 6.16:1 mean and 5.64:1 worst, and the control read 1.00:1 |

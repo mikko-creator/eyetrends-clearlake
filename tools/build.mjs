@@ -143,7 +143,18 @@ function sizesAttr(base) {
   }
   const wide = m[1440] || m['1440'];
   if (!wide) return null;
-  parts.push(Math.ceil(wide) + 'px');
+  // Wide screens (system.css §27, revision 18): above 1440 the layout grows with
+  // the window, so the widths measured at 1920 and 2560 get buckets of their own
+  // (painted width, cover included). Without them the 1440 width was declared
+  // for every window above 1200. Up to 1440 the attribute selects exactly as before.
+  const w1920 = m[1920] || m['1920'], w2560 = m[2560] || m['2560'];
+  if (w1920 && w2560) {
+    parts.push('(max-width: 1440px) ' + Math.ceil(wide) + 'px');
+    parts.push('(max-width: 1920px) ' + Math.ceil(w1920) + 'px');
+    parts.push(Math.ceil(w2560) + 'px');
+  } else {
+    parts.push(Math.ceil(wide) + 'px');
+  }
   return parts.join(', ');
 }
 

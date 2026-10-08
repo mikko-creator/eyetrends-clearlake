@@ -1,6 +1,6 @@
 {
   "schema": "site-reforge/reforge-build@1",
-  "generated": "2026-10-08T01:05:56.589Z",
+  "generated": "2026-10-08T06:17:21.358Z",
   "dist": "C:\\Users\\Dell\\site-reforge\\eyetrendsclearlake-com\\dist",
   "pages": 43,
   "sections": 327,
@@ -20,7 +20,7 @@
       "route": "/",
       "file": "index.html",
       "sections": 12,
-      "bytes": 65708,
+      "bytes": 67152,
       "title": "Eye Trends Vision & Glasses Center | Clear Lake Optometrist"
     },
     {
@@ -52,7 +52,7 @@
       "route": "/eye-health",
       "file": "eye-health/index.html",
       "sections": 5,
-      "bytes": 44410,
+      "bytes": 44846,
       "title": "Eye Health Guides for Clear Lake Families | Eye Trends"
     },
     {
@@ -60,7 +60,7 @@
       "route": "/insurance",
       "file": "insurance/index.html",
       "sections": 5,
-      "bytes": 34650,
+      "bytes": 34816,
       "title": "Insurance & Payment in Clear Lake, TX | Eye Trends"
     },
     {
@@ -68,7 +68,7 @@
       "route": "/our-doctor",
       "file": "our-doctor/index.html",
       "sections": 8,
-      "bytes": 35215,
+      "bytes": 35491,
       "title": "Dr. Jerry Hyder, OD, Clear Lake Optometrist | Eye Trends"
     },
     {
@@ -76,7 +76,7 @@
       "route": "/patient-forms",
       "file": "patient-forms/index.html",
       "sections": 5,
-      "bytes": 33695,
+      "bytes": 33861,
       "title": "New Patient Forms & What to Bring, Clear Lake | Eye Trends"
     },
     {
@@ -92,7 +92,7 @@
       "route": "/products",
       "file": "products/index.html",
       "sections": 6,
-      "bytes": 37600,
+      "bytes": 37932,
       "title": "Eyewear in Clear Lake: Glasses & Contacts | Eye Trends"
     },
     {
@@ -100,7 +100,7 @@
       "route": "/products/contact-lenses",
       "file": "products/contact-lenses/index.html",
       "sections": 5,
-      "bytes": 38176,
+      "bytes": 38664,
       "title": "Contact Lenses in Clear Lake, Fitted in Person | Eye Trends"
     },
     {
@@ -108,7 +108,7 @@
       "route": "/products/designer-frames",
       "file": "products/designer-frames/index.html",
       "sections": 6,
-      "bytes": 40143,
+      "bytes": 40687,
       "title": "Designer Eyeglass Frames in Clear Lake | Eye Trends"
     },
     {
@@ -116,7 +116,7 @@
       "route": "/products/kids-eyewear",
       "file": "products/kids-eyewear/index.html",
       "sections": 6,
-      "bytes": 41857,
+      "bytes": 42507,
       "title": "Kids' Eyewear in Clear Lake, Sized to Fit | Eye Trends"
     },
     {
@@ -124,7 +124,7 @@
       "route": "/products/sunglasses",
       "file": "products/sunglasses/index.html",
       "sections": 5,
-      "bytes": 38135,
+      "bytes": 38623,
       "title": "Prescription Sunglasses in Clear Lake | Eye Trends"
     },
     {
@@ -132,7 +132,7 @@
       "route": "/reviews",
       "file": "reviews/index.html",
       "sections": 5,
-      "bytes": 55395,
+      "bytes": 55781,
       "title": "Patient Reviews, Clear Lake Eye Care | Eye Trends"
     },
     {
@@ -140,7 +140,7 @@
       "route": "/services",
       "file": "services/index.html",
       "sections": 11,
-      "bytes": 52235,
+      "bytes": 52403,
       "title": "Eye Care Services | Exams, Medical, Kids & Contacts | Eye Trends"
     },
     {
@@ -148,7 +148,7 @@
       "route": "/services/adult-eye-exams",
       "file": "services/adult-eye-exams/index.html",
       "sections": 10,
-      "bytes": 45377,
+      "bytes": 45599,
       "title": "Comprehensive Adult Eye Exams in Clear Lake | Eye Trends"
     },
     {
@@ -156,7 +156,7 @@
       "route": "/services/back-to-school-eye-exams",
       "file": "services/back-to-school-eye-exams/index.html",
       "sections": 10,
-      "bytes": 45270,
+      "bytes": 45548,
       "title": "Back-to-School Eye Exams Clear Lake, Saturdays | Eye Trends"
     },
     {
@@ -164,7 +164,7 @@
       "route": "/services/cataract-co-management",
       "file": "services/cataract-co-management/index.html",
       "sections": 9,
-      "bytes": 45627,
+      "bytes": 45849,
       "title": "Cataract Co-Management in Clear Lake | Eye Trends"
     },
     {
@@ -172,7 +172,7 @@
       "route": "/services/childrens-contact-lenses",
       "file": "services/childrens-contact-lenses/index.html",
       "sections": 10,
-      "bytes": 46404,
+      "bytes": 46626,
       "title": "Children's Contact Lenses, Clear Lake | Eye Trends"
     },
     {
@@ -180,7 +180,7 @@
       "route": "/services/childrens-eye-care",
       "file": "services/childrens-eye-care/index.html",
       "sections": 5,
-      "bytes": 34657,
+      "bytes": 34825,
       "title": "Children's Eye Care in Clear Lake | Eye Trends"
     },
     {
@@ -188,7 +188,7 @@
       "route": "/services/comprehensive-eye-exams",
       "file": "services/comprehensive-eye-exams/index.html",
       "sections": 6,
-      "bytes": 37659,
+      "bytes": 37827,
       "title": "Comprehensive Eye Exams in Clear Lake | Eye Trends"
     },
     {
@@ -196,7 +196,7 @@
       "route": "/services/contact-lens-exams",
       "file": "services/contact-lens-exams/index.html",
       "sections": 5,
-      "bytes": 36191,
+      "bytes": 36359,
       "title": "Contact Lens Exams & Fittings, Clear Lake | Eye Trends"
     },
     {
@@ -204,7 +204,7 @@
       "route": "/services/diabetic-eye-exams",
       "file": "services/diabetic-eye-exams/index.html",
       "sections": 9,
-      "bytes": 44250,
+      "bytes": 44472,
       "title": "Dilated Diabetic Eye Exams, Clear Lake | Eye Trends"
     },
     {
@@ -212,7 +212,7 @@
       "route": "/services/dry-eye-treatment",
       "file": "services/dry-eye-treatment/index.html",
       "sections": 10,
-      "bytes": 46425,
+      "bytes": 46645,
       "title": "Dry Eye Treatment in Clear Lake, Houston | Eye Trends"
     },
     {
@@ -220,7 +220,7 @@
       "route": "/services/emergency-eye-care",
       "file": "services/emergency-eye-care/index.html",
       "sections": 6,
-      "bytes": 35628,
+      "bytes": 35796,
       "title": "Emergency Eye Care in Clear Lake, Seen Today | Eye Trends"
     },
     {
@@ -228,7 +228,7 @@
       "route": "/services/flashes-floaters",
       "file": "services/flashes-floaters/index.html",
       "sections": 9,
-      "bytes": 45142,
+      "bytes": 45364,
       "title": "Flashes & Floaters in Clear Lake, Dilated Exam | Eye Trends"
     },
     {
@@ -236,7 +236,7 @@
       "route": "/services/foreign-body-removal",
       "file": "services/foreign-body-removal/index.html",
       "sections": 10,
-      "bytes": 46602,
+      "bytes": 46824,
       "title": "Foreign Body Removal in Clear Lake, Same Day | Eye Trends"
     },
     {
@@ -244,7 +244,7 @@
       "route": "/services/gas-permeable-contacts",
       "file": "services/gas-permeable-contacts/index.html",
       "sections": 10,
-      "bytes": 46694,
+      "bytes": 46916,
       "title": "Gas Permeable (GP) Contacts, Clear Lake | Eye Trends"
     },
     {
@@ -252,7 +252,7 @@
       "route": "/services/glaucoma-management",
       "file": "services/glaucoma-management/index.html",
       "sections": 9,
-      "bytes": 46380,
+      "bytes": 46714,
       "title": "Glaucoma Testing & Management, Clear Lake | Eye Trends"
     },
     {
@@ -260,7 +260,7 @@
       "route": "/services/lasik-co-management",
       "file": "services/lasik-co-management/index.html",
       "sections": 9,
-      "bytes": 43762,
+      "bytes": 43984,
       "title": "LASIK Consultation & Co-Management, Clear Lake | Eye Trends"
     },
     {
@@ -268,7 +268,7 @@
       "route": "/services/macular-degeneration",
       "file": "services/macular-degeneration/index.html",
       "sections": 9,
-      "bytes": 44911,
+      "bytes": 45133,
       "title": "Macular Degeneration Care in Clear Lake | Eye Trends"
     },
     {
@@ -276,7 +276,7 @@
       "route": "/services/medical-eye-care",
       "file": "services/medical-eye-care/index.html",
       "sections": 5,
-      "bytes": 40161,
+      "bytes": 40329,
       "title": "Medical Eye Care in Clear Lake, Houston | Eye Trends"
     },
     {
@@ -284,7 +284,7 @@
       "route": "/services/multifocal-contacts",
       "file": "services/multifocal-contacts/index.html",
       "sections": 9,
-      "bytes": 45473,
+      "bytes": 45695,
       "title": "Multifocal & Bifocal Contacts, Clear Lake | Eye Trends"
     },
     {
@@ -292,7 +292,7 @@
       "route": "/services/myopia-management",
       "file": "services/myopia-management/index.html",
       "sections": 9,
-      "bytes": 46700,
+      "bytes": 46922,
       "title": "Myopia Management for Kids in Clear Lake | Eye Trends"
     },
     {
@@ -300,7 +300,7 @@
       "route": "/services/pediatric-eye-exams",
       "file": "services/pediatric-eye-exams/index.html",
       "sections": 10,
-      "bytes": 46697,
+      "bytes": 46919,
       "title": "Pediatric Eye Exams in Clear Lake, Ages 4-5 | Eye Trends"
     },
     {
@@ -308,7 +308,7 @@
       "route": "/services/pink-eye-conjunctivitis",
       "file": "services/pink-eye-conjunctivitis/index.html",
       "sections": 9,
-      "bytes": 46132,
+      "bytes": 46354,
       "title": "Pink Eye (Conjunctivitis) Care in Clear Lake | Eye Trends"
     },
     {
@@ -316,7 +316,7 @@
       "route": "/services/red-eye-treatment",
       "file": "services/red-eye-treatment/index.html",
       "sections": 10,
-      "bytes": 47678,
+      "bytes": 47898,
       "title": "Red Eye Treatment in Clear Lake, Same Day | Eye Trends"
     },
     {
@@ -324,7 +324,7 @@
       "route": "/services/same-day-contacts",
       "file": "services/same-day-contacts/index.html",
       "sections": 9,
-      "bytes": 44426,
+      "bytes": 44648,
       "title": "Same-Day Contact Lenses in Clear Lake | Eye Trends"
     },
     {
@@ -332,7 +332,7 @@
       "route": "/services/senior-eye-exams",
       "file": "services/senior-eye-exams/index.html",
       "sections": 9,
-      "bytes": 46562,
+      "bytes": 46784,
       "title": "Senior Eye Exams Clear Lake, Medicare Welcome | Eye Trends"
     },
     {
@@ -340,7 +340,7 @@
       "route": "/services/specialty-contacts",
       "file": "services/specialty-contacts/index.html",
       "sections": 9,
-      "bytes": 46381,
+      "bytes": 46603,
       "title": "Hard-to-Fit Specialty Contacts, Clear Lake | Eye Trends"
     },
     {
@@ -348,7 +348,7 @@
       "route": "/services/toric-contacts",
       "file": "services/toric-contacts/index.html",
       "sections": 10,
-      "bytes": 48413,
+      "bytes": 48635,
       "title": "Toric Contacts for Astigmatism, Clear Lake | Eye Trends"
     },
     {

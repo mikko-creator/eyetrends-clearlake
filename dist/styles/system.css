@@ -1637,3 +1637,152 @@ blockquote, .et-review__q, .bw-quote {
      the middle, less a 40-80px gap. */
   .rw-sec.et-quote .ethc-stance__body { max-width: calc(50% + 5vw - clamp(40px, 4.4vw, 80px)); }
 }
+
+/* =========================================================================
+   27 · WIDE SCREENS: THE LAYOUT GROWS WITH THE WINDOW
+   =========================================================================
+   Operator, 2026-10-08: "I want the elements of the whole site to be
+   responsive to all screen sizes. The problem is when it is viewed in a wider
+   screen size, the elements are too compressed that it leaves a huge space/gap
+   on the sides and in correlation to other elements."
+
+   Measured before this section: every page's content was 1100px wide at any
+   window, leaving 163px of empty margin per side at 1440, 403px at 1920 and
+   723px at 2560, and nothing else grew either (type, gaps, section padding).
+
+   The design was tuned at 1280-1440, so everything here is inside one
+   min-width:1441px query: at 1440 and below nothing can change. Above it,
+   each value grows in a straight line from its 1440 value, at
+   (window - 1440px) x k, and stops at its target for a 2560px window
+   (--wx = window - 1440px, so --wx is 1120px at 2560):
+     container 1180 -> 1920px (content 1100 -> 1784px, about 70-75% of the
+     window, as at 1440); side padding 40 -> 68; section padding 108 -> 160;
+     grid gaps 30 -> 46; the --ds-space scale x1.33; body text 17 -> 19.5px
+     and every other type size about x1.15, so a wider card holds larger type
+     rather than the same small type spread thinner. Lines of text stay
+     readable: the measured characters-per-line are re-checked at 1920 and
+     2560. Images get two more `sizes` buckets (tools/build.mjs) so the larger
+     renders still load a sharp enough file. */
+@media (min-width: 1441px) {
+  :root {
+    --wx: calc(100vw - 1440px);
+    /* layout */
+    --wrap: min(1920px, calc(1180px + var(--wx) * 0.66));
+    --gutter: min(68px, calc(40px + var(--wx) * 0.025));
+    --flow: min(160px, calc(108px + var(--wx) * 0.0464));
+    --et-gap: min(46px, calc(30px + var(--wx) * 0.0143));
+    --ds-space-2xs: min(5px, calc(4px + var(--wx) * 0.0009));
+    --ds-space-xs: min(10.5px, calc(8px + var(--wx) * 0.0022));
+    --ds-space-sm: min(18.5px, calc(14px + var(--wx) * 0.004));
+    --ds-space-md: min(32px, calc(24px + var(--wx) * 0.0071));
+    --ds-space-lg: min(53px, calc(40px + var(--wx) * 0.0116));
+    --ds-space-xl: min(85px, calc(64px + var(--wx) * 0.0188));
+    --ds-space-2xl: min(128px, calc(96px + var(--wx) * 0.0286));
+    /* the five size tokens the header, footer, labels and links use (font-size only) */
+    --fs-6: min(14px, calc(12.48px + var(--wx) * 0.00136));
+    --fs-8: min(14.75px, calc(13px + var(--wx) * 0.00156));
+    --fs-16: min(16.5px, calc(14.5px + var(--wx) * 0.00179));
+    --fs-19: min(17px, calc(15px + var(--wx) * 0.00179));
+    --fs-23: min(18.25px, calc(16px + var(--wx) * 0.002));
+  }
+
+  /* --- type in system.css (later in the same file wins at equal weight) --- */
+  body { font-size: min(19.5px, calc(17px + var(--wx) * 0.00223)); }
+  h1, .et-h1, .ethc-hero__h { font-size: clamp(36px, 5.1vw, min(80px, calc(68px + var(--wx) * 0.0107))); }
+  h2, .et-h2 { font-size: clamp(27px, 3.5vw, min(53px, calc(45px + var(--wx) * 0.0071))); }
+  h3, .et-h3 { font-size: clamp(19px, 1.9vw, min(28px, calc(24px + var(--wx) * 0.0036))); }
+  h4 { font-size: clamp(17px, 1.6vw, min(23px, calc(20px + var(--wx) * 0.0027))); }
+  .et-lede, .dc-lead, .lede, .ha-hero__lede, .tib-hero__lede, .od-hero__lede {
+    font-size: clamp(17px, 1.35vw, min(22.5px, calc(19.5px + var(--wx) * 0.0027)));
+  }
+  .et-eyebrow, .eyebrow, .ha-eyebrow, .tib-eyebrow, .od-eyebrow, .dc-eyebrow { font-size: min(13px, calc(11.5px + var(--wx) * 0.00134)); }
+  .btn { font-size: min(17.5px, calc(15.5px + var(--wx) * 0.00179)); }
+  .btn-lg { font-size: min(18.75px, calc(16.5px + var(--wx) * 0.002)); }
+  .dc-faq__q, .dc-faq__item > summary { font-size: min(20px, calc(17.5px + var(--wx) * 0.00223)); }
+  blockquote, .et-review__q, .bw-quote { font-size: clamp(19px, 2vw, min(28px, calc(24px + var(--wx) * 0.0036))); }
+  .et-review__src, .bw-quote__src { font-size: min(15.5px, calc(13.5px + var(--wx) * 0.00179)); }
+  .ethc-hero .ethc-hero__sub { font-size: clamp(17px, 1.4vw, min(23px, calc(20px + var(--wx) * 0.0027))); }
+  .rw-sec.ethc-hero .ethc-hero__k { font-size: clamp(19px, 5.6vw, min(29px, calc(25px + var(--wx) * 0.0036))); }
+  .rw-sec.ethc-hero .ethc-hero__l { font-size: min(11px, calc(9.5px + var(--wx) * 0.00134)); }
+  .rw-sec.et-quote .ethc-stance__q { font-size: clamp(25px, 1.15vw + 17px, min(46px, calc(40px + var(--wx) * 0.0054))); }
+  .rw-sec.et-quote .ethc-stance__q::before { font-size: clamp(120px, 9vw, min(204px, calc(176px + var(--wx) * 0.025))); }
+  .rw-sec.et-quote .ethc-stance__by { font-size: clamp(17px, .45vw + 12px, min(24px, calc(21px + var(--wx) * 0.0027))); }
+
+  /* --- type set in components.css and chrome.css, which load after this file:
+         the html prefix gives each override one more element of weight --- */
+  html :is(.et-pill, .et-dot, .ethc-plan, .ethc-menu__chip, .ethc-point, .tib-point, .tib-chip, .ct-find__tag) {
+    font-size: min(15.5px, calc(13.5px + var(--wx) * 0.00179));
+  }
+  html :is(.dc-proof__k, .ethc-stat__k, .ethc-hero__k, .ia-stat__k, .bw-timeline__year) {
+    font-size: clamp(30px, 3.6vw, min(54px, calc(46px + var(--wx) * 0.0071)));
+  }
+  html .rw-sec.ethc-hero .ethc-hero__k { font-size: clamp(19px, 5.6vw, min(29px, calc(25px + var(--wx) * 0.0036))); }
+  html :is(.et-eyebrow, .dc-pill__n, .ethc-why__tag, .tib-collection__num, .ha-ins__lead, .ha-hero__eyebrow, .od-quote__role, .ia-callout__k, .bw-toc__title, .bw-manifesto__idx) {
+    font-size: min(13px, calc(11.5px + var(--wx) * 0.00134));
+  }
+  html .mega-promo h3 { font-size: min(23px, calc(20px + var(--wx) * 0.0027)); }
+  html :is(.mega-promo p, .mega-promo .btn) { font-size: min(16px, calc(14px + var(--wx) * 0.00179)); }
+  html .mlink { font-size: min(15.5px, calc(13.5px + var(--wx) * 0.00179)); }
+  html .search-panel__h { font-size: min(19.5px, calc(17px + var(--wx) * 0.00223)); }
+  html :is(.book-meta, .form-note, .foot-blurb, .foot-col a, .foot-addr) { font-size: min(16px, calc(14px + var(--wx) * 0.00179)); }
+  html .search-hit__t { font-size: min(21px, calc(18.5px + var(--wx) * 0.00223)); }
+  html .search-hit__u { font-size: min(13.75px, calc(12px + var(--wx) * 0.00156)); }
+  html .foot-name { font-size: min(30px, calc(26px + var(--wx) * 0.0036)); }
+  html .foot-h { font-size: min(13px, calc(11.5px + var(--wx) * 0.00134)); }
+  html .foot-phone { font-size: min(18.75px, calc(16.5px + var(--wx) * 0.002)) !important; }
+  html .brand img { height: min(44px, calc(38px + var(--wx) * 0.0054)); max-width: min(220px, calc(190px + var(--wx) * 0.0268)); }
+  html .site-head.is-stuck .brand img { height: min(37px, calc(32px + var(--wx) * 0.0045)); }
+
+  /* --- components sized in px that should keep their share of the width --- */
+  /* the designer-house logos (revision 15) */
+  .rw-sec .ethc-marquee .ethc-house__logo { height: clamp(24px, 2.5vw, min(40px, calc(32px + var(--wx) * 0.0071))); }
+  /* the home kids section's glass card (revision 14): the frames stay clear,
+     their left edge is 0.676 section-heights from the right edge (>= 370px at 2560) */
+  .rw-sec.rw-p-home.rw-s5 .row--split { grid-template-columns: minmax(0, min(820px, calc(600px + var(--wx) * 0.196))) 1fr; }
+  /* the home quote section (revision 16) keeps its proportion of the window */
+  .rw-sec.et-quote { min-height: clamp(600px, 52vw, min(1100px, calc(860px + var(--wx) * 0.214))); }
+
+  /* layout.css declares its spacing scale and a 1200px --ds-container-max on
+     EVERY section (:where(.rw-sec), weight 0), so the :root values above never
+     reach inside a section: the service pages' hero copy stayed in a 1200px
+     box and started 401px from the left at 1920 while the content below
+     started at 256. Declared again at the section's own level. */
+  .rw-sec {
+    --ds-container-max: var(--wrap);
+    --ds-section-py: min(160px, calc(110px + var(--wx) * 0.0446));
+    --ds-space-2xs: min(5px, calc(4px + var(--wx) * 0.0009));
+    --ds-space-xs: min(10.5px, calc(8px + var(--wx) * 0.0022));
+    --ds-space-sm: min(18.5px, calc(14px + var(--wx) * 0.004));
+    --ds-space-md: min(32px, calc(24px + var(--wx) * 0.0071));
+    --ds-space-lg: min(53px, calc(40px + var(--wx) * 0.0116));
+    --ds-space-xl: min(85px, calc(64px + var(--wx) * 0.0188));
+    --ds-space-2xl: min(128px, calc(96px + var(--wx) * 0.0286));
+  }
+  /* the hero's own side padding, matched to the container's, so its copy
+     starts on the same line as every section below it */
+  .rw-sec .ha-hero__inner { padding-inline: var(--gutter); }
+
+  /* --- reading measure. The columns grow faster than the type (about x1.6
+     against x1.15), so unchecked a paragraph ran to 80-100 characters a line
+     at 2560 (99 sections, measured). Caps are in em, so they follow the text
+     size: about 70 characters for running text, 63 for ledes, 56 for the large
+     quotes. Running text gets its cap at weight 0, so any rule that already
+     sets a width keeps it; where an existing cap is known, the new one is the
+     smaller of the two, so nothing is made wider. --- */
+  :where(.rw-sec) :where(p, li, dd) { max-width: 35em; }
+  .rw-sec .et-lede { max-width: min(52rem, 34em); }
+  .rw-sec .et-sec-head--split .et-lede { max-width: min(34rem, 34em); }
+  .rw-sec .dc-lead { max-width: 33em; }
+  .rw-sec .dc-faq__a { max-width: min(54rem, 35em); }
+  .rw-sec .bw-timeline__d { max-width: 35em; }
+  .rw-sec :is(.tib-creed__q, .et-review__q) { max-width: 30em; }
+
+  /* --- three boxes layout.css fixes in px that are layouts, not text, so at
+     1920 they sat in the left two thirds of the container: the "what we stand
+     on" rows (.bw-manifesto, 1180px), the bio card (.od-bio, 960px) and the
+     story timeline (.bw-timeline, 780px). They keep the share of the
+     container they had at 1440 (1180, 960 and 780 of 1180). --- */
+  .rw-sec .bw-manifesto { max-width: var(--wrap); }
+  .rw-sec .od-bio { max-width: calc(var(--wrap) * 0.8136); }
+  .rw-sec .bw-timeline { max-width: calc(var(--wrap) * 0.661); }
+}

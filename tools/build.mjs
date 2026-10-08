@@ -365,6 +365,12 @@ const PORTRAIT_SWAP = (() => {
     // wider than 100vw. `sizes` must name the painted width, or the browser
     // picks a file 1.2-1.4x too small and he goes soft.
     wideSizes: '(max-width: 1960px) 1960px, 100vw',
+    // The seven other doctor sections (2026-10-08) hold more text, so they are
+    // taller (1079-1322px against the home page's 972-1107) and cover paints
+    // the photo up to 2347px wide (measured, 1025-2560). 1960 would still pick
+    // the right file at 1x and 2x, but at 1.25x it asks for 2450 device px and
+    // gets the 2560 file for a 2934px paint; the true width picks the 3840.
+    wideSizesTall: '(max-width: 2360px) 2360px, 100vw',
     altRewrites: new Map([
       ['Dr. Jerry Hyder, OD, in his Clear Lake optometry practice',
        'Dr. Jerry Hyder, OD, Clear Lake optometrist since 1984'],
@@ -476,15 +482,8 @@ function rewriteImages(html, stats, url) {
       if (!/\sdecoding=/i.test(out)) out = out.replace(/<img\b/i, '<img decoding="async"');
       stats.imgMapped++;
       if (sz) stats.srcsetAdded++;
-      // Home doctor section: the 16:9 version as a full-bleed background on
-      // desktop (wideSizes), the portrait as a full-width band below 1025px (100vw).
-      if (isHome) {
-        stats.portraitWide++;
-        out = out.replace(/\ssizes="[^"]*"/i, ' sizes="100vw"');
-        const wset = PORTRAIT_SWAP.wide.map((r) => r.href + ' ' + r.w + 'w').join(', ');
-        out = '<picture class="et-doctor__picture"><source media="' + PORTRAIT_SWAP.wideMedia + '" srcset="' + wset
-          + '" sizes="' + PORTRAIT_SWAP.wideSizes + '">' + out + '</picture>';
-      }
+      // The doctor sections' full-bleed <picture> is added by reshapeDoctor, which
+      // sees the section (this pass sees one <img> at a time).
       return out;
     }
 
@@ -788,6 +787,33 @@ function reshapeDoctor(html, stats) {
     const at = plainRole.index + plainRole.html.length;   // before linkRole, so unshifted
     body = body.slice(0, at) + moved + body.slice(at);
     stats.doctorLinkMoved++;
+  }
+
+  // 3 - the portrait becomes the section's full-bleed background on desktop.
+  //     Home (operator, 2026-10-07): "make the image you edited a full width
+  //     background image of that section? It looks weird in it's frame". The
+  //     seven other pages with this component (2026-10-08): "apply the
+  //     full-width doctor photo to the other 7 pages". system.css §24.
+  //     The <img> PORTRAIT_SWAP already rewrote is wrapped in a <picture> whose
+  //     16:9 source serves 1025px and up; below that the portrait is a
+  //     full-width band, 100vw. Every .et-doctor section carries his edited
+  //     portrait; one that does not stops the build, because the full-bleed CSS
+  //     would crop whatever it held instead.
+  {
+    const pm = /<div class="et-doctor__portrait"[^>]*>/i.exec(body);
+    const im = pm ? /<img\b[^>]*>/i.exec(body.slice(pm.index)) : null;
+    if (!im || !/dr-hyder-portrait-hf/.test(im[0])) {
+      throw new Error('an .et-doctor section has no edited portrait to make full-bleed');
+    }
+    const at = pm.index + im.index;
+    const tag = im[0].replace(/\ssizes="[^"]*"/i, ' sizes="100vw"');
+    const wset = PORTRAIT_SWAP.wide.map((r) => r.href + ' ' + r.w + 'w').join(', ');
+    // home markup (.row--split-media) or the seven pages' taller one (.row--split)
+    const wideSizes = body.indexOf('row--split-media') !== -1 ? PORTRAIT_SWAP.wideSizes : PORTRAIT_SWAP.wideSizesTall;
+    const picture = '<picture class="et-doctor__picture"><source media="' + PORTRAIT_SWAP.wideMedia + '" srcset="' + wset
+      + '" sizes="' + wideSizes + '">' + tag + '</picture>';
+    body = body.slice(0, at) + picture + body.slice(at + im[0].length);
+    stats.portraitWide++;
   }
 
   return html.slice(0, secStart) + body + html.slice(secStart + section.length);

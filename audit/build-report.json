@@ -1,6 +1,6 @@
 {
   "schema": "site-reforge/reforge-build@1",
-  "generated": "2026-10-07T08:16:49.695Z",
+  "generated": "2026-10-08T01:05:56.589Z",
   "dist": "C:\\Users\\Dell\\site-reforge\\eyetrendsclearlake-com\\dist",
   "pages": 43,
   "sections": 327,
@@ -92,7 +92,7 @@
       "route": "/products",
       "file": "products/index.html",
       "sections": 6,
-      "bytes": 37278,
+      "bytes": 37600,
       "title": "Eyewear in Clear Lake: Glasses & Contacts | Eye Trends"
     },
     {
@@ -140,7 +140,7 @@
       "route": "/services",
       "file": "services/index.html",
       "sections": 11,
-      "bytes": 51913,
+      "bytes": 52235,
       "title": "Eye Care Services | Exams, Medical, Kids & Contacts | Eye Trends"
     },
     {
@@ -180,7 +180,7 @@
       "route": "/services/childrens-eye-care",
       "file": "services/childrens-eye-care/index.html",
       "sections": 5,
-      "bytes": 34335,
+      "bytes": 34657,
       "title": "Children's Eye Care in Clear Lake | Eye Trends"
     },
     {
@@ -188,7 +188,7 @@
       "route": "/services/comprehensive-eye-exams",
       "file": "services/comprehensive-eye-exams/index.html",
       "sections": 6,
-      "bytes": 37337,
+      "bytes": 37659,
       "title": "Comprehensive Eye Exams in Clear Lake | Eye Trends"
     },
     {
@@ -196,7 +196,7 @@
       "route": "/services/contact-lens-exams",
       "file": "services/contact-lens-exams/index.html",
       "sections": 5,
-      "bytes": 35869,
+      "bytes": 36191,
       "title": "Contact Lens Exams & Fittings, Clear Lake | Eye Trends"
     },
     {
@@ -220,7 +220,7 @@
       "route": "/services/emergency-eye-care",
       "file": "services/emergency-eye-care/index.html",
       "sections": 6,
-      "bytes": 35306,
+      "bytes": 35628,
       "title": "Emergency Eye Care in Clear Lake, Seen Today | Eye Trends"
     },
     {
@@ -276,7 +276,7 @@
       "route": "/services/medical-eye-care",
       "file": "services/medical-eye-care/index.html",
       "sections": 5,
-      "bytes": 39839,
+      "bytes": 40161,
       "title": "Medical Eye Care in Clear Lake, Houston | Eye Trends"
     },
     {

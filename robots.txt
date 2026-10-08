@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /
+
+# This is a PREVIEW of a rebuild, not the live site.
+# The real site is https://eyetrendsclearlake.com/ and is the canonical copy.

@@ -1251,9 +1251,9 @@ cannot change). Above 1440 each value grows in a straight line from its 1440 val
 
 | value | 1440 → 2560 |
 |---|---|
-| container | 1180 → 1920px (content about 70–75% of the window, as at 1440) |
+| container | 1180 → 1920px. Content is 1100px at 1440 (77% of the window), 1393 at 1920 (73%), 1783 at 2560 (70%) |
 | side padding | 40 → 68px |
-| section padding | 108 → 160px |
+| section padding | 108–110 → 160px |
 | grid gaps | 30 → 46px |
 | `--ds-space` scale | ×1.33 |
 | body text | 17 → 19.5px |
@@ -1267,12 +1267,23 @@ Along the way:
   declared again at section level. That also put the service pages' hero copy back in line with
   the sections below it: it had started 401px from the left at 1920 while the content below
   started at 256.
-- **Reading measure.** The columns grow faster than the type (about ×1.6 against ×1.15), and 99
-  sections ran past 75 characters a line at 2560. Running text, ledes, FAQ answers and large quotes
-  get `em` caps of about 70, 63 and 56 characters. Plain paragraphs get theirs at zero specificity,
-  and where a cap already existed the new one is the smaller of the two, so nothing became wider.
-- **Fixed layout boxes.** Three boxes that `layout.css` fixes in px (the manifesto rows, the bio
-  card and the story timeline) keep the share of the container they had at 1440.
+- **Reading measure.** The columns grow faster than the type (about ×1.6 against ×1.15). Without
+  caps, 124 sections ran past 75 characters a line at 2560, up to 166, and 99 of them only because
+  of this change. The caps are in `em`:
+  - 35em for running text and FAQ answers;
+  - 34em for ledes and 33em for `dc-lead`;
+  - 30em for the large quotes.
+
+  The probe measures each section's widest paragraph, as its characters divided by its lines.
+  At 2560 that is now at most 74 in running text, 73 in ledes and 61 in quotes.
+
+  Plain paragraphs get their cap at zero specificity, and where a cap already existed the new one
+  is the smaller of the two, so nothing became wider.
+- **Fixed layout boxes.** Three boxes that `layout.css` fixes in px keep the share of the container
+  they had at 1440:
+  - the "what we stand on" rows (`.bw-manifesto`);
+  - the bio card (`.od-bio`);
+  - the story timeline (`.bw-timeline`).
 - **Wide components.** The designer-house logos, the home kids section's glass card (its frames
   stay clear, see below) and the home quote section's height grow with the window too.
 - **Images.** `sizes` gains `(max-width: 1440px)` and `(max-width: 1920px)` buckets, from painted
@@ -1283,14 +1294,26 @@ Along the way:
 
 | check | result |
 |---|---|
-| 1440 and below unchanged | All 44 pages at 1440, 1280 and 390 lay out identically to the old build: every element's box to 0.25px, and its font size. A control adding 1px of padding to the first visible heading is caught on every page tested. Two controls were blind before that one: a 1px margin collapsed into the eyebrow's margin, and the first `<h2>` in the page sits in the hidden search panel |
-| Alignment | At 1920 and 2560, on all 44 pages, no section starts off the container's content edge (the service-page heroes did) |
-| Line length | At 1600, 1920 and 2560, no paragraph runs past 75 characters a line (99 sections did) |
+| 1440 and below unchanged | All 44 pages at 1440, 1280 and 390 lay out identically to the old build, comparing every element's box (to 0.25px) and font size. A control that adds 1px of padding to the first visible `<h2>` in `<main>` is caught on every page and width it was run on (`/` and `/services/` at 1440 and 390). Twice before that the control was blind, for one reason: it nudged the page's first `<h2>`, which sits in the hidden search panel. Changing the nudge from a margin to padding, on a guess that the margin was collapsing, changed nothing; moving it to a visible heading fixed it. No source was edited or rebuilt between this run and the commit |
+| Alignment | On all 44 pages at 1920 and 2560, and 12 of them at 1600, no section starts off the container's content edge. The service-page heroes used to |
+| Line length | On all 44 pages at 1920 and 2560, and 12 of them at 1600, no section runs past 75 characters a line. Without the caps 124 did at 2560 and 32 at 1920 |
 | Photo sections | The 8 doctor sections at 1920 and 2560 cover edge to edge, with his face and figure clear of the text and density at least 1. The quote section: panel 45%, face clear, density 1.1, quote contrast 7.8:1 worst. The kids section at 1600–2560: frames clear of the wider card by 155–377px, while a card stretched across the section reads as an overlap |
-| Scope | 250 files before and after. 38 pages changed, and only in `<img>` `sizes` (204 tags, 43 images), each keeping its old values up to 1440. `system.css` is the old file plus §27 (+149 lines). `tools/build.mjs` +12 / −1. Refs 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |
+| Scope | 250 files before and after. 38 pages changed, and only in `<img>` `sizes` (204 tags, 43 images), each keeping its old values up to 1440. `search-index.json` differs only in its `generated` field. `system.css` is the old file plus §27 (+149 lines). `tools/build.mjs` +12 / −1. Refs 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |
 | Live preview | After the Pages build (`cc5cdce`), six files are byte-identical. The live home, medical eye care and our-doctor pages measure 1393px of content at 1920 and 1783px at 2560 (margins 256 and 381), with none misaligned and none over 75 characters. At 1440 and 390 they lay out identically to the old build |
 
 **Found, not changed** (HANDOFF, known gaps):
-- Eight photos are painted wider than their largest file, three of them already 1.4–1.6× at 1440.
-- For 17 cover-cropped images the 390–1440 `sizes` record box width, not painted width.
-- 27 sections already ran past 75 characters a line at 1440.
+- Eight photos are painted wider than their largest file, measured on 1× screens. Five are already
+  stretched at 1440: three by 1.4–1.6×, one by 1.24× and one by 1.12×.
+- 17 of 39 images have a 1440 `sizes` value smaller than the width they paint at 1440. The 390–1024
+  values were not re-checked.
+- 30 sections on 20 pages already ran past 75 characters a line at 1440, the longest at 134.
+
+**Corrected after publishing.** The first version of this entry, pushed in `7c8fb5c`, had four
+errors:
+- it said 27 sections were over 75 at 1440 (that count skipped 3 sections it could not pair with
+  a 2560 reading);
+- it said the 1600 checks covered all pages (they covered 12);
+- it blamed the first blind control on margin collapse;
+- it gave the reading caps as estimated character counts, not measured ones.
+
+Each figure above was then checked against the saved probe output.

@@ -122,17 +122,23 @@ phone numbers, emails and insurance details to the CMS this rebuild exists to le
 **Images are responsive.** 199 `<img>` tags carry a `srcset`, and the `sizes` attribute on
 each is the **measured** rendered width of that image at 390/768/1024/1440, taken from the
 built pages across all 44 routes — not a guess. Since revision 18 the widths painted at 1920
-and 2560 are measured too and get buckets of their own above 1440. If you change a layout
-width, re-measure (`audit/image-widths.json`) or the browser will pick the wrong file.
+and 2560 are measured too and get buckets of their own above 1440. A re-check at 1440 found 17
+images declared narrower than they paint there (see known gaps). If you change a layout width,
+re-measure (`audit/image-widths.json`) or the browser will pick the wrong file.
 
 **Wide screens grow the layout** (revision 18, `system.css` §27). Above 1440px the container,
 side padding, section padding, gaps, spacing scale and type grow in a straight line to their
 targets at 2560:
-- **Container:** 1180 → 1920px, so content runs about 70–75% of the window.
-- **Type:** body 17 → 19.5px.
 
-Running text keeps a reading width of 75 characters per line or fewer through `em` caps. Up to
-1440px nothing changed: all 44 pages lay out identically at 1440, 1280 and 390.
+| window | content width | share of the window | body text |
+|---|---|---|---|
+| 1440 | 1100px | 77% | 17px |
+| 1920 | 1393px | 73% | 18.1px |
+| 2560 | 1783px | 70% | 19.5px |
+
+Above 1440, `em` caps keep text to 75 characters a line or fewer. The measure is each section's
+widest paragraph, as characters divided by lines, checked on all 44 pages at 1920 and 2560. Up
+to 1440px nothing changed: all 44 pages lay out identically at 1440, 1280 and 390.
 
 **Text is verbatim.** Every phrase on the source site appears in this rebuild character
 for character, with three declared exceptions, all listed in `tools/verify-text.mjs` under
@@ -206,9 +212,9 @@ The home page's **quote section** ("In Dr. Hyder's words") was redesigned in rev
 | **`--ds-glass-blur`** | Referenced by 7 chip rules in `layout.css` and never defined, so their own `backdrop-filter` is inert. Five chips get their glass elsewhere: `components.css` for `.ia-portrait__badge` and `.tib-creed__badge`; `system.css` §19 for `.ethc-hero__badge` and `.tib-hero__chip`; `system.css` §23 for `.et-doctor__badge` and `.dc-doctor__badge`, which had no plate at all until revision 12. `.dc-chip` was not re-checked |
 | **2 parity minors** | one is 14 images with empty `alt` — the logo marquee's decorative duplicates, which are `aria-hidden` on purpose. The other is one `<h1>` where an em-dash became a colon at the client's request |
 | **Gate is 26/28** | `C22` is pixel-parity with the ORIGINAL site, which a deliberate redesign must fail. `C28` is compose-from-presets, and this design layer is hand-authored. Both are recorded overrides in `HANDOFF-MANIFEST.json`, not unnoticed failures |
-| **Some photos are softer on wide screens** | Eight images are painted wider than their largest file, measured: `hero-boutique`, `exam-room` and `kids-eyewear` have only 1024px sources and are stretched 1.4–1.6x at 1440 and 2.5x at 2560, and `optical-showroom`, `trust-banner`, `optical-showroom-wide`, `optical-interior` and `storefront` 1.1–1.7x at 2560. Higher-resolution source images (or an AI upscale, as used for the portrait) are the fix |
-| **`sizes` below 1440 count box width, not painted width** | For 17 cover-cropped images the 390–1440 values in `audit/image-widths.json` record the box, so the browser can pick a smaller file than the crop paints (worst: `optical-interior`, 513 declared vs 1977 painted at 1440). The 1920/2560 values are painted widths. Re-measuring the lower buckets the same way would sharpen those images at 1440 and below |
-| **Long lines at 1440 and below** | 27 sections already ran past 75 characters a line at 1440 (up to 134 on `/eye-doctor-clear-lake/`). Above 1440 they are capped; at 1440 and below the original layout was kept as tuned |
+| **Some photos are softer on wide screens** | Measured on 1x screens, eight images are painted wider than their largest file. **At 1440:** `hero-boutique`, `exam-room` and `kids-eyewear` have only 1024px files, stretched 1.4–1.6x (2.5x at 2560); `optical-interior` is 1.24x and `optical-showroom-wide` 1.12x. **At 2560 only:** `optical-showroom` (1.7x), `trust-banner` (1.59x) and `storefront` (1.11x). The fix is higher-resolution source images, or an AI upscale as used for the portrait |
+| **Some `sizes` values at 1440 are too small** | A re-check at 1440 on 2026-10-08 found 17 of 39 images declared in `audit/image-widths.json` narrower than they paint. The shortfall runs from 8px (the 530 vs 538 portraits) to 1464px (`optical-interior`, 513 vs 1977), so the browser can pick a smaller file than the screen needs. The likely cause is that the earlier measurement took the box width of cover-cropped images; this is not verified for each image. The 390–1024 values were not re-checked. The 1920 and 2560 values are painted widths. Re-measuring the lower buckets the same way would sharpen these images |
+| **Long lines at 1440 and below** | 30 sections on 20 pages already ran past 75 characters a line at 1440, the longest at 134 on `/eye-doctor-clear-lake/`. Above 1440 they are capped. At 1440 and below the original layout was kept as tuned |
 | **Full-bleed bands overshoot by half a scrollbar** | The home page's doctor and kids photo bands (revisions 13 and 14) reach the screen edges with `calc(50% - 50vw)`, and `100vw` includes a classic scrollbar, so below 1200px the page is 8px wider than the window. It is invisible because `body` sets `overflow-x: hidden`: no horizontal scrollbar, and a sideways wheel gesture does not move the page (measured; with that rule removed, a 15px scrollbar appears). Only a script's `scrollTo` can shift it. Keep that rule, or clip those two sections, if you change it |
 
 ---

@@ -250,17 +250,31 @@
       held = shut = null;
       clearTimeout(holdTimer);
     };
-    var movingDown = function () {        // down, at least 1 in 16 of the sideways travel
-      if (trail.length < 2) return false;  // (the shallowest Services paths at 1920 fall about 0.12)
-      var a = trail[0], b = trail[trail.length - 1];
-      var dy = b.y - a.y;
-      return dy > 0 && dy >= Math.abs(b.x - a.x) * 0.0625;
+    var span = function (ms) {            // the pointer's travel over the last `ms` of the trail
+      var b = trail[trail.length - 1], a = b;
+      for (var i = trail.length - 1; i >= 0 && b.t - trail[i].t <= ms; i--) a = trail[i];
+      return { dx: b.x - a.x, dy: b.y - a.y };
     };
-    var throughSideways = function () {   // still crossing: down, but more sideways than down
+    var lastPx = function (px) {          // the pointer's travel over its last `px` of movement
+      var b = trail[trail.length - 1], a = b;
+      for (var i = trail.length - 2; i >= 0; i--) { a = trail[i]; if (Math.abs(b.x - a.x) + Math.abs(b.y - a.y) >= px) break; }
+      return { dx: b.x - a.x, dy: b.y - a.y };
+    };
+    // Two windows.
+    // - The long one says "still descending overall". It holds the shallowest Services paths at 1920 (about
+    //   1 in 8) even at 120 px/s, where 80ms of travel rounds to no descent at all.
+    // - The short one, the last 8px of movement, catches a turn straight down at once. A 200ms window is too
+    //   slow: the pointer is already off the link when it notices (measured: 4 of 16 such turns ended in the
+    //   other menu). A 50ms window is too jumpy: at 120 px/s it can hold two whole-pixel points 0px across and
+    //   1px down, a "turn" in the middle of a graze (2 of 192 runs).
+    var movingDown = function () {        // over 200ms: down, at least 1 in 16 of the sideways travel
       if (trail.length < 2) return false;
-      var a = trail[0], b = trail[trail.length - 1];
-      var dy = b.y - a.y;
-      return dy > 0 && Math.abs(b.x - a.x) >= dy;
+      var d = span(200);
+      return d.dy > 0 && d.dy >= Math.abs(d.dx) * 0.0625;
+    };
+    var turnedDown = function () {        // over the last 8px: steeper than 45 degrees
+      var d = lastPx(8);
+      return d.dy > 0 && d.dy > Math.abs(d.dx);
     };
     var renew = function () { clearTimeout(holdTimer); holdTimer = setTimeout(release, 350); };
     document.addEventListener('pointermove', function (e) {
@@ -270,16 +284,13 @@
       // 1px of descent, which whole-pixel positions can round to none
       while (trail.length > 2 && e.timeStamp - trail[0].t > 200) trail.shift();
       if (!held) return;
-      // While held, the hold lasts as long as the crossing does. A slow pointer (120 px/s) takes about half a
-      // second to cross the link, longer than any fixed hold.
-      // - On a nav link (the crossed one, or the next, whose corner a shallow path clips): keep it while the
-      //   path runs on sideways and down. A turn straight down, a move along the nav (no downward travel) or a
-      //   pause (no move for 350ms) is a choice.
-      // - In the band below: keep it while moving down.
-      var over = e.target && e.target.closest ? e.target.closest('.nv-item') : null;
-      if (over) { if (throughSideways()) renew(); else release(); }
-      else if (movingDown()) renew();
-      else release();
+      // While held, the hold lasts as long as the crossing does: over the links and down through the band. A
+      // slow pointer (120 px/s) takes about half a second to cross a link, longer than any fixed hold. Each of
+      // these is a choice and ends it:
+      // - a turn straight down onto the link under the pointer;
+      // - a move along the nav, with no descent;
+      // - a pause of 350ms.
+      if (movingDown() && !turnedDown()) renew(); else release();
     }, { passive: true });
     megaItems.forEach(function (item) {
       item.addEventListener('pointerleave', function (e) {

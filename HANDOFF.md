@@ -39,7 +39,7 @@ cd dist && python -m http.server 8781      # or: npx serve .
 dist/        the deployable website — 44 pages + every asset it references
 src/         hand-authored sources: styles/ and scripts/
 tools/       the build system and the five audits (Node 18+, zero dependencies)
-assets/      image masters: supplied/, generated/, generated-rt/, img/
+assets/      image masters: supplied/, edited/, generated/, generated-hf/, generated-rt/, img/
 docs/        README, DEPLOY, BRAND-SYSTEM, CHANGE-LOG (every revision, with measurements)
 audit/       the evidence: inventories, parity, verbatim-text, gate reports
 facts/       client-facts.json — the ONLY place a claim may come from that is not on the live site
@@ -140,6 +140,23 @@ Above 1440, `em` caps keep text to 75 characters a line or fewer. The measure is
 widest paragraph, as characters divided by lines, checked on all 44 pages at 1920 and 2560. Up
 to 1440px nothing changed: all 44 pages lay out identically at 1440, 1280 and 390.
 
+**Internal page heroes are short and spread across the width** (revision 20, `system.css` §28). Every internal
+page's first section starts closer to the header (36–64px, was 95–160), and every internal hero heading shares one
+size: 36px on phones, 44.8 at 1280, 50.4 at 1440, 55.4 at 1920, 62 at 2560. The home hero keeps its own.
+- **The six photo cards** (`/services/` and five service pages): from 1025px the copy is two blocks centred on each
+  other, eyebrow and heading on the left (`.ha-hero__lead`), paragraph and buttons on the right (`.ha-hero__side`).
+  `tools/build.mjs` (`splitInnerHeroCopy`) adds the two wrappers and stops if the copy is anything but eyebrow,
+  heading, paragraph, buttons, or if its text changes. The cards show a generated photograph (below) under an even
+  scrim from 861px.
+- **The 21 framed-photo heroes:** from 1025px the heading runs across the top, the paragraph(s) and buttons sit beside
+  the photo, which stretches to their height, and the three proof tiles take one row. The copy column uses
+  `display: contents`, so the markup is unchanged; an element added to `.dc-hero__copy` needs a grid row (§28 lists
+  them).
+- **The visit page:** from 1025px the three facts stand in a right-hand column.
+- **The legal and statement pages:** from 1025px the heading on the left, the lede and effective date on the right.
+- Section heights fell 53–60% (photo cards), 29–52% (framed photo), 31–44% (visit page) and 23–41% (legal pages)
+  at 1280–2560, and 11–26% on the other internal pages. Below 1025px the stacked layouts are as before.
+
 **The mega menus hold while you move into them** (revision 19, `chrome.css` section 4 and `site.js` 8b).
 - **A strip under each link.** Each menu link hangs an invisible strip from 2px below its bottom edge into its
   panel, reaching 180px to each side. It is present only while that menu is open or closing. A click on it does
@@ -164,6 +181,14 @@ proves it and fails if anything else drifts.
 `data-generated`. The client-supplied hero carries `data-supplied`. Real photographs edited by
 an image model carry `data-edited` (below). No generated image is ever used where the alt
 text makes a claim about the practice, its premises or its people.
+
+**The six service-page photo cards show a generated room** (revision 20, at the operator's request). It is an
+eyewear gallery made with Higgsfield Marketing Studio 2.5 Flare at 3840x1648. **It is not the practice's office.**
+- **What it replaced:** 1024–1600px source photos that the full-bleed card stretched to 1903–2543px.
+- **Files and labelling:** `assets/generated-hf/`, with the prompt and request ids in its README. It is stamped
+  `data-generated`, and its alt describes only what is shown.
+- **To use the practice's own rooms instead:** a wide photograph can take the same slot (`tools/build.mjs`,
+  `INNER_HERO`).
 
 **Dr. Hyder's main portrait is an AI-edited photograph** (38 pages, revision 12). At the
 operator's request it was edited with Higgsfield Marketing Studio 2.5 Sunburst:
@@ -224,13 +249,17 @@ The home page's **quote section** ("In Dr. Hyder's words") was redesigned in rev
 | **Form backend** | must be wired before launch — see above |
 | **No `404.html`** | the build does not generate one; add a page and point your host at it |
 | ~~No sitemap and no robots.txt~~ **fixed** | `tools/build-sitemap.mjs` now writes both, listing 43 of the 44 routes (`/search/` is excluded: it renders results client-side and has no content of its own). The `<loc>` entries use the production origin so they agree with the canonical tags. |
-| **`--ds-glass-blur`** | Referenced by 7 chip rules in `layout.css` and never defined, so their own `backdrop-filter` is inert. Five chips get their glass elsewhere: `components.css` for `.ia-portrait__badge` and `.tib-creed__badge`; `system.css` §19 for `.ethc-hero__badge` and `.tib-hero__chip`; `system.css` §23 for `.et-doctor__badge` and `.dc-doctor__badge`, which had no plate at all until revision 12. `.dc-chip` was not re-checked |
+| **`--ds-glass-blur`** | Referenced by 7 chip rules in `layout.css` and never defined, so their own `backdrop-filter` is inert. Five chips get their glass elsewhere: `components.css` for `.ia-portrait__badge` and `.tib-creed__badge`; `system.css` §19 for `.ethc-hero__badge` and `.tib-hero__chip`; `system.css` §23 for `.et-doctor__badge` and `.dc-doctor__badge`, which had no plate at all until revision 12. `.dc-chip` had no plate at all; revision 20 gives it the glass tile's surface (§28) |
 | **2 parity minors** | one is 14 images with empty `alt` — the logo marquee's decorative duplicates, which are `aria-hidden` on purpose. The other is one `<h1>` where an em-dash became a colon at the client's request |
 | **Gate is 26/28** | `C22` is pixel-parity with the ORIGINAL site, which a deliberate redesign must fail. `C28` is compose-from-presets, and this design layer is hand-authored. Both are recorded overrides in `HANDOFF-MANIFEST.json`, not unnoticed failures |
-| **Some photos are softer on wide screens** | Measured on 1x screens, eight images are painted wider than their largest file. **At 1440:** `hero-boutique`, `exam-room` and `kids-eyewear` have only 1024px files, stretched 1.4–1.6x (2.5x at 2560); `optical-interior` is 1.24x and `optical-showroom-wide` 1.12x. **At 2560 only:** `optical-showroom` (1.7x), `trust-banner` (1.59x) and `storefront` (1.11x). The fix is higher-resolution source images, or an AI upscale as used for the portrait |
+| **Some photos are softer on wide screens** | Measured on 1x screens, eight images are painted wider than their largest file. **At 1440:** `hero-boutique`, `exam-room` and `kids-eyewear` have only 1024px files, stretched 1.4–1.6x (2.5x at 2560). Since revision 20 the six service-page photo cards, where they were stretched most, use the generated 3840px image instead; their other usages remain; `optical-interior` is 1.24x and `optical-showroom-wide` 1.12x. **At 2560 only:** `optical-showroom` (1.7x), `trust-banner` (1.59x) and `storefront` (1.11x). The fix is higher-resolution source images, or an AI upscale as used for the portrait |
 | **Some `sizes` values at 1440 are too small** | A re-check at 1440 on 2026-10-08 found 17 of 39 images declared in `audit/image-widths.json` narrower than they paint. The shortfall runs from 8px (the 530 vs 538 portraits) to 1464px (`optical-interior`, 513 vs 1977), so the browser can pick a smaller file than the screen needs. The likely cause is that the earlier measurement took the box width of cover-cropped images; this is not verified for each image. The 390–1024 values were not re-checked. The 1920 and 2560 values are painted widths. Re-measuring the lower buckets the same way would sharpen these images |
 | **Long lines at 1440 and below** | 30 sections on 20 pages already ran past 75 characters a line at 1440, the longest at 134 on `/eye-doctor-clear-lake/`. Above 1440 they are capped. At 1440 and below the original layout was kept as tuned |
 | **Mega menu edge cases** | Measured after revision 19 (`docs/CHANGE-LOG.md`). A panel takes about 0.55–0.6s to close after the pointer leaves (0.34–0.40s before). Leaving Eyewear sideways onto "Insurance" and then moving straight down onto the page within about half a second re-opens it; the old build did the same within 0.25s. With one menu open, crossing another nav link on a downward path keeps the open menu (menu aim). To switch, move along the nav, turn straight down onto the link, or pause on it for 350ms. At 1920px a few very slow (about 120 px/s), very shallow paths to the far-right Services columns still dim or close the panel: 6 of 204 in the path matrix. In 96 repeated runs, 4 closed and 2 ended in Eyewear. The old build failed all 6 matrix paths, and in the same repeats ended in Eyewear 37 times and closed 29. A logged failure traced to a 352ms gap in the headless test driver's pointer events, which the script reads, by design, as a pause. Escape does not close an open mega menu; it never did |
+| **The "Book an Eye Exam" gradient button** | `.btn-primary` (226 on the site) puts white text on teal → bright teal (#16B393) → gold. Measured behind its label: 3.08:1 on average, 2.66 at the 95th percentile, the same before and after revision 20. AA asks 4.5:1 at its size. Darkening the gradient's middle stop, or dark text on the light end, would fix it; it is a brand decision, so it was not changed. The service-page proof labels (`.dc-proof__l`) were `--g-fg-faint` (#7C949B) on light glass at 3.04–3.11:1; revision 20 darkened them (6.04–6.25:1). Five other label classes share that colour (`.et-stat__l`, `.ethc-hero__l`, `.od-record__l`, `.bw-stat__l`, `.ia-stat__suf`) and were not re-measured |
+| **Reveal content needs JavaScript** | `.reveal` starts at opacity 0 and `site.js` adds `.in-view` as it scrolls into view. With scripts off, or before the script runs, that content is invisible, including most hero text (measured on five pages at 1440 and 390, in the build before revision 20 too). A `<noscript>` style or a `.js` class on `<html>` that gates the hidden state would fix it |
+| **The service-page hero photo is generated** | The six `.ha-hero` cards show a generated room, not the office (revision 20, `assets/generated-hf/README.md`). The practice should approve it, or supply a wide photograph of its own optical for the same slot |
+| **Phones magnify the hero crop** | The square crop the six photo cards use up to 820px is 1648px, the largest the render holds. A 3x phone paints it at up to 1.7x; the photo there sits under a 74–90% scrim. From 600px up no file is magnified |
 | **`site.js` has no cache-buster** | The stylesheets are linked with `?v=<hash>`, but `/scripts/site.js` is not, and GitHub Pages serves it with `Cache-Control: max-age=600` (measured). After an update a returning visitor can run the old script for up to 10 minutes. Revision 19 is safe either way: its CSS works without the new script. Adding the same `?v=` to the script tag in `tools/build.mjs` would close this |
 | **Full-bleed bands overshoot by half a scrollbar** | The home page's doctor and kids photo bands (revisions 13 and 14) reach the screen edges with `calc(50% - 50vw)`, and `100vw` includes a classic scrollbar, so below 1200px the page is 8px wider than the window. It is invisible because `body` sets `overflow-x: hidden`: no horizontal scrollbar, and a sideways wheel gesture does not move the page (measured; with that rule removed, a 15px scrollbar appears). Only a script's `scrollTo` can shift it. Keep that rule, or clip those two sections, if you change it |
 

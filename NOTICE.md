@@ -15,6 +15,8 @@ public, forking it, or reusing any part of it.
 | Designer brand wordmarks | `assets/source/*-{ray-ban,oliver-peoples,lindberg,persol,tom-ford,maui-jim,costa}.*` | **registered trademarks of those companies** |
 | Supplied hero photograph | `assets/supplied/hero-eyewear-source.jpg` | a Pexels stock photograph — see below |
 | AI-generated imagery | `assets/generated/`, `assets/generated-rt/` | generated for this project; labelled `data-generated` in the markup |
+| AI-generated hero photograph | `assets/generated-hf/` | generated with Higgsfield for this project (revision 20), wholly generated: a room that is **not the practice's office**; labelled `data-generated`. Provenance in its README |
+| AI-edited photographs | `assets/edited/` | **the client's own photographs** (Dr. Hyder's portrait, the kids' frames) edited with Higgsfield; labelled `data-edited`. Provenance and the likeness check in its README |
 | Dr. Jerry Hyder's portrait | `assets/img/dr-hyder-cutout.png` | **the client's own photograph of a real person**, background removed; labelled `data-cutout`. Not a generated likeness |
 
 ## Things to settle before this repository is public

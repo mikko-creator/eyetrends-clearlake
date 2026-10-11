@@ -1432,3 +1432,124 @@ the final build, with the 8px turn window.
 - At 1041px the header's nav row runs into the Book button.
 - `scripts/site.js` has no `?v=` cache-buster, unlike the stylesheets, so a returning visitor can run the old
   script until their cache expires. The new CSS degrades without it.
+
+---
+
+# Revision 20 — internal page heroes: shorter, spread across the width, and a new photograph
+
+> *"the hero section for internal pages need to be fixed, because in wide screen it looks awkward with a heavy text
+> on the left and huge vacant realty space on the right. Generate a high resolution image too via higgsfield that we
+> can use for internal page hero sections. make those sections shorter too and evenly spread out the text to balance
+> the look"* (with a capture of `/services/medical-eye-care/` at about 1830px wide)
+
+**Measured before.** The 43 internal pages open with one of six kinds of first section. Every page was measured at
+1280x585, 1440x900, 1920x1080 and 2560x1440. The probes and their saved output are in `.tmp/session-cc24e987/hero/`.
+- **The photo card** (`.ha-hero`: `/services/` and five service pages, the one in the capture).
+  - The copy was capped at 44rem at the left of a full-bleed card. At 1920 it filled 37% of the card, with 945px of
+    photograph to its right; at 2560, 28%, with 1460px.
+  - The section was 988–1114px tall at 1280 and 1116–1330px at 1920.
+  - Its four photographs are 1024px files, one 1600px, painted 1903px wide at 1920 and 2543px at 2560.
+- **The framed-photo hero** (`.dc-hero`, 21 service pages).
+  - The heading ran 4–9 lines in a half-width column, the photo floated beside it, and the three proof tiles wrapped
+    one or two to a row: 1303–1730px tall at 1280–1440.
+  - The badge on the photo (`.dc-chip`) had no surface: `layout.css` gives it no background, and its blur reads the
+    undefined `--ds-glass-blur`, so its text sat straight on the photo.
+- **The visit page** (`.ct-hero`): the copy in the left 45%, nothing to its right.
+- **The four legal and statement pages:** the heading and lede in the left half of a plain band.
+- **The other kinds** already pair their copy with a photo on the other side: the product pages, insurance and
+  forms, and the doctor page.
+- **Every internal page started its first section 95–160px below the header**, the site's section padding.
+
+**The change** (`system.css` §28; `tools/build.mjs` `INNER_HERO` and `splitInnerHeroCopy`; `assets/generated-hf/`).
+1. **One heading size for every internal hero**, about 26% below the site-wide h1. The home hero keeps its own.
+
+   | window | 390 | 1280 | 1440 | 1920 | 2560 |
+   |---|---|---|---|---|---|
+   | before | 36 | 65.3 | 68 | 73.1 | 80 |
+   | after | 36 | 44.8 | 50.4 | 55.4 | 62 |
+
+2. **Every internal page's first section starts closer to the header**: 36–52px, up to 64px at 2560. The photo card
+   starts 20–32px down.
+3. **The photo card, from 1025px, has two blocks side by side, centred on each other.** The eyebrow and heading are
+   on the left; the paragraph and the two calls to action are on the right.
+   - `tools/build.mjs` wraps each block (`.ha-hero__lead`, `.ha-hero__side`). It stops if the copy is anything but
+     eyebrow, heading, paragraph and calls to action, or if its tag-stripped text changes.
+   - The wrappers came from the review. With the four children as separate grid items on shared rows, the heading
+     column ended 168–224px above the buttons at 1025.
+   - From 1025 to 1366px the paragraph block gets the wider column, since it is the taller block there.
+4. **A new photograph for the six cards**, generated with Higgsfield (below). The scrim is even across the card from
+   861px. The old one ran from 90% dark down to 18% because the right of the card was empty, and text now sits on both
+   halves.
+5. **The framed-photo hero, from 1025px:**
+   - The heading runs across the top, set with `text-wrap: pretty`.
+   - The paragraph(s) and buttons share the row below with the photo, which stretches to their height (240px at
+     least).
+   - The three proof tiles take one full-width row.
+   - Above 1440 the copy column is the paragraph's own measure (35em), and the photo takes the rest. Before, the
+     paragraph's 37rem cap left a 386px empty band before the photo at 2560.
+   - The copy column's own boxes step aside (`display: contents`), so the markup is unchanged.
+6. **Three fixes inside that hero, at every width:**
+   - The photo badge gets the glass tiles' surface.
+   - The proof tiles' small labels move from `--g-fg-faint` (3.04–3.11:1, in the old build too) to the secondary text
+     colour (6.04–6.25:1).
+   - `/services/adult-eye-exams/` gets a gap between its two paragraphs, which touched.
+7. **The visit page, from 1025px:** the three facts stand as glass tiles in a right-hand column. Above 1440 the copy
+   column is 36em, so the tiles start one gap after it.
+8. **The legal and statement pages, from 1025px:** the eyebrow and heading on the left, the lede and effective date on
+   the right. The heading pair is centred on the lede without a wrapper: the lede spans the pair's two rows, which
+   share its extra height. `/search/` keeps its own layout.
+9. **The product pages' photo badge** (`.tib-hero__chip`, six pages) is back where `layout.css` placed it, at the
+   photo's foot. The generated glass block in `components.css` set `position: relative` at the same weight and loads
+   later, so since the first build it sat at the top of the photo with 21px cut off by the frame, the same trap as the
+   §23 badges.
+10. **Below 1025px the stacked layouts are unchanged** apart from:
+    - items 1, 2, 6 and 9;
+    - the photo card's bottom spacing;
+    - the new photograph.
+
+**The photograph.** Made with Higgsfield Marketing Studio 2.5 Flare, text only, 21:9 at 4k: 3840x1648.
+- **What it shows:** an eyewear gallery in low evening light: backlit oak shelving with rows of frames, teal walls,
+  walnut drawers, a fitting table and two stools.
+- **The rejected render:** the same prompt on Sunburst was as sharp, but busier, with an armchair and plants in the
+  foreground under the heading.
+- **Files:** the 21:9 frame at six widths, 960–3840, from 821px. Up to 820px, the square centre at five widths,
+  480–1648, through `<picture>`, because a phone's card is taller than it is wide.
+- **`sizes`:** each value is the largest painted width in its bucket under cover. It was measured on all six pages at
+  every 4px from 320 to 2560, at three window heights, in phone and desktop-window modes.
+- **It is a generated room, not the practice.**
+  - All six source alts described the practice or a patient, so the alt now describes only what is shown (B3).
+    `tools/build.mjs` stops if that alt ever matches the documentary or practice patterns.
+  - It is stamped `data-generated`.
+  - The first build's rule for generated images was "object studies only". This one is the operator's request, and
+    follows the precedent of the generated room behind Dr. Hyder's portrait (revision 12).
+- **Provenance, prompt, request ids and encoding:** `assets/generated-hf/README.md`.
+
+## Re-verified
+
+| check | result |
+|---|---|
+| Section height, 43 pages | **Photo cards:** 988–1114 → 409–481px at 1280x585, 1116–1330 → 495–596 at 1920, 1238–1504 → 531–596 at 2560 (−53 to −60%). **Framed photo:** 1303–1677 → 726–903 at 1280, 1243–1724 → 842–988 at 1920, 1379–1677 → 920–1082 at 2560 (−29 to −52%). **Visit page:** 914 → 516, 917 → 628, 1027 → 703. **Legal pages:** 441–565 → 294–349 at 1280, 576–646 → 366–433 at 1920. **The other 11:** −11 to −26%. Phones: −0 to −7%. The home page is unchanged |
+| The photo cards' buttons at 1280x585 | All six above the fold: cards end at 475–547px, buttons at 427–505. The old build: 919–1044 |
+| Balance of the photo card's two blocks | Height difference 3–72px at 1280 and 9–59 at 1366; at 1100, 58–127. Before the wrappers, the right column ran 168–224px past the heading at 1025 |
+| Contrast, on rendered pixels | **Photo cards**, six pages at nine widths from 390 to 2560 (324 measurements), worst pixel: eyebrow 4.64:1, heading 5.91, gold highlight 3.8 (large text), paragraph 5.85, call link 7.84.<br>• At 861–1024, before the scrim was moved there, the highlight measured 2.55 and the paragraph 4.48; the old build's own photo measured 2.21 there.<br>• **Elsewhere**, worst pixel: framed-photo badge 9.16, product badge 13.5, visit-page tiles 14.2, legal ledes 4.98.<br>• **Control:** each element's own colour painted behind it collapses to 1:1 |
+| Image selection | A fresh browser per case. From 600px up the file is never magnified (0.74–0.99x); at 1025 on a 1x screen it is the 1280 file. 3x phones magnify the 1648px crop up to 1.7x (its source limit), under a 74–90% scrim |
+| Stacked layouts below 1025px | The old build with §28 injected matches the new build element for element inside the first section on all 43 pages at 390, 600, 768, 820, 900 and 1024: 258 of 258 identical (boxes, font sizes, opacity), so the copy wrappers move nothing. No horizontal overflow and no tap target smaller. The site's scroll parallax was neutralised in both: it scales framed photos that come within 100px of the window, and the shorter heroes bring them into range. Control: 1px on the hero's h1 is caught on every page |
+| Keyboard and labels | Tab order through the first section identical on 5 pages at 1920 and 390, every stop visible, on top and showing its focus ring (control: a hidden link is caught). Image alts: only the six photo-card alts changed, all stamped `data-generated`. Headings: unchanged, one h1 on every page |
+| Below the hero | Every element after the first section, measured from its bottom edge, against the old build: 263 of 264 page-sizes identical (44 pages × 1280x585, 1440x900, 1920x1080, 2560x1440, 390x844, 768x1024). The 264th is the home page's 8px overflow at 768, the same in both builds. Control: 1px on a visible h2 below the hero shifts 117–297 elements |
+| Scope | 44 pages identical to the old build after folding the stylesheet hash, the six `<picture>` swaps and the six copy splits; `search-index.json` differs only by its timestamp; 11 new image files, none removed. Control: a one-character change is caught. Refs 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |
+| Live preview | gh-pages `78ac2c2`, built from `acf9769`. 8 files byte-identical to the build: four pages, `system.css` and three of the new images. On the live site:<br>• **Fold:** at 1280x585 the cards end at 475–547px and the buttons at 427–505.<br>• **Heights:** four pages at 1920 equal the local build.<br>• **Images:** the file each width and DPR loads is the same as locally.<br>• **Contrast:** six pages' heroes at 1280 and 1920 (46 measurements), worst pixel: eyebrow 5.24, heading 6.62, highlight 4.5, paragraphs 5.78 and up, proof labels 6.08, badges 9.64 and up. Nothing fails but the known gradient button |
+| Independent review (first pass) | Four refuters on the first build.<br>• **Build and provenance:** ready. The build reproduces byte for byte from a clean copy, twice. All 11 images are byte-exact encodes of the logged render. Every §28 rule matches only its intended pages, and the home page is pixel-identical. It found stale `sizes` above 1024, the README's crop breakpoint and four comment slips.<br>• **Desktop:** publishable, every first section shorter (172 of 172). It reported:<br>&nbsp;&nbsp;– the legal pages still left-heavy;<br>&nbsp;&nbsp;– the heading column ending above the buttons at 1025–1366;<br>&nbsp;&nbsp;– a band before the visit page's tiles at 2240–2560;<br>&nbsp;&nbsp;– two-line headings leaving the top right empty;<br>&nbsp;&nbsp;– the photo's 300px floor overrunning short copy;<br>&nbsp;&nbsp;– the clipped product badge.<br>• All are fixed above. The other two did not finish: the session was interrupted. A second pass of three refuters on the final build was interrupted twice the same way. Its checks were run directly instead: the stacked-layout, keyboard, label and contrast rows above |
+
+**Trade-offs, measured:**
+- Between 1366 and 1367 the photo cards change height by up to 39px. The paragraph's wider column stops there:
+  carried on to 1440 it made the cards taller there (up to 473px against 454).
+- On the framed-photo pages at 1280x585 the buttons are still below the fold (611–766px, from 839–1213). Their
+  headings run 2–3 lines across the full width, and the paragraphs are long.
+
+**Found, not changed:**
+- **Without JavaScript the reveal content is invisible.** `.reveal` is opacity 0 until `site.js` adds `.in-view`, so with scripts off, or before they run, the hero text on these pages is invisible in both builds. One side effect of this revision: from 1025px the framed-photo hero's copy (`display: contents`) now shows without the script, and no longer fades in with it.
+- **The gradient "Book an Eye Exam" button** (`.btn-primary`, 226 on the site) puts white text on teal → bright teal
+  → gold. Behind its label it measures 3.08:1 on average and 2.66 at the 95th percentile, the same in the old build.
+- **The doctor page** (`/our-doctor/`) still leaves an empty area below the portrait at 1920–2560, smaller than before.
+- **More hero lines start with a spaced hyphen** ("- designer frames"), a side effect of the new measures: 12 lines
+  against 3, counted on the 43 pages at 1025, 1280, 1440, 1920 and 2560. The text's spaced hyphens are verbatim.

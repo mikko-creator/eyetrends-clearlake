@@ -1786,3 +1786,222 @@ blockquote, .et-review__q, .bw-quote {
   .rw-sec .od-bio { max-width: calc(var(--wrap) * 0.8136); }
   .rw-sec .bw-timeline { max-width: calc(var(--wrap) * 0.661); }
 }
+
+/* =========================================================================
+   28 · INTERNAL PAGE HEROES: SHORTER, AND SPREAD ACROSS THE WIDTH
+   =========================================================================
+   Operator, 2026-10-09: "the hero section for internal pages need to be
+   fixed, because in wide screen it looks awkward with a heavy text on the
+   left and huge vacant realty space on the right. ... make those sections
+   shorter too and evenly spread out the text to balance the look."
+
+   Measured before (1920x1080): the photo-card hero (.ha-hero, six /services/
+   pages) held its copy in the left 37% of the card, with 945px of photo to
+   its right, and was 1115-1330px tall; the framed-photo hero (.dc-hero, 21
+   service pages) was 1243-1724px tall with a 4-8 line heading; the visit
+   page's hero (.ct-hero) left its right 55% empty. At 1280x585 they were
+   988-1113, 1303-1677 and 914px tall.
+
+   · Every internal page's first section starts closer to the header, and
+     every internal hero heading shares one size, about 26% below the
+     site-wide h1 (the home page keeps its own hero).
+   · .ha-hero: from 1025px the copy is two columns inside the card, eyebrow
+     and heading on the left (.ha-hero__lead), the paragraph and the two
+     calls to action on the right (.ha-hero__side, both wrappers added by
+     tools/build.mjs), the two blocks centred on each other. The card shows
+     the generated gallery image (tools/build.mjs, INNER_HERO) under a
+     darker, even scrim, because text now sits on both halves.
+   · .dc-hero: from 1025px the heading runs across the top; the paragraph and
+     buttons share the row below with the photo, which now stretches to
+     their height; the three proof tiles take one full-width row. The badge
+     on the photo (.dc-chip) had no surface at all (layout.css gives it no
+     background, and its blur reads the undefined --ds-glass-blur), so its
+     text sat directly on the photo; it gets the glass tile's surface at
+     every width.
+   · .ct-hero: from 1025px the three facts stand as glass tiles in a right-
+     hand column beside the copy instead of a row below it.
+   Below 1025px the stacked layouts are unchanged apart from the top
+   spacing (and the photo card's bottom spacing), the heading size on
+   tablets, the badge's surface and the gap after the first paragraph on
+   /services/adult-eye-exams/. */
+body:not(.pg-home) main > .rw-sec:first-child { padding-top: var(--hero-top, clamp(36px, 3.6vw, 52px)); }
+.rw-sec :is(.ha-hero__h, .dc-hero__h, .ct-hero__h, .tib-hero__h, .et-hero__h, .bw-founder__h, .et-h1) {
+  font-size: clamp(36px, 3.5vw, 50.4px);
+}
+@media (min-width: 1441px) {
+  body:not(.pg-home) main > .rw-sec:first-child {
+    --hero-top-wide: min(64px, calc(52px + var(--wx) * 0.0107));
+    padding-top: var(--hero-top, var(--hero-top-wide));
+  }
+  .rw-sec :is(.ha-hero__h, .dc-hero__h, .ct-hero__h, .tib-hero__h, .et-hero__h, .bw-founder__h, .et-h1) {
+    font-size: min(62px, calc(50.4px + var(--wx) * 0.0104));
+  }
+}
+
+/* --- the photo-card hero --- */
+.rw-sec.ha-hero { --hero-top: clamp(20px, 1.6vw, 32px); padding-bottom: clamp(40px, 4.4vw, 72px); }
+@media (min-width: 1025px) {
+  .rw-sec.ha-hero .ha-hero__stage { min-height: 0; }
+  .rw-sec.ha-hero .ha-hero__inner { padding-block: clamp(40px, 3.6vw, 76px); }
+  /* Two blocks, centred on each other: on these six pages the paragraph
+     block is usually the taller one, and with the four children as separate
+     grid items (top-aligned on shared rows) the heading column ended 168-224px
+     short of the buttons at 1025 and 18-107px at 1920. */
+  .rw-sec.ha-hero .ha-hero__copy {
+    max-width: none;
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+    column-gap: clamp(48px, 5.5vw, 108px);
+    align-items: center;
+  }
+  .rw-sec.ha-hero .ha-hero__h { margin-top: var(--ds-space-sm); }
+  .rw-sec.ha-hero .ha-hero__sub { max-width: 36em; margin-top: 0; }
+}
+/* The scrim is even across the card wherever the old one ran from dark to
+   clear (861px and up): from 1025px text sits on both halves, and at 861-1024
+   the stacked copy is up to 44rem wide, 70-85% of the card, so its right end
+   sat on the old scrim's lightest part (the highlighted words' worst pixel
+   measured 2.55:1 there with the new photo). */
+@media (min-width: 861px) {
+  .rw-sec.ha-hero .ha-hero__scrim {
+    background:
+      linear-gradient(90deg,
+        color-mix(in srgb, var(--c-3) 78%, transparent) 0%,
+        color-mix(in srgb, var(--c-3) 66%, transparent) 46%,
+        color-mix(in srgb, var(--c-3) 62%, transparent) 54%,
+        color-mix(in srgb, var(--c-3) 72%, transparent) 100%),
+      linear-gradient(to top, color-mix(in srgb, var(--c-3) 36%, transparent) 0%, transparent 60%),
+      linear-gradient(to bottom, color-mix(in srgb, var(--c-3) 32%, transparent) 0%, transparent 40%);
+  }
+}
+/* Where the window is narrow it is often short as well (the operator's
+   1280x585). The paragraph block is the taller one on every page there, so it
+   gets the wider share and the card a little less padding. At 1280x585 the six
+   cards end at 475-547px (501-585 without this) and the two blocks differ by
+   3-72px in height (25-100); at 1100, 58-127 (99-196). Above 1366 the heading
+   keeps the wider share: carried on to 1440 this made the cards taller there
+   (up to 473px against 454). The cards change height by up to 39px between
+   1366 and 1367. */
+@media (min-width: 1025px) and (max-width: 1366px) {
+  .rw-sec.ha-hero .ha-hero__copy { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
+  .rw-sec.ha-hero .ha-hero__inner { padding-block: clamp(40px, 3.2vw, 76px); }
+}
+
+/* --- the framed-photo hero --- */
+.rw-sec .dc-chip {
+  background: var(--glass-bg-2);
+  border: 1px solid var(--glass-brd);
+  border-radius: var(--r-md);
+  box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: var(--glass-blur);
+          backdrop-filter: var(--glass-blur);
+}
+@media (min-width: 1025px) {
+  /* The copy's own boxes step aside (display: contents), so its children
+     join the row's grid: eyebrow and heading across both columns (rows 1-2),
+     the one or two paragraphs and the buttons in the left column (rows 3-5),
+     the proof tiles across both (row 6), the photo on the right (rows 3-5). */
+  .rw-sec.dc-hero .row--split {
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+    grid-template-rows: repeat(6, auto);
+    column-gap: clamp(48px, 5.5vw, 108px);
+    row-gap: 0;
+    align-items: start;
+  }
+  .rw-sec.dc-hero .row--split > .col:first-child,
+  .rw-sec.dc-hero .dc-hero__copy { display: contents; }
+  .rw-sec.dc-hero .dc-hero__copy > * { grid-column: 1; }
+  .rw-sec.dc-hero .dc-hero__copy > .et-eyebrow { grid-column: 1 / -1; grid-row: 1; }
+  /* text-wrap: pretty, not the site's balance: a balanced two-line heading
+     stopped at 864 of its 1426px at 2560, leaving the top right empty; pretty
+     fills the first line and still avoids a one-word last line */
+  .rw-sec.dc-hero .dc-hero__copy > .dc-hero__h { grid-column: 1 / -1; grid-row: 2; max-width: 23em; margin-bottom: clamp(24px, 2.6vw, 44px); text-wrap: pretty; }
+  .rw-sec.dc-hero .dc-hero__h + * { margin-top: 0; }
+  .rw-sec.dc-hero .dc-hero__copy > .dc-proof { grid-column: 1 / -1; grid-row: 6; }
+  .rw-sec.dc-hero .row--split > .col:last-child { grid-column: 2; grid-row: 3 / 6; align-self: stretch; display: flex; flex-direction: column; }
+  .rw-sec.dc-hero .dc-hero__media { flex: 1 1 auto; display: flex; flex-direction: column; }
+  /* the floor keeps a very short text block from flattening the photo; 240px
+     sits under the shortest measured block (254px), so the photo never runs
+     past the buttons */
+  .rw-sec.dc-hero .dc-frame--tall { flex: 1 1 auto; aspect-ratio: auto; height: auto; max-height: none; min-height: 240px; }
+  .rw-sec.dc-hero .dc-proof { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 1.2vw, 20px); margin-top: clamp(32px, 3.2vw, 52px); padding-top: 0; }
+  .rw-sec.dc-hero .dc-proof__k { font-size: clamp(26px, 2.4vw, 36px); }
+}
+@media (min-width: 1441px) {
+  .rw-sec.dc-hero .dc-proof__k { font-size: min(42px, calc(34.6px + var(--wx) * 0.0066)); }
+  /* Above 1440 the paragraph's own cap (37rem, layout.css) stopped it 278px
+     short of its column at 2560, a 386px empty band before the photo. The
+     copy column is now the paragraph's measure, 35em of the growing type
+     (595px at 1441, 682px at 2560, about 70 characters a line), and the
+     photo takes the rest. */
+  .rw-sec.dc-hero .row--split { grid-template-columns: minmax(0, 35em) minmax(0, 1fr); }
+  .rw-sec.dc-hero .dc-hero__sub { max-width: 35em; }
+}
+/* The proof tiles' small uppercase labels were --g-fg-faint (#7C949B) on the
+   light glass: 3.04-3.11:1 at 390, 1280 and 1920, in the old build too. In the
+   site's secondary text colour, as the hero's paragraph is. */
+.rw-sec.dc-hero .dc-proof__l { color: var(--g-fg-soft); }
+/* /services/adult-eye-exams/ follows its first paragraph with a plain <p>,
+   which had no margin, so the two read as one block (in the old build too).
+   It gets the gap the two-paragraph pages have. */
+.rw-sec.dc-hero .dc-hero__sub + p { margin-top: var(--ds-space-md); }
+
+/* --- the visit page's hero --- */
+@media (min-width: 1025px) {
+  .rw-sec.ct-hero > .container {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    column-gap: clamp(48px, 5vw, 96px);
+    align-items: center;
+  }
+  .rw-sec.ct-hero > .container > .row:first-child { grid-column: 1; grid-row: 1; }
+  .rw-sec.ct-hero .ct-hero__row { grid-template-columns: 1fr; }
+  .rw-sec.ct-hero > .container > .row.ethc-stats { grid-column: 2; grid-row: 1; grid-template-columns: 1fr; gap: clamp(12px, 1.1vw, 18px); margin-top: 0; }
+  .rw-sec.ct-hero .ethc-stat {
+    flex-direction: row; align-items: center; gap: clamp(16px, 1.6vw, 26px);
+    padding: clamp(14px, 1.3vw, 22px) clamp(18px, 1.6vw, 26px);
+    background: var(--glass-bg); border: 1px solid var(--glass-brd); border-radius: var(--r-md); box-shadow: var(--glass-edge);
+    -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+  }
+  .rw-sec.ct-hero .ethc-stat__k { flex: 0 0 2.1em; text-align: center; }
+  .rw-sec.ct-hero .ethc-stat__l { max-width: none; }
+}
+/* Above 1440 the copy column is the copy's own measure (36em of the growing
+   type), so the tiles start one gap after it: in a 1.5fr column the heading
+   (10.4em) and paragraph (40rem) left a 336-440px band before them at
+   2240-2560. */
+@media (min-width: 1441px) {
+  .rw-sec.ct-hero > .container { grid-template-columns: minmax(0, 36em) minmax(0, 1fr); }
+}
+
+/* --- the legal and statement pages' opening band (/privacy-policy/,
+   /terms/, /disclaimer/, /accessibility/) --- From 1025px the eyebrow and
+   heading stand on the left and the lede (and effective date) on the right;
+   before, all of it sat in the left half, with 0-25% of the right half used
+   at 1920-2560. The heading pair is centred on the lede without a wrapper:
+   the lede spans the pair's two rows, the rows share its extra height
+   equally, and the eyebrow sits at the foot of the first row and the heading
+   at the head of the second, so the pair meets at the middle. /search/ has
+   the same markup with its search form after the heading, and keeps its own. */
+@media (min-width: 1025px) {
+  body:not(.pg-home):not(.pg-search) main > .rw-sec.et-band:first-child > .container > .row > .col--measure:has(> .et-h1) {
+    max-width: none;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    grid-template-rows: auto auto;
+    column-gap: clamp(48px, 5.5vw, 108px);
+  }
+  body:not(.pg-home):not(.pg-search) main > .rw-sec.et-band:first-child .col--measure:has(> .et-h1) > * { grid-column: 2; }
+  body:not(.pg-home):not(.pg-search) main > .rw-sec.et-band:first-child .col--measure:has(> .et-h1) > .et-eyebrow { grid-column: 1; grid-row: 1; align-self: end; margin-bottom: 0; }
+  body:not(.pg-home):not(.pg-search) main > .rw-sec.et-band:first-child .col--measure:has(> .et-h1) > .et-h1 { grid-column: 1; grid-row: 2; align-self: start; }
+  body:not(.pg-home):not(.pg-search) main > .rw-sec.et-band:first-child .col--measure:has(> .et-h1) > .et-lede { grid-row: 1 / 3; align-self: center; margin-top: 0; max-width: 36em; }
+  body:not(.pg-home):not(.pg-search) main > .rw-sec.et-band:first-child .col--measure:has(> .et-h1) > .bw-legal__effective { margin-top: var(--ds-space-sm); }
+}
+
+/* --- the product pages' photo badge (.tib-hero__chip, six pages) ---
+   Positioned absolutely at the photo's foot by layout.css, but the generated
+   glass block in components.css sets position: relative at the same weight
+   and loads later, so since the first build the badge sat in the flow at the
+   top of its photo, 21px of it cut off by the frame (the same trap as the
+   badges in §23). */
+.rw-sec .tib-hero__chip { position: absolute; }

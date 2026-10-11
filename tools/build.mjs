@@ -447,12 +447,133 @@ const KIDS_SWAP = (() => {
   };
 })();
 
+// The photo-card hero on six /services/ pages (.ha-hero: /services/ and five
+// service pages). Operator, 2026-10-09: "the hero section for internal pages
+// need to be fixed, because in wide screen it looks awkward with a heavy text
+// on the left and huge vacant realty space on the right. Generate a high
+// resolution image too via higgsfield that we can use for internal page hero
+// sections." The four source photos these cards used are at most 1024px wide
+// (hero-boutique, exam-room, kids-eyewear) or 1600px (optical-showroom-wide),
+// and painted 1903px wide at 1920 and 2543px at 2560, so they were soft. All six now show
+// one image GENERATED for the purpose by Higgsfield Marketing Studio 2.5 Flare
+// (text only, 21:9, 4k: 3840x1648): an eyewear gallery in low evening light.
+// Record in assets/generated-hf/README.md.
+//
+// It is a generated room, not the practice. The six source alts all described
+// the practice, its premises or a patient ("The Eye Trends optical practice
+// interior in Clear Lake", "An Eye Trends exam room in Clear Lake, set for a
+// comprehensive eye exam", "A child being fitted for glasses at Eye Trends in
+// Clear Lake"), and a generated image must
+// never carry such a caption (B3, HANDOFF.md), so the alt describes only what
+// is shown. Stamped data-generated.
+//
+// On phones the card is taller than it is wide (on a 390px phone, 390 x
+// 723-939), where cover would paint the 21:9 frame 2189px wide to show its
+// middle 18%. Up to 820px a square crop of the same render's centre is served
+// instead, through <picture>. From 821px the 21:9 frame is used again: the
+// card is 1.26-1.78 times wider than tall there, and the square crop (1648px)
+// would be magnified 1.22x at 1024px on a 2x screen. Both `sizes` name the
+// PAINTED width under object-fit: cover, max(image box width, its height x
+// the file's aspect), not the card's width. Each value is the largest painted
+// width in its bucket, measured on all six pages at every 4px from 320 to
+// 2560 and on both sides of every bucket edge, at window heights 768, 900 and
+// 1400, in phone emulation and in a desktop window with a 15px scrollbar
+// (scratchpad hero/paint2.mjs, 2026-10-11), rounded up:
+//   square: 1107 (to 360px, a 320px desktop window), 1051 (361-414),
+//     910 (415-480), 815 (481-600), 698 (601-700), then the card (701-820);
+//   21:9: 1544 (821-1024), 1133 (1025-1099), 1197 (1100-1199), then 99vw.
+// The crop is the largest square the render holds, so a 3x phone still
+// magnifies it 1.3-1.8x; there the photo sits under a 74-90% scrim.
+const INNER_HERO = (() => {
+  const dir = path.join(ROOT, 'assets', 'generated-hf');
+  const read = (re, what) => fs.readdirSync(dir)
+    .filter((f) => re.test(f))
+    .map((f) => {
+      const d = webpSize(path.join(dir, f));
+      if (!d) throw new Error(what + ' unreadable: assets/generated-hf/' + f);
+      return { file: f, href: '/assets/img/' + f, w: d.w, h: d.h };
+    })
+    .sort((a, b) => a.w - b.w);
+  const renditions = read(/^inner-hero-hf(-\d+)?\.webp$/, 'inner hero image');
+  const crop = read(/^inner-hero-crop-hf(-\d+)?\.webp$/, 'inner hero crop');
+  if (renditions.length < 2 || crop.length < 2) throw new Error('inner hero renditions missing in assets/generated-hf/');
+  fs.mkdirSync(path.join(DIST, 'assets', 'img'), { recursive: true });
+  for (const r of renditions.concat(crop)) fs.copyFileSync(path.join(dir, r.file), path.join(DIST, 'assets', 'img', r.file));
+  const alt = 'An eyewear gallery in low evening light: rows of eyeglass frames on backlit oak shelves above walnut drawers, with a fitting table and two stools';
+  if (DOCUMENTARY.test(alt) || PRACTICE.test(alt)) throw new Error('the inner hero alt makes a claim a generated image cannot carry');
+  return {
+    model: 'higgsfield/marketing-studio/image/flare',
+    renditions,
+    largest: renditions[renditions.length - 1],
+    crop,
+    cropMedia: '(max-width: 820px)',
+    cropSizes: '(max-width: 360px) 1110px, (max-width: 414px) 1055px, (max-width: 480px) 912px, (max-width: 600px) 818px, (max-width: 700px) 700px, 100vw',
+    sizes: '(max-width: 1024px) 1550px, (max-width: 1099px) 1140px, (max-width: 1199px) 1200px, 100vw',
+    alt,
+  };
+})();
+
+// The photo-card hero's copy, in two blocks for its two-column layout
+// (revision 20, system.css §28): the eyebrow and heading in .ha-hero__lead,
+// the paragraph and the calls to action in .ha-hero__side. From 1025px the
+// copy is a two-column grid with the two blocks centred on each other. That
+// needs each column to be ONE box: as four separate grid items the columns
+// shared row tracks, and the heading column ended up to 224px short of the
+// buttons at 1025px (168-224 on the six pages, 46-130 at 1280). Wrappers
+// only: the words are untouched, and the build stops unless the copy is
+// exactly eyebrow, heading, paragraph, calls to action, and its tag-stripped
+// text comes out identical.
+function splitInnerHeroCopy(body, stats) {
+  const m = /<div class="ha-hero__copy\b[^"]*"[^>]*>/i.exec(body);
+  if (!m) return body;
+  const whole = sliceBalanced(body, m.index, 'div');
+  if (!whole) throw new Error('.ha-hero__copy is not a balanced <div>');
+  const inner = whole.slice(m[0].length, whole.length - '</div>'.length);
+  const kids = [...inner.matchAll(/<(p|h1|div)\b[^>]*\sclass="([^"]*)"/gi)].map((x) => x[2]);
+  const want = [/\bha-hero__eyebrow\b/, /\bha-hero__h\b/, /\bha-hero__sub\b/, /\bha-hero__cta\b/];
+  if (kids.length !== 4 || !want.every((re, i) => re.test(kids[i]))) {
+    throw new Error('.ha-hero__copy is not eyebrow, heading, paragraph, calls to action: ' + JSON.stringify(kids));
+  }
+  const cut = inner.indexOf('</h1>') + '</h1>'.length;
+  const rebuilt = m[0] + '<div class="ha-hero__lead">' + inner.slice(0, cut) + '</div>'
+    + '<div class="ha-hero__side">' + inner.slice(cut) + '</div></div>';
+  const plain = (s) => s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  if (plain(rebuilt) !== plain(whole)) throw new Error('splitting .ha-hero__copy changed its text');
+  stats.innerHeroSplit++;
+  return body.slice(0, m.index) + rebuilt + body.slice(m.index + whole.length);
+}
+
 function rewriteImages(html, stats, url) {
   const isHome = !!url && new URL(url).pathname === '/';
   return html.replace(/<img\b[^>]*>/gi, (tag) => {
     const srcM = /\ssrc="([^"]*)"/i.exec(tag);
     if (!srcM) return tag;
     const base = (srcM[1].split('?')[0].split('/').pop() || '').replace(/\.(webp|jpe?g|png|gif|svg|ico|avif)$/i, '');
+
+    // The photo-card hero of the six /services/ pages (INNER_HERO): the generated
+    // gallery image, whatever source photo the card held. Matched on the card's own
+    // class, so no other usage of those four photos changes.
+    if (/\sclass="[^"]*\bha-hero__img\b/i.test(tag)) {
+      stats.innerHeroSwapped++;
+      const top = INNER_HERO.largest;
+      let out = tag
+        .replace(/\ssrcset="[^"]*"/gi, '').replace(/\ssizes="[^"]*"/gi, '')
+        .replace(/\ssrc="[^"]*"/i, ' src="' + top.href + '"')
+        .replace(/\swidth="[^"]*"/gi, '').replace(/\sheight="[^"]*"/gi, '')
+        .replace(/\salt="[^"]*"/i, ' alt="' + INNER_HERO.alt + '"');
+      const set = INNER_HERO.renditions.map((r) => r.href + ' ' + r.w + 'w').join(', ');
+      out = out.replace(/<img\b/i, '<img data-generated="' + INNER_HERO.model + '" width="' + top.w + '" height="' + top.h + '"'
+        + ' srcset="' + set + '" sizes="' + INNER_HERO.sizes + '"');
+      if (!/\sfetchpriority=/i.test(out)) out = out.replace(/<img\b/i, '<img fetchpriority="high"');
+      out = out.replace(/\sloading="lazy"/i, ' loading="eager"');
+      if (!/\sloading=/i.test(out)) out = out.replace(/<img\b/i, '<img loading="eager"');
+      if (!/\sdecoding=/i.test(out)) out = out.replace(/<img\b/i, '<img decoding="async"');
+      stats.imgMapped++;
+      stats.srcsetAdded++;
+      const cset = INNER_HERO.crop.map((r) => r.href + ' ' + r.w + 'w').join(', ');
+      return '<picture class="ha-hero__picture"><source media="' + INNER_HERO.cropMedia + '" srcset="' + cset
+        + '" sizes="' + INNER_HERO.cropSizes + '">' + out + '</picture>';
+    }
 
     // Hero only: the swap applies to the one usage inside .ethc-hero__media.
     if (base === HERO_SWAP.from && /ethc-hero|et-media-img/.test(tag) && stats.heroSwapped === 0) {
@@ -977,7 +1098,7 @@ const stats = { pages: 0, sections: 0, imgMapped: 0, imgUnmapped: [], linksRewri
   platformBytesRemoved: 0, formsNeutralised: [], missingRaw: [],
   assetUrlsRewritten: 0, assetUrlUnmapped: [],
   generatedKept: 0, generatedRevertedToOriginal: [], headingDashesRemoved: [],
-  heroSwapped: 0, portraitAdded: 0, portraitSwapped: 0, portraitAltsRewritten: 0, portraitWide: 0, kidsSwapped: 0, marqueesBuilt: 0, marqueeLogos: 0,
+  heroSwapped: 0, portraitAdded: 0, portraitSwapped: 0, portraitAltsRewritten: 0, portraitWide: 0, kidsSwapped: 0, innerHeroSwapped: 0, innerHeroSplit: 0, marqueesBuilt: 0, marqueeLogos: 0,
   doctorStatsRemoved: [], doctorLinkMoved: 0, srcsetAdded: 0 };
 
 const pageRecords = [];
@@ -994,6 +1115,7 @@ for (const p of seo.pages) {
   let body = secs.map((s) => s.html).join('\n');
   body = stripPlatform(body, stats);
   body = rewriteImages(body, stats, p.url);
+  body = splitInnerHeroCopy(body, stats);
   body = rewriteLinks(body, stats);
   body = neutraliseForms(body, stats);
   body = marqueeHouses(body, stats);
@@ -1293,6 +1415,10 @@ console.log('  portrait swapped   ' + stats.portraitSwapped + '  (AI-edited phot
   + ' widths, data-edited; alts rewritten ' + stats.portraitAltsRewritten + '; full-bleed <picture> ' + stats.portraitWide + ')');
 console.log('  kids image swapped ' + stats.kidsSwapped + '  (home only; AI-edited 16:9 still life, ' + KIDS_SWAP.renditions.length
   + ' widths, data-edited, alt rewritten to describe it)');
+console.log('  inner hero swapped  ' + stats.innerHeroSwapped + '  (the six .ha-hero cards; generated 21:9 gallery, ' + INNER_HERO.renditions.length
+  + ' widths + ' + INNER_HERO.crop.length + ' square crops up to 820px, data-generated, alt describes it)');
+if (stats.innerHeroSwapped !== 6) throw new Error('inner hero: expected the six .ha-hero cards, swapped ' + stats.innerHeroSwapped);
+if (stats.innerHeroSplit !== 6) throw new Error('inner hero: expected six .ha-hero copies split in two, split ' + stats.innerHeroSplit);
 console.log('  srcset added       ' + stats.srcsetAdded + '  (' + variantsCopied + ' variant files, '
   + (variantBytes / 1024).toFixed(0) + ' KB)');
 console.log('  doctor stats out   ' + stats.doctorStatsRemoved.length + '  (declared removal)');

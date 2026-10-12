@@ -1698,6 +1698,7 @@ phone it was a rounded 16:10 card between the heading and the paragraph. The ima
 | Image selection | Never magnified: 390@3x the portrait's 1280 file (0.91), 768@2x its 1600 (0.96), 1025 and 1280@1x the 1920 wide file (0.92, 0.85), 1440@2x the 3840 (0.88), 1920 and 2560@1x (0.99) |
 | Links | Both hero buttons on top at their centres at 1025, 1280x585, 1920 and 390 |
 | Scope | 43 pages differ from revision 21 only in the stylesheet hash; on `/our-doctor/` everything outside `<main>` and every other section is byte-identical, and the hero's text is identical, its markup differing only in the class, the `<picture>`/`<source>`, and the image's `sizes` and `loading`. `system.css` only gains §30, whose 24 selectors all name `.od-hero--wide`, a class on this one page. Refs 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** · build reproducible (two builds hash identically) |
+| Live preview | gh-pages `fd8584e`, built from `9da8b7b`. `/our-doctor/`, the home page, `system.css` and two of the photo files byte-identical to the build. On the live page: contrast at 1280, 1920 and 390 (27 measurements), worst 5.67:1 apart from the known button; both hero links on top at 1280x585 and 390; the same files load as locally (390@3x the portrait's 1280, 1280 and 1920@1x the wide 1920) |
 
 **Trade-offs, measured:** on desktop the heading sits 30–54px lower (the section now has 64–112px of padding
 around the copy, for the photograph); on a phone the band is 72px taller than the old card. At 1025 the

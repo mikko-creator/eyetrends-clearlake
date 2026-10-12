@@ -256,6 +256,20 @@ width"). It had shown the edited portrait framed beside the copy.
 - **How:** `tools/build.mjs` `reshapeAboutHero` adds `.od-hero--wide` and the `<picture>`, and stops
   if the hero has no edited portrait; `system.css` §30.
 
+The About page's **"Who I am, in plain terms"** (`/our-doctor/`, revision 24) has the same design,
+at the operator's request ("make this section the same format and design as the enhanced Dr.
+Hyder full width sections we did before"). It had been a light band with his portrait framed in
+a glass card beside the text. The same edited photo now appears twice on the page.
+- **From 1025px:** the 16:9 photo covers the section, him on the left; the heading, his name and
+  role, both paragraphs and the two contact links are in the right column over the About hero's
+  gradient.
+- **Below 1025px:** the heading, then the portrait as a full-width band (4:3 on phones, 2:1 from
+  768px), then the text. The two paragraphs keep the site's 35em measure.
+- **Dark at every width,** like the doctor sections: `.surface-dark` replaces the light
+  `.et-band--warm` and its `.et-band--seam` haze.
+- **How:** `tools/build.mjs` `reshapeAboutBio` swaps those classes, adds `.od-biosec--wide` and
+  the `<picture>`, and stops if the section has no edited portrait; `system.css` §32.
+
 The home page's **kids section** ("The eye doctor your kids will grow up with") was redesigned
 in revision 14:
 - **Desktop (1200px and up):** a full-bleed 16:9 still life, with the text on a frosted-glass
@@ -304,7 +318,8 @@ The home page's **quote section** ("In Dr. Hyder's words") was redesigned in rev
 | **The third material card's `sizes`** | On `/products/designer-frames/` the "whole wall" card keeps its slot's measured `sizes` from `audit/image-widths.json`. Revision 21 measured that slot for the two new cards beside it: those values fall short of the painted width between 401 and 600px (by up to 120px) and at 1024. The two new cards carry their own (`EW_SIZES.card`); the third, and the same slot on other pages, were not changed |
 | **Phones magnify the hero crop** | The square crop the six photo cards use up to 820px is 1648px, the largest the render holds. A 3x phone paints it at up to 1.7x; the photo there sits under a 74–90% scrim. From 600px up no file is magnified |
 | **`site.js` has no cache-buster** | The stylesheets are linked with `?v=<hash>`, but `/scripts/site.js` is not, and GitHub Pages serves it with `Cache-Control: max-age=600` (measured). After an update a returning visitor can run the old script for up to 10 minutes. Revision 19 is safe either way: its CSS works without the new script. Adding the same `?v=` to the script tag in `tools/build.mjs` would close this |
-| **Full-bleed bands overshoot by half a scrollbar** | The home page's doctor and kids photo bands (revisions 13 and 14) reach the screen edges with `calc(50% - 50vw)`, and `100vw` includes a classic scrollbar, so below 1200px the page is 8px wider than the window. It is invisible because `body` sets `overflow-x: hidden`: no horizontal scrollbar, and a sideways wheel gesture does not move the page (measured; with that rule removed, a 15px scrollbar appears). Only a script's `scrollTo` can shift it. Keep that rule, or clip those two sections, if you change it. The eyewear heroes' bands (revision 21, below 1200px) use the same offsets, but their sections clip them (`overflow: hidden`, measured), so they do not widen the page |
+| **Full-bleed bands overshoot by half a scrollbar** | The home page's doctor and kids photo bands (revisions 13 and 14) reach the screen edges with `calc(50% - 50vw)`, and `100vw` includes a classic scrollbar, so below 1200px the page is 8px wider than the window. It is invisible because `body` sets `overflow-x: hidden`: no horizontal scrollbar, and a sideways wheel gesture does not move the page (measured; with that rule removed, a 15px scrollbar appears). Only a script's `scrollTo` can shift it. Keep that rule, or clip those two sections, if you change it. The eyewear heroes' bands (revision 21, below 1200px) use the same offsets, but their sections clip them (`overflow: hidden`, measured), so they do not widen the page. So does the About page's "Who I am" band (revision 24, below 1025px): measured at 820 and 1024, it runs 7.5px past each side and the page stays the window's width; with the section's `overflow: hidden` lifted the page is 8px wider |
+| **Portrait bands at 961–1024px on 2x screens** | Below 1025px the doctor sections, the About hero and "Who I am" show the edited portrait as a 100vw band. Its largest file is 1920px wide, so from 961px on a 2x screen (an iPad in landscape is 1024) the band needs more pixels than that file holds: at 1024@2x the browser stretches it 1.07x (measured on the home page's doctor section and both About sections; the seven other doctor pages use the same files and band). The master is 2628px wide (`assets/edited/`): a 2400w rendition would close it, on every page that uses the portrait |
 
 ---
 

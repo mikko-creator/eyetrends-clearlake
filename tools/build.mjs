@@ -708,21 +708,56 @@ const ABOUT_HERO = {
   media: '(min-width: 1025px)',
   sizes: '(max-width: 1440px) 1770px, (max-width: 1920px) 1910px, 100vw',
 };
+// The edited portrait's <img> inside `figureClass`, wrapped in a <picture> whose source
+// serves the 16:9 version from 1025px; below that the portrait fills a full-width band, so
+// the <img>'s `sizes` becomes 100vw. Returns the section with the swap made, or throws.
+function widePortraitPicture(section, figureClass, pictureClass, wideSizes, what, eager) {
+  const fm = new RegExp('<figure class="' + figureClass + '">\\s*(<img\\b[^>]*>)').exec(section);
+  if (!fm || !/dr-hyder-portrait-hf/.test(fm[1])) throw new Error(what + ': no edited portrait in .' + figureClass);
+  let img = fm[1].replace(/\ssizes="[^"]*"/, ' sizes="100vw"');
+  if (eager) img = img.replace(/\sloading="lazy"/, ' loading="eager"');
+  const picture = '<picture class="' + pictureClass + '"><source media="' + ABOUT_HERO.media + '" srcset="'
+    + PORTRAIT_SWAP.wide.map((r) => r.href + ' ' + r.w + 'w').join(', ') + '" sizes="' + wideSizes + '">' + img + '</picture>';
+  const at = fm.index + fm[0].length - fm[1].length;
+  return section.slice(0, at) + picture + section.slice(at + fm[1].length);
+}
 function reshapeAboutHero(body, route, stats) {
   if (route !== ABOUT_HERO.route) return body;
   const sm = /<div class="(rw-sec\b[^"]*\bod-hero\b[^"]*)"/.exec(body);
   if (!sm) throw new Error('about hero: no .od-hero section on ' + route);
   const section = sliceBalanced(body, sm.index, 'div');
   if (!section) throw new Error('about hero: unbalanced .od-hero section');
-  const fm = /<figure class="bw-founder__portrait">\s*(<img\b[^>]*>)/.exec(section);
-  if (!fm || !/dr-hyder-portrait-hf/.test(fm[1])) throw new Error('about hero: no edited portrait in .bw-founder__portrait');
-  const img = fm[1].replace(/\ssizes="[^"]*"/, ' sizes="100vw"').replace(/\sloading="lazy"/, ' loading="eager"');
-  const picture = '<picture class="bw-founder__picture"><source media="' + ABOUT_HERO.media + '" srcset="'
-    + PORTRAIT_SWAP.wide.map((r) => r.href + ' ' + r.w + 'w').join(', ') + '" sizes="' + ABOUT_HERO.sizes + '">' + img + '</picture>';
-  const at = fm.index + fm[0].length - fm[1].length;
-  let sec = section.slice(0, at) + picture + section.slice(at + fm[1].length);
+  let sec = widePortraitPicture(section, 'bw-founder__portrait', 'bw-founder__picture', ABOUT_HERO.sizes, 'about hero', true);
   sec = sec.replace(/^<div class="rw-sec\b([^"]*)"/, '<div class="rw-sec$1 od-hero--wide"');
   stats.aboutHeroWide++;
+  return body.slice(0, sm.index) + sec + body.slice(sm.index + section.length);
+}
+
+// The About page's "Who I am, in plain terms" (/our-doctor/, .od-biosec; system.css §32).
+// Operator, 2026-10-12: "make this section the same format and design as the enhanced Dr.
+// Hyder full width sections we did before" - the doctor sections (§24, revisions 13 and
+// 17): a dark band, his 16:9 photograph as the full-width background from 1025px with the
+// text in the right column, and the portrait as a full-width band below. The section takes
+// those sections' classes: .surface-dark in place of the light .et-band--warm and its
+// .et-band--seam (a white haze over the top 120px), plus .od-biosec--wide for §32. The
+// photo is lazy: the section is far down the page. `sizes` for the wide file is its
+// painted width under cover, measured every 8px from 1025 to 2560 (scratchpad
+// bio/paint-bio.mjs): the section is taller than 16:9 up to about 1820, so cover scales
+// the photograph to its height - 1567px at most at 1025-1199, 1579 at 1200-1440, 1905 at
+// 1441-1920 - then 99.4vw.
+const ABOUT_BIO = { sizes: '(max-width: 1440px) 1600px, (max-width: 1920px) 1910px, 100vw' };
+function reshapeAboutBio(body, route, stats) {
+  if (route !== ABOUT_HERO.route) return body;
+  const sm = /<div class="(rw-sec\b[^"]*\bod-biosec\b[^"]*)"/.exec(body);
+  if (!sm) throw new Error('about bio: no .od-biosec section on ' + route);
+  const section = sliceBalanced(body, sm.index, 'div');
+  if (!section) throw new Error('about bio: unbalanced .od-biosec section');
+  let sec = widePortraitPicture(section, 'bw-team__portrait', 'bw-team__picture', ABOUT_BIO.sizes, 'about bio', false);
+  sec = sec.replace(/^<div class="(rw-sec\b[^"]*)"/, (m, cls) => {
+    const kept = cls.split(/\s+/).filter((c) => c && c !== 'et-band--warm' && c !== 'et-band--seam');
+    return '<div class="' + kept.join(' ') + ' surface-dark od-biosec--wide"';
+  });
+  stats.aboutBioWide++;
   return body.slice(0, sm.index) + sec + body.slice(sm.index + section.length);
 }
 
@@ -1371,7 +1406,7 @@ const stats = { pages: 0, sections: 0, imgMapped: 0, imgUnmapped: [], linksRewri
   assetUrlsRewritten: 0, assetUrlUnmapped: [],
   generatedKept: 0, generatedRevertedToOriginal: [], headingDashesRemoved: [],
   heroSwapped: 0, portraitAdded: 0, portraitSwapped: 0, portraitAltsRewritten: 0, portraitWide: 0, kidsSwapped: 0, innerHeroSwapped: 0, innerHeroSplit: 0, marqueesBuilt: 0, marqueeLogos: 0,
-  ewHeroSwapped: 0, ewHouses: 0, ewCardsSwapped: 0, ewLooksAdded: 0, aboutHeroWide: 0,
+  ewHeroSwapped: 0, ewHouses: 0, ewCardsSwapped: 0, ewLooksAdded: 0, aboutHeroWide: 0, aboutBioWide: 0,
   doctorStatsRemoved: [], doctorLinkMoved: 0, srcsetAdded: 0 };
 
 const pageRecords = [];
@@ -1395,6 +1430,7 @@ for (const p of seo.pages) {
   body = reshapeDoctor(body, stats);
   body = reshapeEyewear(body, p.url.replace(ORIGIN, '') || '/', stats);
   body = reshapeAboutHero(body, p.url.replace(ORIGIN, '') || '/', stats);
+  body = reshapeAboutBio(body, p.url.replace(ORIGIN, '') || '/', stats);
   // the design layer's reveal hook, applied to the source's own reveal targets
   body = body.replace(/\bet-reveal\b/g, 'et-reveal reveal');
 
@@ -1703,6 +1739,8 @@ if (stats.ewCardsSwapped !== EW_CARDS.size) throw new Error('material cards: exp
 if (stats.ewLooksAdded !== EW_LOOKS.size) throw new Error('looks: expected ' + EW_LOOKS.size + ' photographs, added ' + stats.ewLooksAdded);
 console.log('  about hero          ' + stats.aboutHeroWide + '  (/our-doctor/: the edited photograph at 16:9, full width from 1025px; a full-width band below)');
 if (stats.aboutHeroWide !== 1) throw new Error('about hero: expected 1, reshaped ' + stats.aboutHeroWide);
+console.log('  about bio           ' + stats.aboutBioWide + '  (/our-doctor/ "Who I am": the doctor sections\' design, his 16:9 photo full width from 1025px)');
+if (stats.aboutBioWide !== 1) throw new Error('about bio: expected 1, reshaped ' + stats.aboutBioWide);
 console.log('  srcset added       ' + stats.srcsetAdded + '  (' + variantsCopied + ' variant files, '
   + (variantBytes / 1024).toFixed(0) + ' KB)');
 console.log('  doctor stats out   ' + stats.doctorStatsRemoved.length + '  (declared removal)');

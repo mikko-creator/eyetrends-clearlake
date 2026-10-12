@@ -1734,3 +1734,60 @@ cards stand 12–20px apart; each gets 20–32px of padding top and bottom and 2
 which the contrast probe cannot measure. Computed from the gradient's colours against the card (not measured on
 pixels), they run from about 2.1:1 at the gold end to 5.5:1 at the deep teal, so their lighter parts fall under the
 3:1 that large text needs. That is the site's gradient-text style, unchanged here.
+
+---
+
+# Revision 24 — the About page's "Who I am": the doctor sections' design
+
+> *"make this section the same format and design as the enhanced Dr. Hyder full width sections we did before"*
+> (with a capture of "Who I am, in plain terms" on `/our-doctor/`)
+
+**Measured before.** The section (`.od-biosec`, the fourth on `/our-doctor/`) was a light band: the heading block,
+then a glass card holding the edited portrait in a 340px frame on the left (340x419 at 1280, 340x421 at 1920, a
+316x198 crop at 390) and his name, role, two paragraphs and two contact links on the right. The links sat 14px in
+from the text: each starts with an empty 6px `.dot` that is never drawn, and its 8px gap.
+
+**The change** (`system.css` §32; `tools/build.mjs` `reshapeAboutBio` and `ABOUT_BIO`, sharing
+`widePortraitPicture` with the hero's step).
+1. **The doctor sections' dark surface:** `.surface-dark` in place of the light `.et-band--warm` and its
+   `.et-band--seam`, a white haze over the top 120px that would have shown on the dark band.
+2. **From 1025px his 16:9 photograph covers the whole section**, through `<picture>`: the same `dr-hyder-wide-hf*`
+   files as the doctor sections and the About hero; no new image was made. cover is anchored at 27%, so he stays
+   on the left, and every line of text is in the right column over the About hero's gradient (clear to 36%, 86%
+   by 49%). The columns and gap are the hero's: at 1280 the text starts at 652px, as on the home page's doctor
+   section.
+3. **The card goes** at every width (`display: contents`), and with it its glass highlight, which would otherwise
+   spread over the whole section.
+4. **Below 1025px:** the heading first, then the portrait as a full-width band (4:3 on phones, 2:1 from 768px,
+   his face in the upper third), then his name and the text. The section is dark at every width, as the doctor
+   sections are.
+5. **The contact links line up with the text** (the undrawn dot is hidden), white, gold on hover.
+6. **The paragraphs keep a reading measure below 1025px:** 35em, the site's running-text cap, which they already
+   had from 1441px. At 1024 they went from 929px (about 115 characters a line) to 595px; the card's column had
+   held them to 560px. At 1025–1440 the right column is narrower than 35em, so nothing changes there.
+7. **No word changes.** The build stops if the section has no edited portrait, and checks it ran once.
+
+## Re-verified
+
+| check | result |
+|---|---|
+| Section, old → new | **1280:** 879 → 828px tall; the photo 340x419 → the whole 1265x826 section. **1920:** 970 → 1023; 340x421 → 1905x1021. **1024:** 833 → 1300; 340x446 → a 1024x512 band, the text now under it. **820:** 986 → 1155. **390:** 1224 → 1227; the photo 316x198 → 390x293 |
+| Clearance | The text starts 59px right of his elbows at 1025, 79 at 1100, 133 at 1280, 160 at 1440, 228 at 1920 and 293 at 2560 (the text at 50.6–51.6% of the width, his face at 20–33%) |
+| Contrast, on rendered pixels | 6 sizes from 390 to 2560 (54 measurements), worst pixel: eyebrow 10.62:1, heading 10.49, lede 10.49, name 11.63, role 7.09, paragraphs 7.9, contact links 10.51. Control: each element's own colour behind it collapses to 1–1.5 |
+| `sizes` against painted width | Every 8px from 1025 to 2560: the 16:9 file paints up to 1567px at 1025–1199 (cover scales it to the section's height), 1579 at 1200–1440, 1905 at 1441–1920, then 99.4vw; declared 1600, 1910, then 100vw, never short. Below 1025 the portrait paints 100vw, declared 100vw |
+| Image selection | 390@3x the portrait's 1280 file (0.91), 768@2x its 1600 (0.96), 1025 and 1280@1x the wide 1600 (0.97, 0.92), 1440@2x the 3840 (0.82), 1920 and 2560@1x (0.99). **1024@2x: 1.07**, the portrait's largest file (1920) stretched; the About hero and the home page's doctor section measure the same 1.07 there (HANDOFF, known gaps) |
+| Links | Both contact links on top at their centres after a real scroll, at 1025x768, 1280x585, 1920x1080 and 390; white, and gold with `:hover` forced |
+| Bleed | Below 1025 the band runs 7.5px past each side of an 820 or 1024 window with a scrollbar; the section clips it, and the page stays the window's width (8px wider with the section's `overflow: hidden` lifted, the control) |
+| Scope | 43 pages differ from revision 23 only in the stylesheet hash. On `/our-doctor/` everything before and after the section is byte-identical, the section's text is identical, and its markup differs only in the class list, the `<picture>`/`<source>`, and the image's `sizes`. `system.css` only gains §32, whose 18 selectors all name `.od-biosec--wide`, on one element of one page. Refs 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** · build reproducible (two builds identical apart from the search index's build time) |
+
+**Trade-offs, measured:** the same photograph now appears twice on `/our-doctor/`, in the hero and here, since
+the request was for this section to match those. On tablets the section is taller (1024: 833 → 1300px): the text
+now runs under a full-width band instead of beside a 340px frame.
+
+**Found, not changed:** the 16:9 photograph's left edge holds an out-of-focus grey pillar, 2.47% of its width
+(measured: a sharp edge at x 95 of 3840). It is part of the approved image. The 27% crop hides it up to about 1376px
+and again at 1440–1456. Elsewhere a strip of it shows at the window's left edge: 2–8px at 1392–1424, 15–23px at
+1472–1680, 42 at 1800, then from about 1820, where the section is wider than 16:9 and nothing is cropped
+sideways, 47 at 1920 and 63 at 2560. These widths are computed from the measured painted size, not counted on
+pixels. The doctor sections and the About hero use the same file, so they show it wherever their crop is as small.
+Cropping those 95px out of the wide file would remove it everywhere.

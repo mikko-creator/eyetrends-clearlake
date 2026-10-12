@@ -2484,3 +2484,103 @@ body:not(.pg-home) main > .rw-sec:first-child { padding-top: var(--hero-top, cla
   padding: clamp(20px, 2.4vw, 32px) var(--tl-pad-x);
 }
 .rw-sec .bw-timeline__h { margin-bottom: clamp(10px, .9vw, 14px); }
+
+/* =========================================================================
+   32 · THE ABOUT PAGE BIO: THE DOCTOR SECTIONS' DESIGN
+   =========================================================================
+   Operator, 2026-10-12, on "Who I am, in plain terms" (/our-doctor/,
+   .od-biosec): "make this section the same format and design as the
+   enhanced Dr. Hyder full width sections we did before" - the doctor
+   sections (§24) and the About hero (§30). tools/build.mjs (reshapeAboutBio)
+   wraps the edited portrait in a <picture> whose source serves the 16:9
+   version from 1025px, and gives the section the doctor sections' dark
+   surface: .surface-dark in place of the light .et-band--warm and its
+   .et-band--seam haze, plus .od-biosec--wide for these rules.
+
+   The section was a light band: the heading block, then a glass card with
+   his framed portrait on the left and his name, role, two paragraphs and
+   two contact links on the right. Now:
+   · The card goes at every width. .bw-team__member is display:contents, and
+     its glass highlight (components.css, an absolute ::after) is removed:
+     with the card's box gone it would spread over the whole section.
+   · Phones and tablets (the base rules - mobile-first, so no zoomed width
+     between 1024 and 1025px falls through both, see §26): the heading, then
+     the portrait as a full-width band - no frame, edge to edge, 4:3 on
+     phones and 2:1 from 768px, his face in the upper third - then his name
+     and the text.
+   · 1025px and up: the 16:9 photograph covers the whole section with him on
+     the left (27%), and every line of text is in the right column over a
+     gradient in --c-3 - the columns, gap and gradient of the About hero
+     (§30). The section is at least 560-760px tall (44vw), the text centred
+     in it. A real person's photograph is not mirrored, so the text is
+     always on the right.
+   · The two contact links lose the empty 6px .dot before each (its visuals
+     were stripped and it is not drawn, as with the timeline's gutter in
+     §31), so they line up with the text above instead of 14px in.
+   · Below 1025px the text now has the container's full width, and the two
+     paragraphs ran 929px at 1024 (about 115 characters a line; the card's
+     column had held them to 560px). They take the site's running-text
+     measure, 35em (§27), which they already had from 1441px; at 1025-1440
+     the right column is narrower than that, so nothing changes there. */
+.rw-sec.od-biosec--wide { overflow: hidden; }
+.rw-sec.od-biosec--wide .bw-team { max-width: none; }
+.rw-sec.od-biosec--wide .bw-team__member { display: contents; }
+.rw-sec.od-biosec--wide .bw-team__member::after { content: none; }
+.rw-sec.od-biosec--wide .bw-team__portrait {
+  width: auto;
+  max-width: none;
+  max-height: none;
+  margin-inline: calc(50% - 50vw);
+  aspect-ratio: 4 / 3;
+  border-radius: 0;
+}
+.rw-sec.od-biosec--wide .bw-team__portrait img { object-position: 50% 18%; }
+.rw-sec.od-biosec--wide .bw-team__bio { max-width: 35em; }
+.rw-sec.od-biosec--wide .bw-team__contact .dot { display: none; }
+.rw-sec.od-biosec--wide .bw-team__contact a { color: var(--c-1); }
+.rw-sec.od-biosec--wide .bw-team__contact a:hover { color: var(--c-9); }
+@media (min-width: 768px) {
+  .rw-sec.od-biosec--wide .bw-team__portrait { aspect-ratio: 2 / 1; }
+}
+@media (min-width: 1025px) {
+  .rw-sec.od-biosec--wide .col {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    column-gap: clamp(32px, 5vw, 72px);
+    align-content: center;
+    min-height: clamp(560px, 44vw, 760px);
+  }
+  .rw-sec.od-biosec--wide .bw-team { display: contents; }
+  .rw-sec.od-biosec--wide .et-sec-head,
+  .rw-sec.od-biosec--wide .bw-team__body {
+    grid-column: 2;
+    position: relative;
+    z-index: 1;
+  }
+  .rw-sec.od-biosec--wide .bw-team__portrait {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    margin: 0;
+    aspect-ratio: auto;
+  }
+  .rw-sec.od-biosec--wide .bw-team__portrait img { object-position: 27% 22%; }
+  .rw-sec.od-biosec--wide .bw-team__portrait::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg,
+        color-mix(in srgb, var(--c-3) 0%, transparent) 0%,
+        color-mix(in srgb, var(--c-3) 0%, transparent) 36%,
+        color-mix(in srgb, var(--c-3) 50%, transparent) 42%,
+        color-mix(in srgb, var(--c-3) 86%, transparent) 49%,
+        color-mix(in srgb, var(--c-3) 90%, transparent) 100%),
+      linear-gradient(180deg,
+        color-mix(in srgb, var(--c-3) 30%, transparent) 0%,
+        transparent 18%,
+        transparent 82%,
+        color-mix(in srgb, var(--c-3) 40%, transparent) 100%);
+  }
+}

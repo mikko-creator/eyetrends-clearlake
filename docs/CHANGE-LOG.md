@@ -1703,3 +1703,34 @@ phone it was a rounded 16:10 card between the heading and the paragraph. The ima
 **Trade-offs, measured:** on desktop the heading sits 30–54px lower (the section now has 64–112px of padding
 around the copy, for the photograph); on a phone the band is 72px taller than the old card. At 1025 the
 gradient's edge reaches his outstretched elbow; his face stays clear at every width.
+
+---
+
+# Revision 23 — the About page timeline: room inside and between the cards
+
+> *"the text in the box are too squeezed in, fix the spacing and padding"* (with a capture of the "How this
+> practice started" timeline on `/our-doctor/`)
+
+**Measured before.** The timeline (`.bw-timeline`, only on `/our-doctor/`) was a list in the source: `layout.css`
+keeps its geometry, rows with vertical padding only and a 44px left gutter for a rail and dots that are not drawn.
+`components.css` then gave each row a glass card's surface but kept its zero side padding, and its list-row hover
+set the left padding to 8px. At 390, 1280 and 1920: text 1px from the card's left and right edges, 0px between
+cards, 8–9px between title and paragraph, the cards 44px in from the section heading, and on hover the text moved
+to 8px.
+
+**The change** (`system.css` §31, CSS only): the unused gutter goes, so the cards line up with the heading; the
+cards stand 12–20px apart; each gets 20–32px of padding top and bottom and 20–40px at the sides, held on hover;
+10–14px under each title.
+
+## Re-verified
+
+| check | result |
+|---|---|
+| Spacing, 7 widths from 360 to 2560 | Text inset from the card edges: 21px on phones and at 768, 28 at 1040, 34 at 1280, 41 at 1920 and 2560 (left and right; 21–33 top and bottom). Gaps 12, 15, 18 and 20px. Title to paragraph 10–14px. Cards level with the heading (0px). With `:hover` forced, the left padding stays the same. The same probe on the old build reads 1px, 0px gaps, 8–9px, 44px and 8px on hover |
+| Contrast | Paragraphs 5.86:1 and up, titles 14.7, eyebrow 5.98, heading 13.4, at 390, 1280 and 1920 |
+| Scope | All 44 pages' HTML identical apart from the stylesheet hash; `system.css` gains §31 only (4 selectors, each naming `.bw-timeline`). Refs 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |
+
+**Found, not changed:** the year labels ("1984", "42 years" ...) are gradient text, teal to deep teal to gold,
+which the contrast probe cannot measure. Computed from the gradient's colours against the card (not measured on
+pixels), they run from about 2.1:1 at the gold end to 5.5:1 at the deep teal, so their lighter parts fall under the
+3:1 that large text needs. That is the site's gradient-text style, unchanged here.

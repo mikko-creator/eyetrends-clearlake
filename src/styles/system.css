@@ -2451,3 +2451,36 @@ body:not(.pg-home) main > .rw-sec:first-child { padding-top: var(--hero-top, cla
 @media (min-width: 768px) and (max-width: 1024px) {
   .rw-sec.od-hero--wide .bw-founder__portrait { aspect-ratio: 2 / 1; }
 }
+
+/* =========================================================================
+   31 · THE ABOUT PAGE TIMELINE: ROOM INSIDE AND BETWEEN THE CARDS
+   =========================================================================
+   Operator, 2026-10-12, on "How this practice started" (/our-doctor/,
+   .bw-timeline, the only page with it): "the text in the box are too
+   squeezed in, fix the spacing and padding".
+
+   The source's timeline was a list: layout.css keeps its geometry, rows
+   with vertical padding only and a 44px left gutter for a rail and dots,
+   whose visuals were stripped and are not drawn. components.css then made
+   each row a glass card (background, border, radius, shadow) but kept the
+   row's zero side padding, and its list-row hover set the left padding to
+   8px. So the text sat on the cards' left edge (on phones on both edges),
+   the cards touched, and the empty gutter took 44px. Measured before: side
+   padding 0, gap 0, 8-9px between title and paragraph at every width.
+   · The gutter goes (nothing is drawn in it): the cards line up with the
+     section heading.
+   · The cards stand apart (12-20px) and get padding on every side
+     (20-32px top and bottom, 20-40px at the sides); hover keeps it, so the
+     text no longer jumps to 8px.
+   · A little more room under each title. */
+.rw-sec .bw-timeline__track {
+  display: grid;
+  gap: clamp(12px, 1.4vw, 20px);
+  padding-left: 0;
+}
+.rw-sec .bw-timeline__entry,
+.rw-sec .bw-timeline__entry:hover {
+  --tl-pad-x: clamp(20px, 2.6vw, 40px);
+  padding: clamp(20px, 2.4vw, 32px) var(--tl-pad-x);
+}
+.rw-sec .bw-timeline__h { margin-bottom: clamp(10px, .9vw, 14px); }

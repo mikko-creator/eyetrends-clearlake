@@ -1792,3 +1792,67 @@ and again at 1440–1456. Elsewhere a strip of it shows at the window's left edg
 sideways, 47 at 1920 and 63 at 2560. These widths are computed from the measured painted size, not counted on
 pixels. The doctor sections and the About hero use the same file, so they show it wherever their crop is as small.
 Cropping those 95px out of the wide file would remove it everywhere.
+
+---
+
+# Revision 25 — a photograph of its own service on every service page
+
+> *"for the services page, can you make sure that each specific services page show's a hero image that represents
+> or related to that speific service"*
+
+**Measured before.** None of the 26 service pages had one. The 21 framed heroes (`.dc-hero`) showed one of three
+source photographs: the exam room (`exam-room`, 1024 x 576) on 16 pages, the storefront on 3 (adult exams, pink eye,
+senior exams) and the kids' frames still life on 2 (children's contact lenses, pediatric exams). The five photo cards
+(`.ha-hero`: children's eye care, comprehensive exams, contact lens exams, emergency care, medical care) showed
+revision 20's generated eyewear gallery. Many alts named what the photograph did not show: *"An Eye Trends exam room
+in Clear Lake, set up for a dilated cataract evaluation"*, over the same exam room as fifteen other pages.
+
+**The change** (`tools/build.mjs` `SVC_HERO` and `reshapeServiceHero`; no CSS changed).
+1. **26 new photographs, one per page,** generated with Higgsfield Marketing Studio 2.5. Each shows the
+   instruments, lenses or objects of its service: a phoropter for adult exams, an intraocular lens for cataract
+   care, a retinal camera beside a retina photograph for diabetic exams, a visual field analyzer for glaucoma, an
+   Amsler grid for macular degeneration, a corneal map for LASIK, a large scleral lens beside an ordinary one for
+   specialty lenses, a teddy bear facing a picture chart for pediatric exams, and so on (the full list, prompts and
+   requests are in `assets/generated-hf/README.md`).
+2. **No people, hands or faces.** As with every generated image on the site, none can pass for Dr. Hyder, the
+   staff or a patient. No writing either, and none is the practice's room or equipment.
+3. **Shaped for each hero.** The framed photo is cover-cropped from 0.79:1 to 3.97:1 (measured on all 21 pages), so
+   those are 16:9 with the subject compact in the middle. The cards carry text over the whole image, so those are
+   21:9, evenly lit, with a square crop for phones.
+4. **The alts describe the photographs** and claim nothing about the practice; the build stops if one does. Each was checked against its image by the reviewers.
+5. `/services/` keeps revision 20's gallery: it is not one service.
+
+## How the 26 were chosen
+
+Each prompt was rendered on both Marketing Studio models (52 renders). One reviewer per page inspected both
+renders at full size, in an overview and full-size crops, and chose one. A second reviewer then scanned the chosen
+render in a grid of full-size crops, looking for a person, writing, or a warped or duplicated part.
+- **Six were re-rendered with a tighter prompt:**
+  - **Adult exams:** a blurred shape behind the exam chair read as the back of a seated person's head.
+  - **Foreign-body removal:** pseudo-printing on the sterile pouches, and in the other render, swabs with extra heads.
+  - **Senior exams:** the reading glasses had three arms.
+  - **Specialty lenses:** the scleral lens read as a glass dish, with nothing to show its size.
+  - **Gas-permeable lenses:** the first prompt gave the same picture as the scleral lens.
+  - **Emergency care:** a bright steel trolley under the card's links. The gold "Book an Appointment" link fell to
+    4.47:1 at its worst pixel at 1920 (8.89 over the old gallery); the re-render keeps the right half dark.
+- **Three were edited:**
+  - **LASIK:** a scratch-like streak on the corneal map was filled from its surroundings.
+  - **Pediatric exams:** the teddy bear's stool had a fifth leg, now covered with the rug beside it.
+  - **Foreign-body removal:** the tray was mirrored, so the swabs sit beside the badge instead of under it.
+- **One is re-anchored:** diabetic exams at 60%, so tall frames keep the retina photograph.
+
+## Re-verified
+
+| check | result |
+|---|---|
+| Every page | 26 of 26 service pages show their own photograph, stamped `data-generated`; the build checks 21 framed + 5 cards, and `/services/` still shows the gallery |
+| Contrast, on rendered pixels | The photo cards' text over the new photographs, 5 pages at 10 widths from 390 to 2560 (250 measurements): worst pixel 5.16:1 for the eyebrow, 5.37 the paragraph, 6.21 the links, 5.59 the heading and 4.35 its highlighted words (large text, 3:1). The badges on the framed photos: 8.91 and up (126 measurements on all 21 pages, then 42 and 12 more on the 9 whose photograph changed after that). Only the known gradient button is lower (2.62, as everywhere). Control: each element's own colour behind it collapses to 1:1 |
+| `sizes` against painted width | The framed photos: every 8 px from 320 to 2560 on all 21 pages, in a desktop window and in phone emulation, 396 px at most up to 360, then 462, 540, 675, 711, 960 (768–1099), 825, 725, 715 and 38.8vw. The declared values are never short. The cards keep the gallery's measured values (the same box) |
+| Image selection | No framed photo is magnified (390@3x the 1600 file at 0.81; 1024@2x the 1920 at 1.00; 1280@1x the 960; 2560@2x the 2560 at 0.78). The cards as before: 1280 and 1920@1x 0.99; the square crop at 390@3x 1.61, the known limit of a 1648 px crop, under a 74–90% scrim |
+| Scope | No CSS changed, so every other page is byte-identical. On the 26 service pages everything outside the hero is byte-identical, the hero's text is identical, and only its `<img>` (and on the cards its `<source>`) changed. `dist` gains the 202 shipped renditions; the 26 masters stay in `assets/generated-hf/`. Refs 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** · build reproducible (two builds identical apart from the search index's build time) |
+
+**Found, not changed:** the framed hero's badge sits over the photograph's lower left. Measured on all 21 pages,
+it covers 6–27% of the frame on desktop and 3–14% from 600 to 1024px. On phones up to 414px it spans the frame
+over its lower half: 16–47% of the frame, and up to 67% at 320. It did the same over the old exam room. Each subject
+is centred, and the badge still covers part of some, such as the foreign-body tray's gauze and magnifier. Moving the
+badge below the photograph would show every picture whole (HANDOFF, known gaps).

@@ -457,7 +457,9 @@ const KIDS_SWAP = (() => {
 // and painted 1903px wide at 1920 and 2543px at 2560, so they were soft. All six now show
 // one image GENERATED for the purpose by Higgsfield Marketing Studio 2.5 Flare
 // (text only, 21:9, 4k: 3840x1648): an eyewear gallery in low evening light.
-// Record in assets/generated-hf/README.md.
+// Record in assets/generated-hf/README.md. Since revision 25 the five service pages
+// replace it with a photograph of their own service (SVC_HERO, reshapeServiceHero, in the
+// same card and with these `sizes`); /services/ itself keeps the gallery.
 //
 // It is a generated room, not the practice. The six source alts all described
 // the practice, its premises or a patient ("The Eye Trends optical practice
@@ -758,6 +760,145 @@ function reshapeAboutBio(body, route, stats) {
     return '<div class="' + kept.join(' ') + ' surface-dark od-biosec--wide"';
   });
   stats.aboutBioWide++;
+  return body.slice(0, sm.index) + sec + body.slice(sm.index + section.length);
+}
+
+// ------------------------------------------------ the service pages' heroes (rev. 25)
+// Operator, 2026-10-12: "for the services page, can you make sure that each specific
+// services page show's a hero image that represents or related to that speific service".
+// None did. The 21 framed-photo heroes (.dc-hero) showed one of three source photographs -
+// the exam room (16 pages), the storefront (3), the kids' frames still life (2) - and the
+// five photo-card heroes (.ha-hero) revision 20's generated eyewear gallery (INNER_HERO),
+// under alts that often named what the photo did not show ("set up for a dilated cataract
+// evaluation"). Each page now shows its own photograph, GENERATED with Higgsfield Marketing
+// Studio 2.5 (prompts, requests and the checks in assets/generated-hf/README.md): the
+// instruments, lenses and objects of that service. As with every generated image on the
+// site, none shows people, hands or faces - none may pass for the practice's doctor, its
+// staff or a patient - and none shows writing. Each alt describes only what is shown (B3;
+// the build stops if one matches the documentary or practice patterns), each <img> is
+// stamped data-generated, and the build stops unless all 26 pages get theirs.
+//   · frame (21 pages): 16:9 (3840x2160), the subject compact in the middle. Measured on all
+//     21 pages (scratchpad svc/frames.mjs), the frame runs from 0.79:1 (1025px) to 3.97:1
+//     (2560px), 1.45:1 on phones, and the badge covers its lower left, so cover always keeps
+//     the middle 44% of the width and 45% of the height. Shipped up to 2560px: the largest
+//     need is about 2000 device pixels (1025px on a 2x screen). `sizes` is the painted width
+//     under cover, measured every 8px from 320 to 2560 on all 21 pages in a desktop window
+//     and in phone emulation (svc/paint-frames.mjs), rounded up: 396 (to 360px), 462 (to
+//     414), 540 (to 480), 675 (to 600), 711 (to 767), 960 (to 1099), 825 (to 1199), 725 (to
+//     1440), 715 (to 1920), then 38.8vw.
+//   · card (5 pages): 21:9 (3840x1648), lit evenly for the text over it, with the square crop
+//     up to 820px that INNER_HERO uses. The card is the same box as on /services/ (which
+//     keeps the gallery), so INNER_HERO's measured `sizes` apply.
+const SVC_HERO = (() => {
+  const pages = new Map([
+    ['adult-eye-exams', { kind: 'frame', model: 'flare',
+      alt: 'A black and silver phoropter hanging from its mounting arm in front of an empty black exam chair and a blurred eye chart screen in a teal room' }],
+    ['back-to-school-eye-exams', { kind: 'frame', model: 'flare',
+      alt: 'Teal eyeglasses on a stack of books on a sunlit wooden desk, with a red apple, colored pencils, a zippered pencil case and a backpack on the chair behind' }],
+    ['cataract-co-management', { kind: 'frame', model: 'flare',
+      alt: 'A clear intraocular lens implant with two thin curved arms on a dark teal tabletop, its reflection below, in a softly blurred room' }],
+    ['childrens-contact-lenses', { kind: 'frame', model: 'sunburst',
+      alt: 'A contact lens case with coral and teal caps holding a soft lens, beside a dropper bottle and a small yellow mirror on a sunlit wooden counter' }],
+    // the monitor's retina photograph reaches x 0.77 of the render, past the middle 44% a
+    // tall frame keeps (0.28-0.72): 60% moves that window to 0.34-0.78
+    ['diabetic-eye-exams', { kind: 'frame', model: 'flare', pos: '60% 50%',
+      alt: 'A white retinal camera with a chin rest beside a monitor showing a color photograph of a retina, in a teal-walled room' }],
+    ['dry-eye-treatment', { kind: 'frame', model: 'sunburst',
+      alt: 'A white eye drop bottle, its cap and a few clear drops beside a soft gray eye mask on a round teal ceramic tray' }],
+    ['flashes-floaters', { kind: 'frame', model: 'sunburst',
+      alt: 'A round glass examination lens in a black knurled ring standing on a dark wooden desk, in front of a monitor showing an orange photograph of a retina' }],
+    ['foreign-body-removal', { kind: 'frame', model: 'flare',
+      alt: 'A stainless steel tray holding a sealed pouch of two cotton swabs, a small clear bottle of liquid, a folded gauze pad and a round magnifying lens, with a slit lamp microscope behind' }],
+    ['gas-permeable-contacts', { kind: 'frame', model: 'flare',
+      alt: 'Two small light-blue rigid contact lenses in an open white lens case between its teal caps, on marble with a dropper bottle behind' }],
+    ['glaucoma-management', { kind: 'frame', model: 'sunburst',
+      alt: 'A white visual field testing machine with small lights inside its bowl and a gray chin rest, on a wooden table in a teal room' }],
+    ['lasik-co-management', { kind: 'frame', model: 'flare',
+      alt: 'A monitor on a wooden desk showing a colorful corneal topography map, with a slit lamp blurred behind and tortoiseshell glasses in front' }],
+    ['macular-degeneration', { kind: 'frame', model: 'sunburst',
+      alt: 'A white Amsler grid card with a central dot on a small walnut easel, beside a brass magnifying glass and tortoiseshell glasses' }],
+    ['multifocal-contacts', { kind: 'frame', model: 'sunburst',
+      alt: 'A clear contact lens with faint concentric rings on gray marble beside a small brass bowl, with an open book and a window looking out on a lake and hills behind' }],
+    ['myopia-management', { kind: 'frame', model: 'flare',
+      alt: "Small round teal children's glasses on a sunlit oak windowsill beside an illustrated book and a potted plant, with a playground outside" }],
+    ['pediatric-eye-exams', { kind: 'frame', model: 'sunburst',
+      alt: 'A teddy bear, seen from behind, in a small teal chair facing a framed eye chart of house, apple, circle and square symbols' }],
+    ['pink-eye-conjunctivitis', { kind: 'frame', model: 'sunburst',
+      alt: 'A wooden tray with brass handles on a white marble counter, holding a teal tissue box, a white dropper bottle, a folded washcloth and a pump bottle' }],
+    ['red-eye-treatment', { kind: 'frame', model: 'flare',
+      alt: 'A slit lamp microscope with binocular eyepieces shining a thin vertical beam of warm light, in a dim exam room with teal walls' }],
+    ['same-day-contacts', { kind: 'frame', model: 'flare',
+      alt: 'An open wooden drawer in a teal cabinet holding rows of contact lens blister packs, one peeled open to show its lens' }],
+    ['senior-eye-exams', { kind: 'frame', model: 'flare',
+      alt: 'Round gold reading glasses folded on an open book beside a teal cup and saucer, on a round walnut side table in warm sunlight' }],
+    ['specialty-contacts', { kind: 'frame', model: 'flare',
+      alt: 'A large clear scleral contact lens on a white plunger beside a much smaller soft contact lens and an open white lens case, on a glossy dark teal surface' }],
+    ['toric-contacts', { kind: 'frame', model: 'flare',
+      alt: 'A clear soft contact lens with a thin blue edge and two small orientation marks, on a glossy dark teal surface crossed by streaks of light' }],
+    ['childrens-eye-care', { kind: 'card', model: 'flare',
+      alt: "A children's eyewear corner: shelves of small colorful frames and plush toys, a shape vision chart on a teal wall and a little wooden table with two stools" }],
+    ['comprehensive-eye-exams', { kind: 'card', model: 'flare',
+      alt: 'A dimly lit eye exam room with a phoropter on a swing arm above a black exam chair, a slit lamp microscope on a wheeled table and a lit vision chart screen at the back' }],
+    ['contact-lens-exams', { kind: 'card', model: 'flare',
+      alt: 'A long walnut counter set with trays of contact lens trial packs, lens cases, a solution bottle, a round mirror and a slit lamp microscope' }],
+    ['emergency-eye-care', { kind: 'card', model: 'flare',
+      alt: 'A dim exam room with a slit lamp microscope switched on beside an exam chair, a folded gauze pad and clear safety glasses on its table, and walnut cabinets along the wall' }],
+    ['medical-eye-care', { kind: 'card', model: 'flare',
+      alt: 'A diagnostic imaging room: an OCT scanner and a retinal camera side by side, their monitors showing a cross-section scan and a color photograph of the retina, with two stools' }],
+  ]);
+  for (const [slug, p] of pages) {
+    if (DOCUMENTARY.test(p.alt) || PRACTICE.test(p.alt)) throw new Error('service hero ' + slug + ': the alt makes a claim a generated image cannot carry: ' + p.alt);
+    p.photos = ewRenditions('svc-' + slug + '-hf', p.kind === 'frame' ? 7 : 6);
+    if (p.kind === 'card') p.crop = ewRenditions('svc-' + slug + '-crop-hf', 5);
+    p.generated = 'higgsfield/marketing-studio/image/' + p.model;
+  }
+  return {
+    pages,
+    frameSizes: '(max-width: 360px) 400px, (max-width: 414px) 465px, (max-width: 480px) 545px, (max-width: 600px) 680px, '
+      + '(max-width: 767px) 715px, (max-width: 1099px) 960px, (max-width: 1199px) 830px, (max-width: 1440px) 730px, '
+      + '(max-width: 1920px) 720px, 39vw',
+  };
+})();
+
+// The hero photograph of one service page (SVC_HERO). Runs after rewriteImages, so the
+// photo card already holds INNER_HERO's <picture>; it is replaced whole. The framed hero's
+// own <img> is the only image in its first section, and is replaced whole; the same class
+// further down the page (other sections' frames) is not touched.
+function reshapeServiceHero(body, route, stats) {
+  const m = /^\/services\/([a-z0-9-]+)$/.exec(route);
+  if (!m) return body;
+  const hero = SVC_HERO.pages.get(m[1]);
+  if (!hero) throw new Error('service hero: no photograph for ' + route);
+  const want = hero.kind === 'frame' ? 'dc-hero' : 'ha-hero';
+  const sm = /<div class="(rw-sec\b[^"]*)"/.exec(body);
+  if (!sm || !new RegExp('\\b' + want + '\\b').test(sm[1])) throw new Error('service hero: the first section of ' + route + ' is not a .' + want);
+  const section = sliceBalanced(body, sm.index, 'div');
+  if (!section) throw new Error('service hero: unbalanced first section on ' + route);
+  const top = hero.photos[hero.photos.length - 1];
+  let sec;
+  if (hero.kind === 'frame') {
+    const imgs = section.match(/<img\b[^>]*>/g) || [];
+    if (imgs.length !== 1 || !/\sclass="dc-frame__img"/.test(imgs[0])) throw new Error('service hero: expected one .dc-frame__img in the hero of ' + route + ', found ' + imgs.length + ' images');
+    const img = '<img data-generated="' + hero.generated + '" width="' + top.w + '" height="' + top.h + '" srcset="' + ewSet(hero.photos)
+      + '" sizes="' + SVC_HERO.frameSizes + '" fetchpriority="high" class="dc-frame__img"' + (hero.pos ? ' style="object-position:' + hero.pos + '"' : '')
+      + ' src="' + top.href + '" alt="' + hero.alt + '" loading="eager" decoding="async">';
+    const at = section.indexOf(imgs[0]);
+    sec = section.slice(0, at) + img + section.slice(at + imgs[0].length);
+  } else {
+    const pm = /<picture class="ha-hero__picture">[\s\S]*?<\/picture>/.exec(section);
+    if (!pm || !/inner-hero-hf/.test(pm[0])) throw new Error('service hero: no gallery <picture> in the photo card of ' + route);
+    const old = /<img\b[^>]*>/.exec(pm[0])[0];
+    const cls = (/\sclass="([^"]*)"/.exec(old) || [])[1];
+    const style = (/\sstyle="([^"]*)"/.exec(old) || [])[1];
+    if (!cls || !/\bha-hero__img\b/.test(cls)) throw new Error('service hero: the photo card image of ' + route + ' lost its class');
+    const img = '<img data-generated="' + hero.generated + '" width="' + top.w + '" height="' + top.h + '" srcset="' + ewSet(hero.photos)
+      + '" sizes="' + INNER_HERO.sizes + '" fetchpriority="high" class="' + cls + '"' + (style ? ' style="' + style + '"' : '')
+      + ' src="' + top.href + '" alt="' + hero.alt + '" loading="eager" decoding="async">';
+    const picture = '<picture class="ha-hero__picture"><source media="' + INNER_HERO.cropMedia + '" srcset="' + ewSet(hero.crop)
+      + '" sizes="' + INNER_HERO.cropSizes + '">' + img + '</picture>';
+    sec = section.slice(0, pm.index) + picture + section.slice(pm.index + pm[0].length);
+  }
+  stats.svcHeroes[hero.kind]++;
   return body.slice(0, sm.index) + sec + body.slice(sm.index + section.length);
 }
 
@@ -1406,7 +1547,7 @@ const stats = { pages: 0, sections: 0, imgMapped: 0, imgUnmapped: [], linksRewri
   assetUrlsRewritten: 0, assetUrlUnmapped: [],
   generatedKept: 0, generatedRevertedToOriginal: [], headingDashesRemoved: [],
   heroSwapped: 0, portraitAdded: 0, portraitSwapped: 0, portraitAltsRewritten: 0, portraitWide: 0, kidsSwapped: 0, innerHeroSwapped: 0, innerHeroSplit: 0, marqueesBuilt: 0, marqueeLogos: 0,
-  ewHeroSwapped: 0, ewHouses: 0, ewCardsSwapped: 0, ewLooksAdded: 0, aboutHeroWide: 0, aboutBioWide: 0,
+  ewHeroSwapped: 0, ewHouses: 0, ewCardsSwapped: 0, ewLooksAdded: 0, aboutHeroWide: 0, aboutBioWide: 0, svcHeroes: { frame: 0, card: 0 },
   doctorStatsRemoved: [], doctorLinkMoved: 0, srcsetAdded: 0 };
 
 const pageRecords = [];
@@ -1431,6 +1572,7 @@ for (const p of seo.pages) {
   body = reshapeEyewear(body, p.url.replace(ORIGIN, '') || '/', stats);
   body = reshapeAboutHero(body, p.url.replace(ORIGIN, '') || '/', stats);
   body = reshapeAboutBio(body, p.url.replace(ORIGIN, '') || '/', stats);
+  body = reshapeServiceHero(body, p.url.replace(ORIGIN, '') || '/', stats);
   // the design layer's reveal hook, applied to the source's own reveal targets
   body = body.replace(/\bet-reveal\b/g, 'et-reveal reveal');
 
@@ -1741,6 +1883,10 @@ console.log('  about hero          ' + stats.aboutHeroWide + '  (/our-doctor/: t
 if (stats.aboutHeroWide !== 1) throw new Error('about hero: expected 1, reshaped ' + stats.aboutHeroWide);
 console.log('  about bio           ' + stats.aboutBioWide + '  (/our-doctor/ "Who I am": the doctor sections\' design, his 16:9 photo full width from 1025px)');
 if (stats.aboutBioWide !== 1) throw new Error('about bio: expected 1, reshaped ' + stats.aboutBioWide);
+console.log('  service heroes      ' + (stats.svcHeroes.frame + stats.svcHeroes.card) + '  (' + stats.svcHeroes.frame + ' framed 16:9 + '
+  + stats.svcHeroes.card + ' photo cards 21:9, one generated photograph per service page, data-generated, alt describes it)');
+if (stats.svcHeroes.frame !== 21 || stats.svcHeroes.card !== 5 || SVC_HERO.pages.size !== 26)
+  throw new Error('service heroes: expected 21 framed + 5 cards of 26, got ' + JSON.stringify(stats.svcHeroes) + ' of ' + SVC_HERO.pages.size);
 console.log('  srcset added       ' + stats.srcsetAdded + '  (' + variantsCopied + ' variant files, '
   + (variantBytes / 1024).toFixed(0) + ' KB)');
 console.log('  doctor stats out   ' + stats.doctorStatsRemoved.length + '  (declared removal)');

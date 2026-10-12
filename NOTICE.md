@@ -15,7 +15,7 @@ public, forking it, or reusing any part of it.
 | Designer brand wordmarks | `assets/source/*-{ray-ban,oliver-peoples,lindberg,persol,tom-ford,maui-jim,costa}.*` | **registered trademarks of those companies** |
 | Supplied hero photograph | `assets/supplied/hero-eyewear-source.jpg` | a Pexels stock photograph — see below |
 | AI-generated imagery | `assets/generated/`, `assets/generated-rt/` | generated for this project; labelled `data-generated` in the markup |
-| AI-generated photographs (Higgsfield) | `assets/generated-hf/` | generated with Higgsfield for this project, wholly generated; labelled `data-generated`. Revision 20: a room that is **not the practice's office**. Revision 21: eyewear close-ups for the eyewear pages, which are **not any brand's product** and not the practice's stock. Provenance in its README |
+| AI-generated photographs (Higgsfield) | `assets/generated-hf/` | generated with Higgsfield for this project, wholly generated; labelled `data-generated`. Revision 20: a room that is **not the practice's office**. Revision 21: eyewear close-ups for the eyewear pages, which are **not any brand's product** and not the practice's stock. Revision 25: a still life for each service page (instruments, lenses, objects), with **no people**, and **not the practice's rooms or equipment**. Provenance in its README |
 | AI-edited photographs | `assets/edited/` | **the client's own photographs** (Dr. Hyder's portrait, the kids' frames) edited with Higgsfield; labelled `data-edited`. Provenance and the likeness check in its README |
 | Dr. Jerry Hyder's portrait | `assets/img/dr-hyder-cutout.png` | **the client's own photograph of a real person**, background removed; labelled `data-cutout`. Not a generated likeness |
 

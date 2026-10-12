@@ -157,6 +157,28 @@ size: 36px on phones, 44.8 at 1280, 50.4 at 1440, 55.4 at 1920, 62 at 2560. The 
 - Section heights fell 53–60% (photo cards), 29–52% (framed photo), 31–44% (visit page) and 23–41% (legal pages)
   at 1280–2560, and 11–26% on the other internal pages. Below 1025px the stacked layouts are as before.
 
+**The eyewear pages open on full-width close-ups** (revision 21, `system.css` §29, `tools/build.mjs` `EW_HERO`).
+`/products/` and the four pages in its menu (designer frames, sunglasses, kids' eyewear, contact lenses):
+- **The hero.** The build adds `.ew-hero` and `.surface-dark` to the first section and swaps its photo for a
+  generated 16:9 close-up (`<picture>`). From 1200px the photo is the section's background, full width, the eyewear
+  at 57–96% of the window and the copy on the left (its column ends at 45–51%), over a scrim in the page's own dark
+  (`--ew-ink`, one per page). The photo's box is 16:9 tall, capped at the section; where the section is taller
+  (1200–1440) the box's foot fades into the dark. Below 1200px the photo is a full-width band above the text, a
+  16:10 crop (2:1 from 768px); the badge straddles the band's foot. `/eye-health/` and `/reviews/` use the same
+  `.tib-hero` component and are unchanged.
+- **`/products/designer-frames/`** gains a section after the hero, "Designer houses we carry": eight cards, each a
+  generated photograph in that house's style with the house's own wordmark in white (`EW_HOUSES`; Barton Perreira in
+  type) and a short line on its design language, then a line saying the photographs are not the houses' product
+  shots. The two material cards of "Three ways a frame earns its place" get new close-ups (`EW_CARDS`), and the
+  three looks each get a photograph, alternating sides from 821px (`EW_LOOKS`).
+- **The words of the page are unchanged.** The new section's copy is new: its eyebrow is the home page's heading,
+  its heading and lede restate the source's own sentences (this page's "These are the houses you will find on the
+  wall", "measured to your face", "fitted and adjusted in house after your eye exam"; the sunglasses page's
+  polarized lenses), and the house notes describe design language only. The build stops if a look's photograph
+  changes the page text or if any count is off.
+- **Images:** `assets/generated-hf/ew-*`, provenance and prompts in its README. Each `sizes` is a measured painted
+  width (`tools/build.mjs` `EW_SIZES`).
+
 **The mega menus hold while you move into them** (revision 19, `chrome.css` section 4 and `site.js` 8b).
 - **A strip under each link.** Each menu link hangs an invisible strip from 2px below its bottom edge into its
   panel, reaching 180px to each side. It is present only while that menu is open or closing. A click on it does
@@ -189,6 +211,14 @@ eyewear gallery made with Higgsfield Marketing Studio 2.5 Flare at 3840x1648. **
   `data-generated`, and its alt describes only what is shown.
 - **To use the practice's own rooms instead:** a wide photograph can take the same slot (`tools/build.mjs`,
   `INNER_HERO`).
+
+**The eyewear pages show generated eyewear** (revision 21, at the operator's request): the five heroes and, on
+`/products/designer-frames/`, the eight designer-house cards, two material cards and three look photographs. All
+made with Higgsfield Marketing Studio 2.5. **None is a real product**: the prompts excluded logos, lettering and
+markings, every render used was checked zoomed in for invented lettering (one was retouched), and the alts describe
+only what is shown. The brand identity on the house cards is the houses' own wordmarks, the logo files the source
+already used. To replace one, put a photograph of the same shape in the same slot: `EW_HERO` (16:9 plus its 16:10
+band), `EW_HOUSES` (3:4), `EW_CARDS` and `EW_LOOKS` (4:3) in `tools/build.mjs`.
 
 **Dr. Hyder's main portrait is an AI-edited photograph** (38 pages, revision 12). At the
 operator's request it was edited with Higgsfield Marketing Studio 2.5 Sunburst:
@@ -256,12 +286,14 @@ The home page's **quote section** ("In Dr. Hyder's words") was redesigned in rev
 | **Some `sizes` values at 1440 are too small** | A re-check at 1440 on 2026-10-08 found 17 of 39 images declared in `audit/image-widths.json` narrower than they paint. The shortfall runs from 8px (the 530 vs 538 portraits) to 1464px (`optical-interior`, 513 vs 1977), so the browser can pick a smaller file than the screen needs. The likely cause is that the earlier measurement took the box width of cover-cropped images; this is not verified for each image. The 390–1024 values were not re-checked. The 1920 and 2560 values are painted widths. Re-measuring the lower buckets the same way would sharpen these images |
 | **Long lines at 1440 and below** | 30 sections on 20 pages already ran past 75 characters a line at 1440, the longest at 134 on `/eye-doctor-clear-lake/`. Above 1440 they are capped. At 1440 and below the original layout was kept as tuned |
 | **Mega menu edge cases** | Measured after revision 19 (`docs/CHANGE-LOG.md`). A panel takes about 0.55–0.6s to close after the pointer leaves (0.34–0.40s before). Leaving Eyewear sideways onto "Insurance" and then moving straight down onto the page within about half a second re-opens it; the old build did the same within 0.25s. With one menu open, crossing another nav link on a downward path keeps the open menu (menu aim). To switch, move along the nav, turn straight down onto the link, or pause on it for 350ms. At 1920px a few very slow (about 120 px/s), very shallow paths to the far-right Services columns still dim or close the panel: 6 of 204 in the path matrix. In 96 repeated runs, 4 closed and 2 ended in Eyewear. The old build failed all 6 matrix paths, and in the same repeats ended in Eyewear 37 times and closed 29. A logged failure traced to a 352ms gap in the headless test driver's pointer events, which the script reads, by design, as a pause. Escape does not close an open mega menu; it never did |
-| **The "Book an Eye Exam" gradient button** | `.btn-primary` (226 on the site) puts white text on teal → bright teal (#16B393) → gold. Measured behind its label: 3.08:1 on average, 2.66 at the 95th percentile, the same before and after revision 20. AA asks 4.5:1 at its size. Darkening the gradient's middle stop, or dark text on the light end, would fix it; it is a brand decision, so it was not changed. The service-page proof labels (`.dc-proof__l`) were `--g-fg-faint` (#7C949B) on light glass at 3.04–3.11:1; revision 20 darkened them (6.04–6.25:1). Five other label classes share that colour (`.et-stat__l`, `.ethc-hero__l`, `.od-record__l`, `.bw-stat__l`, `.ia-stat__suf`) and were not re-measured |
+| **The "Book an Eye Exam" gradient button** | `.btn-primary` (226 on the site) puts white text on teal → bright teal (#16B393) → gold. Measured behind its label: 3.08:1 on average, 2.66 at the 95th percentile, the same before and after revision 20, and the same on revision 21's dark eyewear heroes (2.61 at the worst pixel), since it paints its own background. AA asks 4.5:1 at its size. Darkening the gradient's middle stop, or dark text on the light end, would fix it; it is a brand decision, so it was not changed. The service-page proof labels (`.dc-proof__l`) were `--g-fg-faint` (#7C949B) on light glass at 3.04–3.11:1; revision 20 darkened them (6.04–6.25:1). Five other label classes share that colour (`.et-stat__l`, `.ethc-hero__l`, `.od-record__l`, `.bw-stat__l`, `.ia-stat__suf`) and were not re-measured |
 | **Reveal content needs JavaScript** | `.reveal` starts at opacity 0 and `site.js` adds `.in-view` as it scrolls into view. With scripts off, or before the script runs, that content is invisible, including most hero text (measured on five pages at 1440 and 390, in the build before revision 20 too). A `<noscript>` style or a `.js` class on `<html>` that gates the hidden state would fix it |
 | **The service-page hero photo is generated** | The six `.ha-hero` cards show a generated room, not the office (revision 20, `assets/generated-hf/README.md`). The practice should approve it, or supply a wide photograph of its own optical for the same slot |
+| **The eyewear photos are generated, and the house cards pair real wordmarks with them** | Revision 21. The eight houses are the source's own lists, but the practice should confirm which it carries today. Brands' rules often govern how their marks appear next to other imagery: check them, or swap in a house's official retailer imagery in the same card (`NOTICE.md`, item 2). The line under the cards says the photographs are not the houses' product shots |
+| **The third material card's `sizes`** | On `/products/designer-frames/` the "whole wall" card keeps its slot's measured `sizes` from `audit/image-widths.json`. Revision 21 measured that slot for the two new cards beside it: those values fall short of the painted width between 401 and 600px (by up to 120px) and at 1024. The two new cards carry their own (`EW_SIZES.card`); the third, and the same slot on other pages, were not changed |
 | **Phones magnify the hero crop** | The square crop the six photo cards use up to 820px is 1648px, the largest the render holds. A 3x phone paints it at up to 1.7x; the photo there sits under a 74–90% scrim. From 600px up no file is magnified |
 | **`site.js` has no cache-buster** | The stylesheets are linked with `?v=<hash>`, but `/scripts/site.js` is not, and GitHub Pages serves it with `Cache-Control: max-age=600` (measured). After an update a returning visitor can run the old script for up to 10 minutes. Revision 19 is safe either way: its CSS works without the new script. Adding the same `?v=` to the script tag in `tools/build.mjs` would close this |
-| **Full-bleed bands overshoot by half a scrollbar** | The home page's doctor and kids photo bands (revisions 13 and 14) reach the screen edges with `calc(50% - 50vw)`, and `100vw` includes a classic scrollbar, so below 1200px the page is 8px wider than the window. It is invisible because `body` sets `overflow-x: hidden`: no horizontal scrollbar, and a sideways wheel gesture does not move the page (measured; with that rule removed, a 15px scrollbar appears). Only a script's `scrollTo` can shift it. Keep that rule, or clip those two sections, if you change it |
+| **Full-bleed bands overshoot by half a scrollbar** | The home page's doctor and kids photo bands (revisions 13 and 14) reach the screen edges with `calc(50% - 50vw)`, and `100vw` includes a classic scrollbar, so below 1200px the page is 8px wider than the window. It is invisible because `body` sets `overflow-x: hidden`: no horizontal scrollbar, and a sideways wheel gesture does not move the page (measured; with that rule removed, a 15px scrollbar appears). Only a script's `scrollTo` can shift it. Keep that rule, or clip those two sections, if you change it. The eyewear heroes' bands (revision 21, below 1200px) use the same offsets, but their sections clip them (`overflow: hidden`, measured), so they do not widen the page |
 
 ---
 

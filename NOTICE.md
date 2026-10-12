@@ -15,7 +15,7 @@ public, forking it, or reusing any part of it.
 | Designer brand wordmarks | `assets/source/*-{ray-ban,oliver-peoples,lindberg,persol,tom-ford,maui-jim,costa}.*` | **registered trademarks of those companies** |
 | Supplied hero photograph | `assets/supplied/hero-eyewear-source.jpg` | a Pexels stock photograph — see below |
 | AI-generated imagery | `assets/generated/`, `assets/generated-rt/` | generated for this project; labelled `data-generated` in the markup |
-| AI-generated hero photograph | `assets/generated-hf/` | generated with Higgsfield for this project (revision 20), wholly generated: a room that is **not the practice's office**; labelled `data-generated`. Provenance in its README |
+| AI-generated photographs (Higgsfield) | `assets/generated-hf/` | generated with Higgsfield for this project, wholly generated; labelled `data-generated`. Revision 20: a room that is **not the practice's office**. Revision 21: eyewear close-ups for the eyewear pages, which are **not any brand's product** and not the practice's stock. Provenance in its README |
 | AI-edited photographs | `assets/edited/` | **the client's own photographs** (Dr. Hyder's portrait, the kids' frames) edited with Higgsfield; labelled `data-edited`. Provenance and the likeness check in its README |
 | Dr. Jerry Hyder's portrait | `assets/img/dr-hyder-cutout.png` | **the client's own photograph of a real person**, background removed; labelled `data-cutout`. Not a generated likeness |
 
@@ -30,7 +30,12 @@ public, forking it, or reusing any part of it.
 2. **Designer trademarks.** Seven brand wordmarks are included because the practice stocks
    those frames. Naming the brands you carry is ordinary retail use; redistributing the logo
    files in a public code repository is a different act, and the brands' own guidelines
-   govern it.
+   govern it. Since revision 21, `/products/designer-frames/` also shows them in white, each
+   beside a **generated** photograph styled to that house's look, with a line under the cards
+   saying the photographs are not the houses' own product shots. Brands' rules often cover
+   how their marks may be shown next to other imagery: the practice should confirm the houses
+   it carries and check those rules, and can swap in a house's official retailer imagery in
+   the same card.
 
 3. **The hero photograph.** `hero-eyewear-source.jpg` came from Pexels. The Pexels licence
    permits commercial use without attribution, but the photographer's name is in the original

@@ -1553,3 +1553,101 @@ the final build, with the 8px turn window.
 - **The doctor page** (`/our-doctor/`) still leaves an empty area below the portrait at 1920–2560, smaller than before.
 - **More hero lines start with a spaced hyphen** ("- designer frames"), a side effect of the new measures: 12 lines
   against 3, counted on the 43 pages at 1025, 1280, 1440, 1920 and 2560. The text's spaced hyphens are verbatim.
+
+---
+
+# Revision 21 — the eyewear pages: full-width close-ups, and the designer houses
+
+> *"for hero images of inner pages under EYEWEAR, I want to revise all the heroes. I want hero images that are high
+> resolution and close-up photos of designer brands. Use higgsfield to generate high quality photos and make sure the
+> hero background images are full width … And then after updating the hero images on these internal pages, focus on
+> the designer frames page and make sure to add a lot of designer frames and designer eyewears across the page, I
+> want big brands featured in there with corresponding kick ass photo"* (with a capture of
+> `/products/designer-frames/` at about 1890px wide)
+
+**Measured before.** The probes and their saved output are in `.tmp/session-cc24e987/eyewear/`. The pages under
+Eyewear are the hub `/products/` and the four in its menu. Each opened with the photo in a frame on the left and the
+copy on the right:
+- **The four product pages** (`.tib-hero`): a 5:6 portrait photo up to 600px tall, 509–654px wide at 1440–1920
+  and 847px at 2560, from the source's 1200px uploads (a frame wall, a sunglass wall, a kids' wall, a contact-lens
+  room).
+- **The hub** (`.et-hero`): `hero-boutique`, a 1024px file, painted 501–835px wide.
+
+**The change** (`system.css` §29; `tools/build.mjs` `EW_HERO`, `EW_HOUSES`, `EW_CARDS`, `EW_LOOKS`,
+`reshapeEyewear`; `assets/generated-hf/ew-*`).
+1. **The five heroes are dark, full-width close-ups.** The build adds `.ew-hero` and `.surface-dark` to the first
+   section and swaps its photo for a generated 16:9 close-up through `<picture>`; `.surface-dark` gives the text,
+   pills, call link and badge the site's existing dark variants.
+   - **From 1200px** the photo is the section's background: full width, its box 16:9 tall and capped at the
+     section's height, the eyewear at 57–96% of the window and the copy on the left. The copy column grows from 520px
+     to 760px and ends at 45–51% of the window. A scrim in the page's own dark (`--ew-ink`, sampled from each photo's
+     left 45%) sits under the text, and where the section is taller than the box (1200–1440) the box's foot fades
+     into that dark.
+   - **Below 1200px** the photo is a full-width band above the text: a 16:10 crop around the eyewear, 2:1 from 768px.
+     The badge straddles the band's foot instead of covering the eyewear, and on the hub the eyebrow follows the band
+     (`layout.css` had ordered it above).
+   - The site's scroll parallax is overridden for these photos, since a background must not drift or grow.
+   - `/eye-health/` and `/reviews/` use the same `.tib-hero` component and are unchanged.
+2. **`/products/designer-frames/` gains a section of designer houses** after the hero, "Designer houses we carry":
+   - Eight cards, four across from 821px and two below: Ray-Ban, Oliver Peoples, Lindberg, Persol, Tom Ford, Barton
+     Perreira, Maui Jim and Costa, the source's own lists (the home page's seven logos and this page's five names).
+   - Each card is a generated photograph in that house's design language, the house's own wordmark from the source's
+     logo files made white (Barton Perreira, with no logo file, set in type), and one line on the house's style.
+   - Under the cards: *"Photographs are styled to each house's look, not product shots from the houses
+     themselves."*
+   - The copy is new and claims nothing the source does not: the eyebrow is the home page's heading, and the heading
+     and lede restate the source's sentences ("These are the houses you will find on the wall", "measured to your
+     face", "fitted and adjusted in house after your eye exam", the sunglasses page's polarized lenses).
+3. **The two material cards** ("Acetate", "Titanium & rimless") swap the first build's fal studies (1200px) for
+   generated close-ups (1600px). The third card, a photograph of the practice's wall, stays.
+4. **The three looks** ("The Classics", "Bold Statement", "Featherlight") each get a photograph: above the text on a
+   phone, beside it from 821px with the middle one's photo on the left and the title at display size.
+5. **No source word changes.** The build stops if adding the look photographs changes the page's tag-stripped text,
+   or if any count is off (5 heroes, 8 houses, 2 cards, 3 looks).
+
+**The photographs.** 23 renders and 5 extensions, all Higgsfield Marketing Studio 2.5 at 4k, 2026-10-12.
+- **The heroes:** each rendered at 21:9 on Flare and Sunburst; four Flare renders and one Sunburst were chosen. At
+  1200–1440 the section is only 1.36–1.59 times wider than tall, and a cover-fitted 21:9 photo there put the frames'
+  left temple under the paragraph at 1280 in a first build. So each chosen render was extended to 16:9 by Flare from a
+  layout sketch, with its eyewear smaller and further right. The extension redraws the eyewear faithfully: aligned on
+  it, scale within 0.3%, rotation under 0.1°, shift 1.7–8.1px. Pasting the approved render back left a visible block
+  on one image, so the extensions are used as they came.
+- **The houses** (3:4), **cards and looks** (4:3): Sunburst, text only.
+- **No logos, no lettering, no real product.** Every prompt excluded them. The 18 renders used and the 5 extensions
+  were checked zoomed in (hinges and temples at 3–4x). The hub render carried invented lettering inside a temple and
+  was retouched before its extension; nothing else was legible.
+- **Encoding:** heroes `-q 90` (at `-q 80` their dark gradients showed faint 16px blocks), the rest `-q 80`.
+- **Provenance, every prompt, request ids, hashes and crops:** `assets/generated-hf/README.md`.
+- **No longer used on the site:** the source's sunglass-wall, kids'-wall and contact-lens portrait photos (they were
+  only in those heroes) and the first build's acetate study. The build's prune drops them from `dist/`; they stay in
+  `assets/`. The frame-wall photo still serves `/eye-health/`, and `hero-boutique` five service pages.
+
+## Re-verified
+
+| check | result |
+|---|---|
+| Hero geometry, 5 pages × 1200–2560 | Copy column ends at 44.6–50.6% of the window; the photo box is the full section width at every width; the section is 1.36–1.59 times wider than tall at 1200–1440, where the box's foot leaves 86–193px of plain dark, and 1.89–2.56 at 1920–2560, where the box is the section |
+| First screen, old → new | **1280x585:** hero 823–874 → 836–887px; the heading ends at 410–457 (was 379–426), above the fold; the first button at 733–852 (was 702–822), below it in both. **1440x900:** heading 437–544, button 820–880, both above the fold. **1920x1080:** hero 875–962 → 918–1005. **2560:** 942–1006 → 993–1120. **390 phones:** 11–16px shorter. The photo's box: about 510x420 → 1265x720 at 1280, 654x600 → 1905x1005 at 1920 |
+| Contrast, on rendered pixels | **Heroes**, 5 pages at 7 sizes from 390 to 2560 (371 measurements), worst pixel: paragraphs and notes 8.0:1, call link 8.63, points 9.97, hub pills 12.38, badge 13.5, eyebrow 14.18, heading 15.34. Only the known gradient button is below 4.5 (2.61, as on unchanged pages). **Designer houses**, 5 sizes (65): fine print 5.14, card notes on photographs 5.54 and up. **Control:** each element's own colour painted behind it collapses to 1:1 |
+| `sizes` against painted width | Every 8px from 320 to 2560 on `/products/designer-frames/` and every 24px on `/products/`, in a desktop window and in phone emulation to 1366: no image is ever declared narrower than it paints (heroes and bands 100vw; houses, looks and cards from the measured widths in `EW_SIZES`) |
+| Links and reveals | Every link in the five heroes is on top at its centre at 1280x585 and 390. Scrolling each designer-house card to the centre reveals 8 of 8 at both sizes |
+| Scope | 39 pages differ from the old build only in the stylesheet hash. On the five eyewear pages everything outside `<main>` is identical, and inside it only the hero changed, plus, on `/products/designer-frames/`, the added section, the two card images (that section is otherwise identical) and the looks. `system.css` only gains §29; all 56 of its selectors name a revision 21 class (control: the same check flags all 47 of §28's), and those classes appear only on the five pages. Refs 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** |
+| Build | Reproducible: two builds hash identically (all of `dist/` but the search index's timestamp) |
+| Alts | Each of the 18 new alts was read against its image; one named a five-barrel hinge the render does not clearly show, and was corrected |
+| Secrets | The staged diff and all 235 new or changed binary files scanned for the Higgsfield key, whole and in parts, and for key-shaped tokens: none. Controls: every check fires on planted copies |
+| Live preview | gh-pages `c28145e`, built from `aadf9e9`. 12 files byte-identical to the build: the five pages, `/eye-health/`, `system.css` and five of the new images. On the live site:<br>• **Images:** the hero never magnifies its file at 390@3x, 768@2x, 1100–1920@1x, 1440@2x or 2560 (0.75–1.00); house cards 0.72–0.95, looks 0.68–0.89.<br>• **Contrast:** the five heroes at 1280 and 1920 (106 measurements), worst pixel 8.0:1 and up; only the known gradient button is lower (2.61).<br>• **Links and reveals:** every hero link on top at 1280x585 and 390 on the hub and the designer-frames page; all 8 house cards reveal on scroll |
+
+**Trade-offs, measured:**
+- On desktop the heading sits 31–58px lower at 1280–1920, and 122px at 2560: the photo wants more room above the copy
+  (72–120px). At 1280x585 it still ends above the fold.
+- At 1200–1440 the bottom 86–193px of the hero is plain dark under the photo's faded foot, the price of keeping the
+  eyewear clear of the text without scaling the photo to the section's height.
+- The heroes are 16–146px taller at 2560.
+
+**Found, not changed:**
+- **The third material card's `sizes`.** The slot's measured values in `audit/image-widths.json` fall short of the
+  painted width between 401 and 600px (by up to 120px) and at 1024. The two new cards carry their own; the practice's
+  wall photograph keeps the old ones, as does the same slot on other pages.
+- **Brands' rules.** The house cards show real wordmarks beside generated photographs. The practice should confirm the
+  houses it carries and their rules for showing their marks, or swap in official retailer imagery (`NOTICE.md`).
+- **The gradient button** (`.btn-primary`), as before.

@@ -513,6 +513,240 @@ const INNER_HERO = (() => {
   };
 })();
 
+// ------------------------------------------------ the eyewear pages (rev. 21)
+// Operator, 2026-10-12: "for hero images of inner pages under EYEWEAR, I want to revise
+// all the heroes. I want hero images that are high resolution and close-up photos of
+// designer brands. Use higgsfield to generate high quality photos and make sure the hero
+// background images are full width ... And then after updating the hero images on these
+// internal pages, focus on the designer frames page and make sure to add a lot of
+// designer frames and designer eyewears across the page, I want big brands featured in
+// there with corresponding kick ass photo".
+//
+// Every photograph below is GENERATED with Higgsfield Marketing Studio 2.5 (record in
+// assets/generated-hf/README.md). None shows the practice, and none shows a real product:
+// the prompts asked for no logos, lettering or markings, and each render was checked at
+// full size for invented lettering. So each alt describes only what is shown (B3), the
+// build stops if one matches the documentary or practice patterns, and every <img> is
+// stamped data-generated. The brand identity on /products/designer-frames/ comes from the
+// houses' own wordmarks - the logo files the source's home page already shows - not from
+// the photographs, and the page says so under the cards.
+const EW_GEN = path.join(ROOT, 'assets', 'generated-hf');
+function ewRenditions(prefix, min) {
+  const re = new RegExp('^' + prefix + '(-\\d+)?\\.webp$');
+  const list = fs.readdirSync(EW_GEN)
+    .filter((f) => re.test(f))
+    .map((f) => {
+      const d = webpSize(path.join(EW_GEN, f));
+      if (!d) throw new Error('unreadable: assets/generated-hf/' + f);
+      return { file: f, href: '/assets/img/' + f, w: d.w, h: d.h };
+    })
+    .sort((a, b) => a.w - b.w);
+  if (list.length < min) throw new Error('expected ' + min + '+ renditions of assets/generated-hf/' + prefix + '*.webp, found ' + list.length);
+  fs.mkdirSync(path.join(DIST, 'assets', 'img'), { recursive: true });
+  for (const r of list) fs.copyFileSync(path.join(EW_GEN, r.file), path.join(DIST, 'assets', 'img', r.file));
+  return list;
+}
+function ewGuardAlt(alt) {
+  if (DOCUMENTARY.test(alt) || PRACTICE.test(alt)) throw new Error('a generated eyewear image alt makes a claim it cannot carry: ' + alt);
+  return alt;
+}
+const ewSet = (list) => list.map((r) => r.href + ' ' + r.w + 'w').join(', ');
+
+// The heroes of the five eyewear pages: the hub and the four pages in its menu
+// (system.css §29). Each photograph is the full-width background of its section from
+// 1200px; below that it is a full-width band above the text. The renders began at 21:9
+// (3840x1648) with the eyewear in their right half; the hero's copy column ends at 45-51%
+// of the window, and at 1200-1440 the section is 1.36-1.59 times wider than tall, where
+// cover would push 21:9 eyewear under the text. So each was extended to 16:9 by Flare from
+// a layout sketch, the eyewear at x 0.57-0.96: 3840x2160. The band is a 16:10 crop of the
+// same file around the eyewear (x 1840-3840, y 455-1705); the hub's three-frame stack is
+// taller, and in the 2:1 band at 768-1199px that crop cut its top frame, so its crop is
+// wider (x 1472-3840, y 295-1775) and the band's middle holds the whole stack.
+const EW_HERO = (() => {
+  const pages = new Map([
+    ['/products', { slug: 'eyewear',
+      alt: 'Tortoiseshell and black acetate eyeglasses and gold-framed sunglasses with green lenses, layered on a walnut table' }],
+    ['/products/designer-frames', { slug: 'designer-frames',
+      alt: 'A pair of tortoiseshell acetate eyeglasses with gold temples on a dark walnut table, in low studio light' }],
+    ['/products/sunglasses', { slug: 'sunglasses',
+      alt: 'Gold aviator sunglasses with brown gradient lenses on dark stone, catching low golden light' }],
+    ['/products/kids-eyewear', { slug: 'kids-eyewear',
+      alt: "Two pairs of children's eyeglasses, one red and one yellow, stacked on a teal surface" }],
+    ['/products/contact-lenses', { slug: 'contact-lenses',
+      alt: 'A soft contact lens beside an open lens case, with water droplets on a dark surface' }],
+  ]);
+  for (const p of pages.values()) {
+    ewGuardAlt(p.alt);
+    p.wide = ewRenditions('ew-hero-' + p.slug + '-hf', 5);
+    p.band = ewRenditions('ew-hero-' + p.slug + '-band-hf', 5);
+  }
+  return {
+    pages,
+    model: 'higgsfield/marketing-studio/image/flare',
+    bandMedia: '(max-width: 1199px)',
+    bandSizes: '100vw',
+    sizes: '100vw',
+  };
+})();
+
+// The designer houses on /products/designer-frames/: the eight the source names, each
+// with a photograph in its house's design language (Sunburst, 3:4) and its own wordmark
+// in white. Barton Perreira has no logo file in the crawl, so its name is set in type.
+// The notes describe each house's design language only - no claim about stock, prices or
+// the practice. Wordmarks are sized to one visual area, not one height: their width-to-
+// height ratios run from 1.7 (Persol) to 11.5 (Lindberg), so --h scales each to the
+// height a 2:1 mark would have at the same area.
+const EW_HOUSES = [
+  { slug: 'ray-ban', name: 'Ray-Ban', logo: 'ray-ban', note: 'Icons in acetate and metal',
+    alt: 'Bold black acetate eyeglasses with silver rivets on dark concrete' },
+  { slug: 'oliver-peoples', name: 'Oliver Peoples', logo: 'oliver-peoples', note: 'Vintage-inspired and quietly detailed',
+    alt: 'Round honey tortoiseshell eyeglasses with a gold bridge on cream linen' },
+  { slug: 'lindberg', name: 'Lindberg', logo: 'lindberg', note: 'Rimless titanium, almost weightless',
+    alt: 'Rimless titanium eyeglasses on pale grey stone' },
+  { slug: 'persol', name: 'Persol', logo: 'persol', note: 'Sculpted Italian acetate',
+    alt: 'Tortoiseshell sunglasses with green lenses on a sunlit terracotta ledge' },
+  { slug: 'tom-ford', name: 'Tom Ford', logo: 'tom-ford', note: 'Bold shapes with a glamorous edge',
+    alt: 'Glossy black acetate eyeglasses with gold hinges on black marble' },
+  { slug: 'barton-perreira', name: 'Barton Perreira', logo: null, note: 'Hand-finished luxury frames',
+    alt: 'Emerald green acetate eyeglasses with gold temples on dark green velvet' },
+  { slug: 'maui-jim', name: 'Maui Jim', logo: 'maui-jim', note: 'Polarized sunglasses for bright days',
+    alt: 'Wrap sunglasses with blue mirror lenses on volcanic rock beside turquoise water' },
+  { slug: 'costa', name: 'Costa', logo: 'costa', note: 'Polarized sunglasses made for the water',
+    alt: 'Sport sunglasses with green mirror lenses on a teak boat deck by the sea' },
+].map((h) => {
+  ewGuardAlt(h.alt);
+  h.photos = ewRenditions('ew-brand-' + h.slug + '-hf', 4);
+  if (h.logo) {
+    const rec = imageMap.get(h.logo);
+    if (!rec || rec.generated || !rec.w || !rec.h) throw new Error('designer house logo missing from the source images: ' + h.logo);
+    h.logoRec = rec;
+    h.logoH = Math.sqrt(2 / (rec.w / rec.h));
+  }
+  return h;
+});
+
+// The two material cards in "Three ways a frame earns its place" (designer-frames only):
+// the first build's fal studies at 1200px become close-ups at 1600px. Matched by their
+// source alts; the third card is the practice's own photograph and stays.
+const EW_CARDS = new Map([
+  ['Hand-finished acetate eyeglass frames in tortoiseshell and olive', { slug: 'card-acetate',
+    alt: 'A tortoiseshell acetate eyeglass frame with polished bevels and a barrel hinge, close up' }],
+  ["An optician's bench where eyeglass frames are adjusted by hand", { slug: 'card-titanium',
+    alt: 'A semi-rimless titanium eyeglass frame in matte gunmetal on pale stone, close up' }],
+]);
+for (const c of EW_CARDS.values()) { ewGuardAlt(c.alt); c.photos = ewRenditions('ew-' + c.slug + '-hf', 3); }
+
+// The three looks in "Most people arrive with a look in mind" get a photograph each,
+// matched by their titles.
+const EW_LOOKS = new Map([
+  ['The Classics', { slug: 'look-classics', alt: 'A slim black acetate frame and a thin round gold metal frame side by side on oatmeal linen' }],
+  ['Bold Statement', { slug: 'look-bold', alt: 'An oversized cobalt blue acetate eyeglass frame on a sand-coloured surface' }],
+  ['Featherlight', { slug: 'look-featherlight', alt: 'Rimless titanium eyeglasses with rose-gold temples on handmade paper beside a white feather' }],
+]);
+for (const l of EW_LOOKS.values()) { ewGuardAlt(l.alt); l.photos = ewRenditions('ew-' + l.slug + '-hf', 3); }
+
+// `sizes` from the painted widths, measured on the built page every 16px from 320 to
+// 2560 plus each breakpoint's two sides, in a desktop window (15px scrollbar) and in
+// phone emulation to 1366 (largest painted width per range, as vw of that window):
+//   house: 45.3 (to 820, two across), 22.2 (821-1440, four across), 18.0 (1441-1920), 17.2;
+//   look:  92.1 (to 820, stacked), 46.8 (821-1440), 38.0 (1441-1920), 35.9;
+//   card:  91.7 (to 600, one across), 44.7 (601-1024, two), 29.3 (1025-1440, three), 24.0, 22.8.
+// The material cards' slot has measured `sizes` in audit/image-widths.json, but those
+// fall short here between 401 and 600px (by up to 120px) and at 1024, so the two new
+// photographs carry their own.
+const EW_SIZES = {
+  house: '(max-width: 820px) 46vw, (max-width: 1440px) 23vw, (max-width: 1920px) 18.5vw, 17.5vw',
+  look: '(max-width: 820px) 93vw, (max-width: 1440px) 47.5vw, (max-width: 1920px) 38.5vw, 36.5vw',
+  card: '(max-width: 600px) 92.5vw, (max-width: 1024px) 45.5vw, (max-width: 1440px) 30vw, (max-width: 1920px) 24.5vw, 23.5vw',
+};
+
+function ewImg(photos, sizes, alt, model, extra = '') {
+  const top = photos[photos.length - 1];
+  return '<img data-generated="' + model + '" width="' + top.w + '" height="' + top.h + '" srcset="' + ewSet(photos)
+    + '" sizes="' + sizes + '" src="' + top.href + '" alt="' + alt + '"' + extra + ' loading="lazy" decoding="async">';
+}
+
+function ewHousesHTML() {
+  const cards = EW_HOUSES.map((h, i) => {
+    const mark = h.logo
+      ? '<img class="ew-house__logo" src="' + h.logoRec.href + '" width="' + h.logoRec.w + '" height="' + h.logoRec.h
+        + '" alt="' + h.name + '" style="--h:' + h.logoH.toFixed(3) + '" loading="lazy" decoding="async">'
+      : '<span class="ew-house__type">' + h.name + '</span>';
+    return '<article class="ew-house et-reveal" style="--et-i:' + (i % 4) + '">'
+      + '<div class="ew-house__media">' + ewImg(h.photos, EW_SIZES.house, h.alt, 'higgsfield/marketing-studio/image/sunburst') + '</div>'
+      + '<div class="ew-house__body"><h3 class="ew-house__name">' + mark + '</h3>'
+      + '<p class="ew-house__note">' + h.note + '</p></div></article>';
+  }).join('');
+  return '<div class="rw-sec rw-p-designer-frames et-band ew-houses"><div class="container">'
+    + '<div class="row row--head"><div class="col col--measure et-reveal">'
+    + '<p class="et-eyebrow">Designer houses we carry</p>'
+    + '<h2 class="et-h2">Names you will find on the wall.</h2>'
+    + '<p class="et-lede">From hand-finished acetate to rimless titanium and polarized sun lenses, every pair is measured to your face and fitted in house after your eye exam.</p>'
+    + '</div></div>'
+    + '<div class="ew-houses__grid">' + cards + '</div>'
+    + '<p class="ew-houses__fine">Photographs are styled to each house\'s look, not product shots from the houses themselves.</p>'
+    + '</div></div>';
+}
+
+// The five eyewear heroes, and on /products/designer-frames/ the designer houses, the two
+// material cards and the three looks. Markup only: no source word is touched, and the
+// build stops unless each piece lands exactly where it is meant to.
+function reshapeEyewear(body, route, stats) {
+  const hero = EW_HERO.pages.get(route);
+  if (!hero) return body;
+
+  // 1 - the hero: the first section, which must be a product hero
+  const sm = /<div class="(rw-sec\b[^"]*)"/.exec(body);
+  if (!sm || !/\b(tib-hero|et-hero)\b/.test(sm[1])) throw new Error('eyewear hero: the first section of ' + route + ' is not a product hero');
+  const section = sliceBalanced(body, sm.index, 'div');
+  if (!section) throw new Error('eyewear hero: unbalanced first section on ' + route);
+  const mm = /<div class="(?:tib-hero__media|et-hero__media)"[^>]*>\s*(<img\b[^>]*>)/.exec(section);
+  if (!mm) throw new Error('eyewear hero: no photo in the hero media of ' + route);
+  const top = hero.wide[hero.wide.length - 1];
+  const keepCls = (/\sclass="([^"]*)"/.exec(mm[1]) || [])[1] || 'et-media-img';
+  const img = '<img data-generated="' + EW_HERO.model + '" width="' + top.w + '" height="' + top.h + '" srcset="' + ewSet(hero.wide)
+    + '" sizes="' + EW_HERO.sizes + '" fetchpriority="high" class="' + keepCls + '" src="' + top.href + '" alt="' + hero.alt
+    + '" loading="eager" decoding="async">';
+  const picture = '<picture class="ew-hero__picture"><source media="' + EW_HERO.bandMedia + '" srcset="' + ewSet(hero.band)
+    + '" sizes="' + EW_HERO.bandSizes + '">' + img + '</picture>';
+  const imgAt = mm.index + mm[0].length - mm[1].length;
+  let sec = section.slice(0, imgAt) + picture + section.slice(imgAt + mm[1].length);
+  sec = sec.replace(/^<div class="rw-sec\b([^"]*)"/, '<div class="rw-sec$1 ew-hero surface-dark"');
+  body = body.slice(0, sm.index) + sec + body.slice(sm.index + section.length);
+  stats.ewHeroSwapped++;
+  if (route !== '/products/designer-frames') return body;
+
+  // 2 - the designer houses, straight after the hero
+  const afterHero = sm.index + sec.length;
+  body = body.slice(0, afterHero) + '\n' + ewHousesHTML() + body.slice(afterHero);
+  stats.ewHouses += EW_HOUSES.length;
+
+  // 3 - the two material cards
+  body = body.replace(/<img\b[^>]*\salt="([^"]*)"[^>]*>/g, (tag, alt) => {
+    const c = EW_CARDS.get(alt);
+    if (!c) return tag;
+    stats.ewCardsSwapped++;
+    // the slot's own class and inline style (object-fit) stay on the new <img>
+    const keep = ['class', 'style'].map((a) => { const m = new RegExp('\\s' + a + '="([^"]*)"').exec(tag); return m ? ' ' + a + '="' + m[1] + '"' : ''; }).join('');
+    return ewImg(c.photos, EW_SIZES.card, c.alt, 'higgsfield/marketing-studio/image/sunburst', keep);
+  });
+
+  // 4 - the three looks: a photograph after each look's heading row; the rows alternate
+  //     sides from 821px (system.css §29), so the second is marked to put its photo left
+  const plain = (s) => s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  const before = plain(body);
+  body = body.replace(/(<div class="tib-collection\b[^"]*"[^>]*>\s*<div class="tib-collection__head">[\s\S]*?<span class="tib-collection__title">([^<]*)<\/span>[\s\S]*?<\/div>)/g, (m, head, title) => {
+    const l = EW_LOOKS.get(title.trim());
+    if (!l) throw new Error('eyewear looks: no photograph for the look "' + title + '"');
+    const mod = stats.ewLooksAdded % 2 ? ' tib-collection--photo tib-collection--photo-left' : ' tib-collection--photo';
+    stats.ewLooksAdded++;
+    return head.replace(/^<div class="tib-collection\b/, '<div class="tib-collection' + mod)
+      + '<div class="tib-collection__media">' + ewImg(l.photos, EW_SIZES.look, l.alt, 'higgsfield/marketing-studio/image/sunburst') + '</div>';
+  });
+  if (plain(body) !== before) throw new Error('eyewear looks: adding the photographs changed the page text');
+  return body;
+}
+
 // The photo-card hero's copy, in two blocks for its two-column layout
 // (revision 20, system.css §28): the eyebrow and heading in .ha-hero__lead,
 // the paragraph and the calls to action in .ha-hero__side. From 1025px the
@@ -1099,6 +1333,7 @@ const stats = { pages: 0, sections: 0, imgMapped: 0, imgUnmapped: [], linksRewri
   assetUrlsRewritten: 0, assetUrlUnmapped: [],
   generatedKept: 0, generatedRevertedToOriginal: [], headingDashesRemoved: [],
   heroSwapped: 0, portraitAdded: 0, portraitSwapped: 0, portraitAltsRewritten: 0, portraitWide: 0, kidsSwapped: 0, innerHeroSwapped: 0, innerHeroSplit: 0, marqueesBuilt: 0, marqueeLogos: 0,
+  ewHeroSwapped: 0, ewHouses: 0, ewCardsSwapped: 0, ewLooksAdded: 0,
   doctorStatsRemoved: [], doctorLinkMoved: 0, srcsetAdded: 0 };
 
 const pageRecords = [];
@@ -1120,6 +1355,7 @@ for (const p of seo.pages) {
   body = neutraliseForms(body, stats);
   body = marqueeHouses(body, stats);
   body = reshapeDoctor(body, stats);
+  body = reshapeEyewear(body, p.url.replace(ORIGIN, '') || '/', stats);
   // the design layer's reveal hook, applied to the source's own reveal targets
   body = body.replace(/\bet-reveal\b/g, 'et-reveal reveal');
 
@@ -1419,6 +1655,13 @@ console.log('  inner hero swapped  ' + stats.innerHeroSwapped + '  (the six .ha-
   + ' widths + ' + INNER_HERO.crop.length + ' square crops up to 820px, data-generated, alt describes it)');
 if (stats.innerHeroSwapped !== 6) throw new Error('inner hero: expected the six .ha-hero cards, swapped ' + stats.innerHeroSwapped);
 if (stats.innerHeroSplit !== 6) throw new Error('inner hero: expected six .ha-hero copies split in two, split ' + stats.innerHeroSplit);
+console.log('  eyewear heroes      ' + stats.ewHeroSwapped + '  (generated 16:9 close-ups, full-width; 16:10 band below 1200px; data-generated)');
+console.log('  designer houses     ' + stats.ewHouses + ' cards, ' + stats.ewCardsSwapped + ' material cards, ' + stats.ewLooksAdded
+  + ' look photographs  (/products/designer-frames/ only; generated, data-generated; wordmarks are the source\'s logos)');
+if (stats.ewHeroSwapped !== EW_HERO.pages.size) throw new Error('eyewear heroes: expected ' + EW_HERO.pages.size + ', swapped ' + stats.ewHeroSwapped);
+if (stats.ewHouses !== EW_HOUSES.length) throw new Error('designer houses: expected ' + EW_HOUSES.length + ' cards, built ' + stats.ewHouses);
+if (stats.ewCardsSwapped !== EW_CARDS.size) throw new Error('material cards: expected ' + EW_CARDS.size + ', swapped ' + stats.ewCardsSwapped);
+if (stats.ewLooksAdded !== EW_LOOKS.size) throw new Error('looks: expected ' + EW_LOOKS.size + ' photographs, added ' + stats.ewLooksAdded);
 console.log('  srcset added       ' + stats.srcsetAdded + '  (' + variantsCopied + ' variant files, '
   + (variantBytes / 1024).toFixed(0) + ' KB)');
 console.log('  doctor stats out   ' + stats.doctorStatsRemoved.length + '  (declared removal)');

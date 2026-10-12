@@ -1,6 +1,6 @@
 {
   "schema": "site-reforge/reforge-build@1",
-  "generated": "2026-10-11T15:59:45.315Z",
+  "generated": "2026-10-12T02:21:13.745Z",
   "dist": "C:\\Users\\Dell\\site-reforge\\eyetrendsclearlake-com\\dist",
   "pages": 43,
   "sections": 327,
@@ -92,7 +92,7 @@
       "route": "/products",
       "file": "products/index.html",
       "sections": 6,
-      "bytes": 37932,
+      "bytes": 38354,
       "title": "Eyewear in Clear Lake: Glasses & Contacts | Eye Trends"
     },
     {
@@ -100,7 +100,7 @@
       "route": "/products/contact-lenses",
       "file": "products/contact-lenses/index.html",
       "sections": 5,
-      "bytes": 38664,
+      "bytes": 39095,
       "title": "Contact Lenses in Clear Lake, Fitted in Person | Eye Trends"
     },
     {
@@ -108,7 +108,7 @@
       "route": "/products/designer-frames",
       "file": "products/designer-frames/index.html",
       "sections": 6,
-      "bytes": 40687,
+      "bytes": 51425,
       "title": "Designer Eyeglass Frames in Clear Lake | Eye Trends"
     },
     {
@@ -116,7 +116,7 @@
       "route": "/products/kids-eyewear",
       "file": "products/kids-eyewear/index.html",
       "sections": 6,
-      "bytes": 42507,
+      "bytes": 42919,
       "title": "Kids' Eyewear in Clear Lake, Sized to Fit | Eye Trends"
     },
     {
@@ -124,7 +124,7 @@
       "route": "/products/sunglasses",
       "file": "products/sunglasses/index.html",
       "sections": 5,
-      "bytes": 38623,
+      "bytes": 38990,
       "title": "Prescription Sunglasses in Clear Lake | Eye Trends"
     },
     {

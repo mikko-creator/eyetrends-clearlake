@@ -1,6 +1,6 @@
 {
   "schema": "site-reforge/reforge-build@1",
-  "generated": "2026-10-12T03:07:42.590Z",
+  "generated": "2026-10-12T04:28:59.752Z",
   "dist": "C:\\Users\\Dell\\site-reforge\\eyetrendsclearlake-com\\dist",
   "pages": 43,
   "sections": 327,
@@ -68,7 +68,7 @@
       "route": "/our-doctor",
       "file": "our-doctor/index.html",
       "sections": 8,
-      "bytes": 35491,
+      "bytes": 35803,
       "title": "Dr. Jerry Hyder, OD, Clear Lake Optometrist | Eye Trends"
     },
     {

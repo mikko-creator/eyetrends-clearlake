@@ -245,6 +245,17 @@ revision 13, and `/products/` plus six `/services/` pages since revision 17.
   - Their sections are taller, so the `<source>` declares a 2360px painted width.
 - **CSS:** `system.css` §24.
 
+The **About page's hero** (`/our-doctor/`, revision 22) uses the same 16:9 photo, full width, at
+the operator's request ("I want the improved version of Dr. Hyder's photo utilized and made full
+width"). It had shown the edited portrait framed beside the copy.
+- **From 1025px:** the photo is the section's background, him in the left third, the copy in the
+  right column over a dark gradient that stays clear of him (his face sits at 19–34% of the width,
+  the copy starts at 51%); the copy's colours turn light there only.
+- **Below 1025px:** the light band and the order are kept (eyebrow, heading, photo, paragraph), and
+  the portrait is a full-width band, 4:3 on phones and 2:1 from 768px.
+- **How:** `tools/build.mjs` `reshapeAboutHero` adds `.od-hero--wide` and the `<picture>`, and stops
+  if the hero has no edited portrait; `system.css` §30.
+
 The home page's **kids section** ("The eye doctor your kids will grow up with") was redesigned
 in revision 14:
 - **Desktop (1200px and up):** a full-bleed 16:9 still life, with the text on a frosted-glass

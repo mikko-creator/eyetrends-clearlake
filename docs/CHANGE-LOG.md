@@ -1657,3 +1657,48 @@ copy on the right:
   cards says so, but each reads as a lookalike of its house. The practice should confirm the houses it carries and
   their rules for showing their marks, or swap in official retailer imagery (`NOTICE.md`).
 - **The gradient button** (`.btn-primary`), as before.
+
+---
+
+# Revision 22 — the About page hero: his photograph, full width
+
+> *"update the about us page hero, I want the improved version of Dr. Hyder's photo utilized and made full width"*
+
+**Measured before.** "About Us" is `/our-doctor/`. Its hero (`.od-hero`, the `.bw-founder` layout) already showed
+the edited portrait (revision 12, `data-edited`), but framed beside the copy: copy on the left, the photo in a
+rounded 4:5 frame on the right, 440x360 at 1280 and 561x560 at 1920, with an empty band under it at 1920–2560. On a
+phone it was a rounded 16:10 card between the heading and the paragraph. The image was marked
+`fetchpriority="high"` and `loading="lazy"` at once.
+
+**The change** (`system.css` §30; `tools/build.mjs` `reshapeAboutHero`, `ABOUT_HERO`).
+1. **From 1025px the photograph is the section's full-width background**, served through `<picture>`: the 16:9
+   version of the same edited photograph that the doctor sections use (`dr-hyder-wide-hf*`: him in the left third,
+   his likeness the checked one, face SSIM 0.905 against the original; no new image was made). The copy moves to
+   the right column, as in the doctor sections: the photo has him on the left, and a real person's photograph is
+   not mirrored. cover is anchored at 27% so he stays in the left column.
+2. **A dark gradient behind the copy**, clear of him: measured at 1025–2560, his face sits at 19–34% of the width,
+   his elbow reaches 39–48% and the copy starts at 50.6–51.6%. The gradient is clear to 36% and 86% dark by 49%. A
+   first draft reached 84% only at 56%, and its gold eyebrow measured 4.19:1 at 2560 against the bright frame wall.
+3. **The copy turns light there only:** white heading with "for 42 years" in the site's light gold, light
+   paragraph, quote and signature, and the ghost button's dark variant.
+4. **Below 1025px** the light band and the order stay (eyebrow, heading, photo, paragraph), and the portrait
+   becomes a full-width band with no frame: 4:3 on phones, 2:1 from 768px, his face in the upper third. Its `sizes`
+   is now 100vw.
+5. **The image loads eagerly**: it is the page's first image.
+6. **No word changes.** The build stops if the hero has no edited portrait, and checks it ran once.
+
+## Re-verified
+
+| check | result |
+|---|---|
+| First screen, old → new | **1280x585:** hero 904 → 917px, heading ends at 332 → 362 (above the fold), first button 799 → 829 (below it in both). **1440x900:** heading 349 → 384, button 816 → 851, both above the fold. **1920:** hero 1032 → 1068. **2560:** 1160 in both. **390:** hero 1184 → 1255, the band 354x221 → 390x293. The photograph: a 440x360 frame → the whole 1265x917 section at 1280, 561x560 → 1905x1068 at 1920 |
+| Clearance | The copy starts 34px right of his elbow at 1025, 78px at 1100, 113 at 1280, 228 at 1920, 293 at 2560 |
+| Contrast, on rendered pixels | 9 sizes from 390 to 2560 (81 measurements), worst pixel: heading 11.46:1, eyebrow 6.95, "for 42 years" 6.86 (large text), paragraph 8.07, quote 10.32, signature 7.6; on the light band below 1025, 5.67 and up. Only the known gradient button is lower (2.64, as everywhere). Control: each element's own colour behind it collapses to 1–1.5 |
+| `sizes` against painted width | Every 8px from 1025 to 2560: the 16:9 file paints up to 1766px at 1025–1199 (cover scales it to the section's height), 1685 at 1200–1440, 1905 at 1441–1920, then 99.4vw; declared 1770, 1910, then 100vw, never short. Below 1025 the portrait paints 100vw |
+| Image selection | Never magnified: 390@3x the portrait's 1280 file (0.91), 768@2x its 1600 (0.96), 1025 and 1280@1x the 1920 wide file (0.92, 0.85), 1440@2x the 3840 (0.88), 1920 and 2560@1x (0.99) |
+| Links | Both hero buttons on top at their centres at 1025, 1280x585, 1920 and 390 |
+| Scope | 43 pages differ from revision 21 only in the stylesheet hash; on `/our-doctor/` everything outside `<main>` and every other section is byte-identical, and the hero's text is identical, its markup differing only in the class, the `<picture>`/`<source>`, and the image's `sizes` and `loading`. `system.css` only gains §30, whose 24 selectors all name `.od-hero--wide`, a class on this one page. Refs 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** · build reproducible (two builds hash identically) |
+
+**Trade-offs, measured:** on desktop the heading sits 30–54px lower (the section now has 64–112px of padding
+around the copy, for the photograph); on a phone the band is 72px taller than the old card. At 1025 the
+gradient's edge reaches his outstretched elbow; his face stays clear at every width.

@@ -689,6 +689,43 @@ function ewHousesHTML() {
     + '</div></div>';
 }
 
+// The About page's hero (/our-doctor/, .od-hero; system.css §30). Operator, 2026-10-12:
+// "update the about us page hero, I want the improved version of Dr. Hyder's photo utilized
+// and made full width". The hero already showed the edited portrait (PORTRAIT_SWAP), but
+// framed beside the copy. From 1025px it now shows the same edited photograph at 16:9 - the
+// doctor sections' file (PORTRAIT_SWAP.wide): him in the left third, his likeness the
+// checked one - as the section's full-width background, with the copy on the right. Below
+// that the portrait becomes a full-width band between the heading and the paragraph, so the
+// <img>'s `sizes` is 100vw. It is the page's first image, so it loads eagerly (the source
+// had fetchpriority high beside loading lazy). The section gets .od-hero--wide: the CSS
+// applies only where the build put the wide file in. `sizes` for the wide file is its
+// painted width under cover, measured every 8px from 1025 to 2560 in a desktop window
+// (scratchpad about/paint-about.mjs): the section is taller than 16:9 up to about 1900,
+// so cover scales the photograph to its height - 1766px at most at 1025-1199, 1685 at
+// 1200-1440, 1905 at 1441-1920 - then 99.4vw.
+const ABOUT_HERO = {
+  route: '/our-doctor',
+  media: '(min-width: 1025px)',
+  sizes: '(max-width: 1440px) 1770px, (max-width: 1920px) 1910px, 100vw',
+};
+function reshapeAboutHero(body, route, stats) {
+  if (route !== ABOUT_HERO.route) return body;
+  const sm = /<div class="(rw-sec\b[^"]*\bod-hero\b[^"]*)"/.exec(body);
+  if (!sm) throw new Error('about hero: no .od-hero section on ' + route);
+  const section = sliceBalanced(body, sm.index, 'div');
+  if (!section) throw new Error('about hero: unbalanced .od-hero section');
+  const fm = /<figure class="bw-founder__portrait">\s*(<img\b[^>]*>)/.exec(section);
+  if (!fm || !/dr-hyder-portrait-hf/.test(fm[1])) throw new Error('about hero: no edited portrait in .bw-founder__portrait');
+  const img = fm[1].replace(/\ssizes="[^"]*"/, ' sizes="100vw"').replace(/\sloading="lazy"/, ' loading="eager"');
+  const picture = '<picture class="bw-founder__picture"><source media="' + ABOUT_HERO.media + '" srcset="'
+    + PORTRAIT_SWAP.wide.map((r) => r.href + ' ' + r.w + 'w').join(', ') + '" sizes="' + ABOUT_HERO.sizes + '">' + img + '</picture>';
+  const at = fm.index + fm[0].length - fm[1].length;
+  let sec = section.slice(0, at) + picture + section.slice(at + fm[1].length);
+  sec = sec.replace(/^<div class="rw-sec\b([^"]*)"/, '<div class="rw-sec$1 od-hero--wide"');
+  stats.aboutHeroWide++;
+  return body.slice(0, sm.index) + sec + body.slice(sm.index + section.length);
+}
+
 // The five eyewear heroes, and on /products/designer-frames/ the designer houses, the two
 // material cards and the three looks. Markup only: no source word is touched, and the
 // build stops unless each piece lands exactly where it is meant to.
@@ -1334,7 +1371,7 @@ const stats = { pages: 0, sections: 0, imgMapped: 0, imgUnmapped: [], linksRewri
   assetUrlsRewritten: 0, assetUrlUnmapped: [],
   generatedKept: 0, generatedRevertedToOriginal: [], headingDashesRemoved: [],
   heroSwapped: 0, portraitAdded: 0, portraitSwapped: 0, portraitAltsRewritten: 0, portraitWide: 0, kidsSwapped: 0, innerHeroSwapped: 0, innerHeroSplit: 0, marqueesBuilt: 0, marqueeLogos: 0,
-  ewHeroSwapped: 0, ewHouses: 0, ewCardsSwapped: 0, ewLooksAdded: 0,
+  ewHeroSwapped: 0, ewHouses: 0, ewCardsSwapped: 0, ewLooksAdded: 0, aboutHeroWide: 0,
   doctorStatsRemoved: [], doctorLinkMoved: 0, srcsetAdded: 0 };
 
 const pageRecords = [];
@@ -1357,6 +1394,7 @@ for (const p of seo.pages) {
   body = marqueeHouses(body, stats);
   body = reshapeDoctor(body, stats);
   body = reshapeEyewear(body, p.url.replace(ORIGIN, '') || '/', stats);
+  body = reshapeAboutHero(body, p.url.replace(ORIGIN, '') || '/', stats);
   // the design layer's reveal hook, applied to the source's own reveal targets
   body = body.replace(/\bet-reveal\b/g, 'et-reveal reveal');
 
@@ -1663,6 +1701,8 @@ if (stats.ewHeroSwapped !== EW_HERO.pages.size) throw new Error('eyewear heroes:
 if (stats.ewHouses !== EW_HOUSES.length) throw new Error('designer houses: expected ' + EW_HOUSES.length + ' cards, built ' + stats.ewHouses);
 if (stats.ewCardsSwapped !== EW_CARDS.size) throw new Error('material cards: expected ' + EW_CARDS.size + ', swapped ' + stats.ewCardsSwapped);
 if (stats.ewLooksAdded !== EW_LOOKS.size) throw new Error('looks: expected ' + EW_LOOKS.size + ' photographs, added ' + stats.ewLooksAdded);
+console.log('  about hero          ' + stats.aboutHeroWide + '  (/our-doctor/: the edited photograph at 16:9, full width from 1025px; a full-width band below)');
+if (stats.aboutHeroWide !== 1) throw new Error('about hero: expected 1, reshaped ' + stats.aboutHeroWide);
 console.log('  srcset added       ' + stats.srcsetAdded + '  (' + variantsCopied + ' variant files, '
   + (variantBytes / 1024).toFixed(0) + ' KB)');
 console.log('  doctor stats out   ' + stats.doctorStatsRemoved.length + '  (declared removal)');

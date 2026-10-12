@@ -2337,3 +2337,117 @@ body:not(.pg-home) main > .rw-sec:first-child { padding-top: var(--hero-top, cla
   }
   .rw-sec .tib-collection--photo .tib-collection__note { max-width: 30em; }
 }
+
+/* =========================================================================
+   30 · THE ABOUT PAGE HERO: HIS PHOTOGRAPH, FULL WIDTH
+   =========================================================================
+   Operator, 2026-10-12: "update the about us page hero, I want the
+   improved version of Dr. Hyder's photo utilized and made full width".
+   /our-doctor/ only (.od-hero--wide, added by tools/build.mjs with the
+   <picture>; the section's own classes are unchanged).
+
+   The hero showed his edited portrait framed beside the copy. Now:
+   · From 1025px the <picture> serves the 16:9 version of the same edited
+     photograph (the doctor sections' file: him in the left third, the
+     optical beyond him) as the section's full-width background. The copy
+     moves to the right column, as in the doctor sections (§24): the photo
+     has him on the left, and a real person's photograph is not mirrored.
+     cover is anchored at 27% so he stays in the left column; a gradient
+     in --c-3 darkens the right side behind the copy, whose colours turn
+     light here only.
+   · Below 1025px the section keeps its light band and its order (eyebrow,
+     heading, photograph, paragraph ...), and the portrait becomes a
+     full-width band: no frame, edge to edge, 4:3 on phones and 2:1 from
+     768px, his face in the upper third. */
+.rw-sec.od-hero--wide { overflow: hidden; }
+.rw-sec.od-hero--wide .bw-founder__portrait {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  max-height: none;
+}
+.rw-sec.od-hero--wide .bw-founder__portrait img { transform: none; transition: none; }
+.rw-sec.od-hero--wide .bw-founder__portrait::after,
+.rw-sec.od-hero--wide .bw-founder__portrait:hover::after {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+@media (min-width: 1025px) {
+  .rw-sec.od-hero--wide {
+    --hero-top: clamp(64px, 6vw, 112px);
+    padding-bottom: clamp(64px, 6vw, 112px);
+    background: var(--c-3);
+  }
+  .rw-sec.od-hero--wide .bw-founder {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    min-height: clamp(560px, 44vw, 760px);
+    align-items: center;
+  }
+  .rw-sec.od-hero--wide .bw-founder__copy {
+    grid-column: 2;
+    grid-row: 1;
+    position: relative;
+    z-index: 1;
+  }
+  .rw-sec.od-hero--wide .bw-founder__portrait {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: auto;
+    height: auto;
+    aspect-ratio: auto;
+    margin: 0;
+  }
+  .rw-sec.od-hero--wide .bw-founder__portrait img { object-position: 27% 22%; }
+  /* Measured at 1025-2560: his face sits at x 19-34% of the section, his
+     elbow reaches 39-48%, and the copy starts at 50.6-51.6%. The gradient
+     is clear to 36% and 86% dark by 49%: with the 56% stop of a first draft
+     the copy's start sat on 71%, and the gold eyebrow there measured 4.19:1
+     at 2560 against the bright frame wall. */
+  .rw-sec.od-hero--wide .bw-founder__portrait::after,
+  .rw-sec.od-hero--wide .bw-founder__portrait:hover::after {
+    background:
+      linear-gradient(90deg,
+        color-mix(in srgb, var(--c-3) 0%, transparent) 0%,
+        color-mix(in srgb, var(--c-3) 0%, transparent) 36%,
+        color-mix(in srgb, var(--c-3) 50%, transparent) 42%,
+        color-mix(in srgb, var(--c-3) 86%, transparent) 49%,
+        color-mix(in srgb, var(--c-3) 90%, transparent) 100%),
+      linear-gradient(180deg,
+        color-mix(in srgb, var(--c-3) 30%, transparent) 0%,
+        transparent 18%,
+        transparent 82%,
+        color-mix(in srgb, var(--c-3) 40%, transparent) 100%);
+  }
+  /* the copy on the dark side */
+  .rw-sec.od-hero--wide .bw-founder__kicker { color: var(--c-9); }
+  .rw-sec.od-hero--wide .bw-founder__h { color: var(--c-1); }
+  .rw-sec.od-hero--wide .bw-founder__h .ac { color: var(--c-9); }
+  .rw-sec.od-hero--wide .bw-founder__lede { color: var(--g-on-dark-soft); }
+  .rw-sec.od-hero--wide .od-hero__quote { color: var(--c-7); }
+  .rw-sec.od-hero--wide .bw-founder__sig-name { color: var(--c-1); }
+  .rw-sec.od-hero--wide .bw-founder__sig-role { color: var(--g-on-dark-soft); }
+  .rw-sec.od-hero--wide .btn-ghost {
+    color: var(--c-1);
+    background: color-mix(in srgb, var(--c-1) 8%, transparent);
+    border-color: color-mix(in srgb, var(--c-1) 24%, transparent);
+  }
+  .rw-sec.od-hero--wide .btn-ghost:hover {
+    color: var(--c-1);
+    background: color-mix(in srgb, var(--c-1) 16%, transparent);
+    border-color: color-mix(in srgb, var(--c-1) 40%, transparent);
+  }
+}
+@media (max-width: 1024px) {
+  .rw-sec.od-hero--wide .bw-founder__portrait {
+    width: auto;
+    max-width: none;
+    margin-inline: calc(50% - 50vw);
+    aspect-ratio: 4 / 3;
+  }
+  .rw-sec.od-hero--wide .bw-founder__portrait img { object-position: 50% 18%; }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .rw-sec.od-hero--wide .bw-founder__portrait { aspect-ratio: 2 / 1; }
+}

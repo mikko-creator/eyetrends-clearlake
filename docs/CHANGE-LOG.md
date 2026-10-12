@@ -1568,9 +1568,9 @@ the final build, with the 8px turn window.
 **Measured before.** The probes and their saved output are in `.tmp/session-cc24e987/eyewear/`. The pages under
 Eyewear are the hub `/products/` and the four in its menu. Each opened with the photo in a frame on the left and the
 copy on the right:
-- **The four product pages** (`.tib-hero`): a 5:6 portrait photo up to 600px tall, 509–654px wide at 1440–1920
-  and 847px at 2560, from the source's 1200px uploads (a frame wall, a sunglass wall, a kids' wall, a contact-lens
-  room).
+- **The four product pages** (`.tib-hero`): the source's 1200x1586 portrait photos (a frame wall, a sunglass wall,
+  a kids' wall, a contact-lens room) in a frame set at 5:6 and capped at 600px tall: 513x421 at 1280, 509x600 at
+  1440, then wider than tall, 654x600 at 1920 and 847x600 at 2560.
 - **The hub** (`.et-hero`): `hero-boutique`, a 1024px file, painted 501–835px wide.
 
 **The change** (`system.css` §29; `tools/build.mjs` `EW_HERO`, `EW_HOUSES`, `EW_CARDS`, `EW_LOOKS`,
@@ -1593,6 +1593,8 @@ copy on the right:
      Perreira, Maui Jim and Costa, the source's own lists (the home page's seven logos and this page's five names).
    - Each card is a generated photograph in that house's design language, the house's own wordmark from the source's
      logo files made white (Barton Perreira, with no logo file, set in type), and one line on the house's style.
+     The wordmarks' width-to-height ratios run from 1.7 to 11.5, so their heights scale by (2 / ratio)^0.35, between
+     one height and one visual area, with a soft shadow for the thin ones.
    - Under the cards: *"Photographs are styled to each house's look, not product shots from the houses
      themselves."*
    - The copy is new and claims nothing the source does not: the eyebrow is the home page's heading, and the heading
@@ -1636,6 +1638,7 @@ copy on the right:
 | Alts | Each of the 18 new alts was read against its image; one named a five-barrel hinge the render does not clearly show, and was corrected |
 | Secrets | The staged diff and all 235 new or changed binary files scanned for the Higgsfield key, whole and in parts, and for key-shaped tokens: none. Controls: every check fires on planted copies |
 | Live preview | gh-pages `c28145e`, built from `aadf9e9`. 12 files byte-identical to the build: the five pages, `/eye-health/`, `system.css` and five of the new images. On the live site:<br>• **Images:** the hero never magnifies its file at 390@3x, 768@2x, 1100–1920@1x, 1440@2x or 2560 (0.75–1.00); house cards 0.72–0.95, looks 0.68–0.89.<br>• **Contrast:** the five heroes at 1280 and 1920 (106 measurements), worst pixel 8.0:1 and up; only the known gradient button is lower (2.61).<br>• **Links and reveals:** every hero link on top at 1280x585 and 390 on the hub and the designer-frames page; all 8 house cards reveal on scroll |
+| Independent review | Three refuters on the published build (`wf_17cdb2af-054`), each re-running its own evidence: copy and claims against the source, edge widths (1024–2048 and two phones), and the code. No high findings; the brands, every new string's source support, 14 of the figures above, the regexes, the parallax override, stacking and the badge's right edge all held.<br>• **Acted on:** the widest wordmarks were too thin at equal area (Lindberg 11px tall at 821–1024): heights now scale by (2 / ratio)^0.35 (at 821–1024: Lindberg 13–15px, held to the card's width at 821; Tom Ford 19, Oliver Peoples 21), with a soft shadow, which also lifts the thin Maui Jim script off its photograph. Three comment and wording slips corrected: the photo box is 56.25vw tall (8px more than 16:9 of the section beside a scrollbar), the badge sits at the foot of the photo's box (123–224px above the section's foot at 1200–1440), and the old frame was wider than tall from 1920.<br>• **Left as found:** in a desktop window with a classic scrollbar, the badge sits 7.5px left of the text edge below 1200px (0 on phones); Barton Perreira's name is set in type because the source has no logo file for it; the house photographs are styled after each house's signature look under its real wordmark (see below) |
 
 **Trade-offs, measured:**
 - On desktop the heading sits 31–58px lower at 1280–1920, and 122px at 2560: the photo wants more room above the copy
@@ -1648,6 +1651,9 @@ copy on the right:
 - **The third material card's `sizes`.** The slot's measured values in `audit/image-widths.json` fall short of the
   painted width between 401 and 600px (by up to 120px) and at 1024. The two new cards carry their own; the practice's
   wall photograph keeps the old ones, as does the same slot on other pages.
-- **Brands' rules.** The house cards show real wordmarks beside generated photographs. The practice should confirm the
-  houses it carries and their rules for showing their marks, or swap in official retailer imagery (`NOTICE.md`).
+- **Brands' rules.** The house cards show real wordmarks beside generated photographs that are, on purpose, styled
+  after each house's best-known look (a bold black trapezoid acetate for Ray-Ban, Havana acetate with green lenses
+  for Persol, mirrored polarized wraps for Maui Jim and Costa). They are nobody's product, and a line under the
+  cards says so, but each reads as a lookalike of its house. The practice should confirm the houses it carries and
+  their rules for showing their marks, or swap in official retailer imagery (`NOTICE.md`).
 - **The gradient button** (`.btn-primary`), as before.

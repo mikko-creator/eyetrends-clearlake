@@ -2100,8 +2100,10 @@ body:not(.pg-home) main > .rw-sec:first-child { padding-top: var(--hero-top, cla
     z-index: 1;
   }
   .rw-sec.ew-hero :is(.tib-hero__grid, .row--split-media) > .col:first-child { grid-column: 2; grid-row: 1; }
-  /* The photograph's box is the section's full width and 16:9 tall, capped
-     at the section's height. Where the section is wider than 16:9 (at 1920
+  /* The photograph's box is the section's full width and 56.25vw tall (16:9
+     of the window; with a classic scrollbar that is about 8px more than 16:9
+     of the section, so cover trims about 7px off each side), capped at the
+     section's height. Where the section is wider than 16:9 (at 1920
      and 2560 on these pages; 1.70-1.76 at 1600) that is cover, cropping top
      and bottom.
      Where it is taller (1.36-1.59 wide at 1200-1440, measured), cover
@@ -2139,7 +2141,10 @@ body:not(.pg-home) main > .rw-sec:first-child { padding-top: var(--hero-top, cla
         transparent 72%,
         var(--ew-ink) 100%);
   }
-  /* the badge: at the foot of the section, on the content's right edge */
+  /* the badge: at the foot of the photograph's box, on the content's right
+     edge. Where the box is the section (1920 and up) that is the section's
+     foot; at 1200-1440 the box stops short, and the badge sits 123-224px
+     above the section's foot, on the photograph's faded table (measured) */
   .rw-sec.ew-hero .tib-hero__chip {
     top: auto;
     left: auto;
@@ -2184,7 +2189,9 @@ body:not(.pg-home) main > .rw-sec:first-child { padding-top: var(--hero-top, cla
   /* The badge sat inside the band's lower left and hid part of the eyewear
      (about 28% of the band on a 390px phone). It now straddles the band's
      foot, half on the fade and half on the section, on the text's left
-     edge, and the text below starts clear of it. */
+     edge, and the text below starts clear of it. (In a desktop window with
+     a classic scrollbar it sits 7.5px left of that edge: the band's 100vw
+     includes the scrollbar. 0px on phones.) */
   .rw-sec.ew-hero .tib-hero__media { overflow: visible; }
   .rw-sec.ew-hero .tib-hero__chip {
     top: auto;
@@ -2201,9 +2208,10 @@ body:not(.pg-home) main > .rw-sec:first-child { padding-top: var(--hero-top, cla
    in its house's design language, the house's own wordmark in white and a
    line on its design language (tools/build.mjs, EW_HOUSES). Four across
    from 821px, two below. The wordmarks are black on transparent in the
-   source; brightness(0) invert(1) makes them white. Each carries --h, its
-   height for one shared visual area, and they stand on a common baseline
-   so the notes line up across a row. */
+   source; brightness(0) invert(1) makes them white, and a soft shadow keeps
+   the thin ones (the Maui Jim script) clear of a busy photograph. Each
+   carries --h, its height relative to a 2:1 mark (tools/build.mjs), and
+   they stand on a common baseline so the notes line up across a row. */
 .rw-sec.ew-houses .ew-houses__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2214,7 +2222,7 @@ body:not(.pg-home) main > .rw-sec:first-child { padding-top: var(--hero-top, cla
   .rw-sec.ew-houses .ew-houses__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 .rw-sec .ew-house {
-  --ew-logo: clamp(26px, 2.5vw, 46px);
+  --ew-logo: clamp(28px, 2.6vw, 46px);
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -2264,7 +2272,7 @@ body:not(.pg-home) main > .rw-sec:first-child { padding-top: var(--hero-top, cla
   max-width: 100%;
   object-fit: contain;
   object-position: left bottom;
-  filter: brightness(0) invert(1);
+  filter: brightness(0) invert(1) drop-shadow(0 1px 5px rgb(0 0 0 / .5));
 }
 .rw-sec .ew-house__type {
   font-family: var(--font-display);

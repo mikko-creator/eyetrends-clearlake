@@ -593,9 +593,10 @@ const EW_HERO = (() => {
 // with a photograph in its house's design language (Sunburst, 3:4) and its own wordmark
 // in white. Barton Perreira has no logo file in the crawl, so its name is set in type.
 // The notes describe each house's design language only - no claim about stock, prices or
-// the practice. Wordmarks are sized to one visual area, not one height: their width-to-
-// height ratios run from 1.7 (Persol) to 11.5 (Lindberg), so --h scales each to the
-// height a 2:1 mark would have at the same area.
+// the practice. Wordmarks are not sized to one height: their width-to-height ratios run
+// from 1.7 (Persol) to 11.5 (Lindberg). --h scales each by (2 / ratio)^0.35, between one
+// height (^0) and one visual area (^0.5): at equal area the widest marks came out too
+// thin (Lindberg 11px tall at 821-1024px, in review).
 const EW_HOUSES = [
   { slug: 'ray-ban', name: 'Ray-Ban', logo: 'ray-ban', note: 'Icons in acetate and metal',
     alt: 'Bold black acetate eyeglasses with silver rivets on dark concrete' },
@@ -620,7 +621,7 @@ const EW_HOUSES = [
     const rec = imageMap.get(h.logo);
     if (!rec || rec.generated || !rec.w || !rec.h) throw new Error('designer house logo missing from the source images: ' + h.logo);
     h.logoRec = rec;
-    h.logoH = Math.sqrt(2 / (rec.w / rec.h));
+    h.logoH = Math.pow(2 / (rec.w / rec.h), 0.35);
   }
   return h;
 });

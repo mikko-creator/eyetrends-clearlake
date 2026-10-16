@@ -1857,3 +1857,131 @@ it covers 6–27% of the frame on desktop and 3–14% from 600 to 1024px. On pho
 over its lower half: 16–47% of the frame, and up to 67% at 320. It did the same over the old exam room. Each subject
 is centred, and the badge still covers part of some, such as the foreign-body tray's gauze and magnifier. Moving the
 badge below the photograph would show every picture whole (HANDOFF, known gaps).
+
+---
+
+# Revision 26 — phones: alignment, spacing and padding
+
+> *"I need you to optimize the mobile. There are a lot of alignment, spacing and padding issues in mobile"*
+
+**Measured before.** All 44 pages were captured at 390px in phone emulation (539 tiles of 1100px) and measured at
+360, 390 and 414 for:
+- text that misses the 18px gutter;
+- card padding under 16px, or lopsided;
+- a card mixing centred and left-aligned text;
+- a stack of same-kind boxes at different widths;
+- text blocks touching.
+
+The probe flagged 292 / 106 / 208 / 152 / 948 of these (touching blocks include label/value pairs that touch by
+design); no page scrolled sideways. Eight reviewers then read the captures, a group of pages each, and traced every
+fault to its rule. The faults had two kinds of cause.
+
+1. **Decorations that were never drawn, at every width.** `layout.css` keeps the source's geometry and strips its
+   visuals (revision 2), and some properties that are not visual went with them: `list-style: none`, the `content`
+   of a `::before` bullet, SVG fills, and small backgrounds no other file replaced. A script compared every
+   decoration rule in the source pages' CSS with the built pages: 67 were not rendered at 1280. On a phone they
+   showed as browser bullets 3–8px from the screen edge with the text 28px in, a solid black disc for the map's pin
+   on 21 pages, empty white ovals in front of pill labels, icons floating 10–17px in from their text, review
+   initials with no circle, and long reviews with no "See more" to say they open.
+2. **Phone layout.** Stacks of buttons, tiles and chips each at its own width; the related-care cards' icon,
+   title and link centred over left-aligned text (the phone tap-target rule set `align-items: center` on the whole
+   card); a split row's eyebrow, heading and paragraphs run together as one paragraph below 1025px on seven pages;
+   prose link underlines drawn 14px under the text, through the next line; 60px of padding on every band.
+
+**The change** (`system.css` §33; `chrome.css` §12 and a new §13; no markup, text or image changed).
+
+At every width (these change the desktop too):
+1. **Lists** (`.dc-steps` and four kinds like it, `.od-facts`, `.ia-bring`): teal dots centred on the first line
+   (±1.6px, measured), the browser's disc gone. The legal pages' table of contents loses its discs.
+2. **The map** in the visit card: the source's teal pin and rings and soft roads.
+3. **Dots:** the pill dot (an empty 34x20 oval) is a 7px dot; the topic chips', the designer houses', the home
+   page's plans' and address's dots are drawn.
+4. **Icon tiles** (§11's tile) for the insurance and patient-forms icons, the service heroes' caption chip, the
+   guide and eyewear heroes' badge, and the home page's comparison arrows.
+5. **Reviews:** initials in a teal circle; long reviews say "See more"; every quote is the quote colour (a short
+   review's `<p>` was grey, a long one's `<span>` was not).
+6. **Rules that met:** FAQ answers are text inside their card (`components.css` gave each a glass panel of its
+   own, its text on the panel's left edge); the cataract page's dark band loses a grey-white 92x120px block in its
+   corner (a light seam haze that took the dark edge's geometry); the legal pages' "On this page" label loses a
+   glass chip; "Leave a review" loses the browser's grey button skin; bold text in a dark band takes the band's
+   text colour (the practice name in "Read enough?" was dark ink on 5 pages); the service pages' second section
+   puts its eyebrow under its icon, on the heading's edge (it sat 57px right of it on phones, 81px on desktop).
+7. **Spacing:** a list followed by a paragraph gets 24px (it had 0); the parent-hub card no longer touches the
+   related cards; two pages' visit lists lose a 40px indent and the underlines the other 19 pages' rows do not
+   have; the About hero's quote gets its gold bar.
+8. **Card hierarchy, in the cards fixed here:** the related-care and service cards (a mono eyebrow, display
+   titles, teal links), the stat numbers of the service pages' stat band and of the doctor sections' tiles (the
+   gradient the site's other stat numbers have; `components.css`'s list missed these two), the eyewear and guide
+   cards (`.et-frame`: a mono label, a display title, a teal link on the text edge), the hero photos' caption
+   chips (a display line over a small one), and the dark bands' NAP and "Who I am" links (gold, as the doctor
+   sections' links are; they were plain white text).
+
+Phones (below 641px unless noted):
+9. **Below 1025px:** the seven split rows (five service pages, `/services/` and `/products/`) keep their eyebrow, heading and paragraphs as blocks, in the wrapped rows'
+   order (eyebrow and heading, photo, text). `layout.css` flattens the text column with `display: contents` so a
+   wrapper's children can be ordered around the photo; these columns have no wrapper.
+10. **Rhythm and type:** 48px section padding (60); page headings 29–34px (36), so long ones lose a line or two.
+11. **One width for a stack:** the buttons of a cluster, the service heroes' proof tiles, the credential and
+    feature chips (the brand cloud and topic chips keep wrapping); the home page's plans wrap as chips.
+12. **Alignment:** the related-care cards left-aligned (`chrome.css` §12 no longer centres them); the hub card's
+    text on the cards' edge; the photo hero edge to edge, flush under the header, its text on the gutter; the call
+    links on the copy's edge; "01" beside its icon (below 561px); the photo caption chip inside the frame; the
+    legal table of contents on its label's edge.
+13. **Spacing:** FAQ answers use the card's width; plain lists in prose sit inside the gutter with 10px between
+    items (one page's inline 40px indent is overridden); photos no longer touch the text or each other; the doctor
+    sections open with the portrait and put the stats 24px under the chips, full width; icon cards put the icon
+    above the text; callout labels sit on their own line; the reviews footer, the About page's closing links and
+    signature are columns; NAP rows are even, the phone row with its divider; legal paragraphs 20px apart, 48px
+    before a heading; the empty search results row is gone; "Getting here" stands apart from the card above.
+14. **The footer:** the practice across the top, then the three link columns and the visit block two by two (one
+    column on a 56px pitch ran 1.4 screens); the legal links without an extra row gap.
+15. **Search:** the field and its button share a row.
+
+Up to 1200px:
+16. **Links in running text.** `layout.css` keeps the source's tap rule (below 1201px every `.et-golink` and
+    `tel:` link is a 44px inline-flex box; `chrome.css` §12 makes it 46px below 835px). In a paragraph that box
+    made its line 17–18px taller and put the underline 12–14px under the text. Now such a link is inline, its hit
+    area from padding that does not move the prose, and prose underlines are a real 2px underline under the
+    glyphs, the same colour, gold on hover.
+
+## How it was checked
+
+Five reviewers compared the before and after captures page by page (44 pages), and a refuter re-measured each of
+their medium and high findings on the live builds. They found what this revision had broken, and each was fixed:
+- **The eye-doctor page's reviews footer (high):** a flex trick meant to hide the " · " between two links
+  squeezed both links to 57px, one word a line.
+- **The home page's plans:** in two columns, "Blue Cross Blue Shield" wrapped and its row grew.
+- **The footer:** "two by two" first left Practice alone beside an empty cell.
+- **The legal pages:** the 20px paragraph spacing took the last paragraph's 0 with it.
+- **The red-eye page's list:** 10px item margins on top of the list's own 14px gap.
+
+They also found older faults on phones, fixed in the same pass: the photo hero's pale strips, the macular page's
+indented list, the doctor-band stat numbers at body size, the uneven dark-band NAP, the hub card's 6px jog,
+"Getting here", the About links.
+
+## Re-verified
+
+| check | result |
+|---|---|
+| Fix checks | 20 numeric checks of the fixes, every instance on all 44 pages. **360, 390 and 414: 1,000 instances at each, all pass.** Among them: 57 list items with the dot centred on the first line (±1.6px), 69 related cards with every child on the inner edge (±1px), 110 prose links underlined under the text, 21 paragraphs with a link in running text a whole number of lines tall, 40 button clusters at one width, 79 chip and tile stacks at one width, 86 FAQ answers on their question's edge, 126 bands with 48px padding. **768 and 1024:** every check that applies passes (881). **1280:** the all-width checks pass (874). Before this revision, at 1024, 11 paragraphs had a stretched line and 32 links an underline 12–14px low |
+| Layout probe, 360/390/414 | text off the gutter 292 → 178, card padding 106 → 93, mixed alignment in a card 208 → 24, ragged stacks 152 → 13, touching blocks 948 → 900. No page scrolls sideways, before or after. What remains was looked at: text inside pills measured against the page gutter, label and value pairs that touch by design, inline links counted as stacks, and the off-screen skip link (all 132 "edge" hits) |
+| Page length at 390 | every page is shorter, none longer: 44 pages together 569,800 → 519,457px (8.8% less), from 5.9% on the visit page to 22.2% on the search page |
+| Decorations | of the 67 source decorations the built pages did not render at 1280, 34 render now. The other 33 are left out on purpose: the eyebrow bars (removed on request) and the bars before the table-of-contents label, callout labels and the About kicker; the washes and accent bars of the hero and dark bands, which the redesign replaced; the About timeline's rail (revision 23); the table of contents' numbers; and 22 hairlines, frame borders and plates the redesign does its own way (among them the category cards' ring around their arrow) |
+| Desktop | every element's box and computed style compared with revision 25 at 1280 and 1920 on all 44 pages, the two builds loaded one after the other in one tab: every difference is one of the all-width changes above (40 pages have at least one element whose box changed). Run with the two builds in two tabs at once, the diff also showed a container's margin as 0 in the background tab on 17-18 pages; its box was identical, and the sequential run shows nothing there |
+| Headings | 29px at 360, 30.8 at 390, 32.7 at 414, 34 at 640, 36 from 641 (h1 on 7 page types). The toric page's hero heading went from 7 lines to 5 at 390 |
+| The photo caption chip | 61px tall (81–109). Covers 11–25% of the frame at 360–414 (16–47%), 19–46% at 320 (29–67%), 2–9% at 600–1024 (3–14%), 5–13% at 1280–1920 (8–21%), measured on all 21 pages |
+| Visual review | five reviewers and four refuters (above). 12 findings went to a refuter and all were real on the build the reviewers saw; three were already fixed when their refuter measured. The build that shipped fixes them, apart from a low remainder of one: the eye-doctor page's two review links now wrap as one line of text |
+| Scope | No markup, text or image changed: the 44 HTML pages differ from revision 25 only in the stylesheet hash, `search-index.json` only in its build time, and only `system.css` and `chrome.css` changed. Refs 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** · build reproducible (two builds identical apart from the search index's build time, 559 of 560 files) |
+
+**Left as they were, on purpose:**
+- **Text the source styled that is still body text.** Only the cards fixed here got their hierarchy back. The
+  doctor's name and role in the doctor sections, NAP names, hero sub-paragraphs, the category cards' "Designer /
+  Frames", collection titles, review names, the About hero's "Our doctor" kicker and its quote are still plain 17px
+  text (64 checks at 390). They read as plain, not broken; restyling them changes the desktop (HANDOFF,
+  known gaps).
+- **"Leave a review" does nothing.** It is a `<button>` with no handler, in the source too. It now looks like the
+  links beside it (HANDOFF).
+- The About page's "Who I am" links were white by design in revision 24; they are gold now, as the doctor
+  sections' links are, after both reviewers of that page read them as paragraph text.
+- Smaller things the reviewers saw and that stay: the contact-lens page's closing button has 76px under it; go-links
+  whose label wraps keep their arrow at the far right; one card's link reads just "Dry", as in the source.

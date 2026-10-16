@@ -142,7 +142,8 @@ to 1440px nothing changed: all 44 pages lay out identically at 1440, 1280 and 39
 
 **Internal page heroes are short and spread across the width** (revision 20, `system.css` §28). Every internal
 page's first section starts closer to the header (36–64px, was 95–160), and every internal hero heading shares one
-size: 36px on phones, 44.8 at 1280, 50.4 at 1440, 55.4 at 1920, 62 at 2560. The home hero keeps its own.
+size: 29–34px on phones (30.8 at 390; 36 before revision 26), 36 from 641px, 44.8 at 1280, 50.4 at 1440, 55.4 at
+1920, 62 at 2560. The home hero keeps its own.
 - **The six photo cards** (`/services/` and five service pages): from 1025px the copy is two blocks centred on each
   other, eyebrow and heading on the left (`.ha-hero__lead`), paragraph and buttons on the right (`.ha-hero__side`).
   `tools/build.mjs` (`splitInnerHeroCopy`) adds the two wrappers and stops if the copy is anything but eyebrow,
@@ -193,6 +194,24 @@ size: 36px on phones, 44.8 at 1280, 50.4 at 1440, 55.4 at 1920, 62 at 2560. The 
 Without JavaScript, everything but the menu aim still works. The measurements behind each value are in
 `docs/CHANGE-LOG.md`, revision 19. If the header changes, keep the strip's 180px below the gap between a menu link
 and the Book button (201px at 1041px wide).
+
+**Phones have their own layout rules, and some of the source's decorations are drawn again** (revision 26,
+`system.css` §33, `chrome.css` §12–13; no markup or text changed).
+- **Why decorations went missing.** `layout.css` keeps the source's geometry and strips its visuals, and with them
+  went `list-style: none`, the `content` of `::before` bullets, SVG fills and small backgrounds no other file
+  replaced. §33 part A draws them again at every width: the custom list dots, the map pin, chip dots, icon tiles,
+  review avatars and "See more", plus fixes where two rules met. If you add a component whose source rule has a
+  dot, a bullet or an icon tile, check it renders; `layout.css` alone will not draw it.
+- **Phones (below 641px, part B):** 48px section padding (the `--flow` token), 29–34px page headings, one width
+  for stacked buttons, tiles and chip lists, the related-care cards left-aligned, the photo hero edge to edge, the
+  footer's link columns two by two.
+- **Up to 1200px** (`chrome.css` §12): a link inside running text is inline, with its hit area from padding, so
+  the source's own 44px tap rule no longer stretches its line; prose links get a real 2px underline under the
+  glyphs.
+- **Below 1025px** split rows whose text column has no wrapper keep their eyebrow, heading and paragraphs as
+  separate blocks: `layout.css` flattens that column with `display: contents`, which ran them into one paragraph.
+- One `!important`, on purpose: a step list on `/services/macular-degeneration/` carries the source's inline 40px
+  indent, which only `!important` can override; it is scoped to phones and to that list's attribute.
 
 **Text is verbatim.** Every phrase on the source site appears in this rebuild character
 for character, with three declared exceptions, all listed in `tools/verify-text.mjs` under
@@ -332,7 +351,10 @@ The home page's **quote section** ("In Dr. Hyder's words") was redesigned in rev
 | **The "Book an Eye Exam" gradient button** | `.btn-primary` (226 on the site) puts white text on teal → bright teal (#16B393) → gold. Measured behind its label: 3.08:1 on average, 2.66 at the 95th percentile, the same before and after revision 20, and the same on revision 21's dark eyewear heroes (2.61 at the worst pixel), since it paints its own background. AA asks 4.5:1 at its size. Darkening the gradient's middle stop, or dark text on the light end, would fix it; it is a brand decision, so it was not changed. The service-page proof labels (`.dc-proof__l`) were `--g-fg-faint` (#7C949B) on light glass at 3.04–3.11:1; revision 20 darkened them (6.04–6.25:1). Five other label classes share that colour (`.et-stat__l`, `.ethc-hero__l`, `.od-record__l`, `.bw-stat__l`, `.ia-stat__suf`) and were not re-measured |
 | **Reveal content needs JavaScript** | `.reveal` starts at opacity 0 and `site.js` adds `.in-view` as it scrolls into view. With scripts off, or before the script runs, that content is invisible, including most hero text (measured on five pages at 1440 and 390, in the build before revision 20 too). A `<noscript>` style or a `.js` class on `<html>` that gates the hidden state would fix it |
 | **The service-page hero photos are generated** | Every service page's hero shows a generated still life of its service, with no people (revision 25), and `/services/` a generated room (revision 20). None is the practice's office or equipment (`assets/generated-hf/README.md`). The practice should approve them, or supply its own photographs for the same slots |
-| **The framed hero's badge covers part of the photo** | On the 21 framed service heroes the badge (`.dc-chip`) sits over the photograph's lower left. Measured on all 21 pages, it covers 6–27% of the frame on desktop and 3–14% from 600 to 1024px. On phones up to 414px it spans the frame's width over its lower half: 16–47% of the frame, and up to 67% at 320. It did the same over the old exam-room photo. Each new photograph keeps its subject in the middle, but the badge still covers part of some; the foreign-body tray was mirrored for this (revision 25). Moving the badge below the photo would show every picture whole |
+| **The framed hero's badge covers part of the photo** | On the 21 framed service heroes the badge (`.dc-chip`) sits over the photograph's lower left. Revision 26 drew its two lines as a heading and a small caption (both were 17px body text) and keeps it inside the frame on phones, so it is 61px tall instead of 81–109. Measured on all 21 pages after that: it covers 5–13% of the frame at 1280–1920 (was 8–21%), 2–9% from 600 to 1024px (was 3–14%), 11–25% on phones from 360 to 414px (was 16–47%) and 19–46% at 320 (was 29–67%). Each new photograph keeps its subject in the middle, but the badge still covers part of some; the foreign-body tray was mirrored for this (revision 25). Moving the badge below the photo would show every picture whole |
+| **"Leave a review" does nothing** | On `/reviews/` it is a `<button>` with no handler, in the source too. Revision 26 gave it its neighbours' link style (it had the browser's grey button skin), so it now looks like a working link. Make it a link to the practice's Google review page, or remove it |
+| **Text the source styled that is still body text** | Revision 26 gave back the hierarchy of the cards it fixed (related-care and service cards, stat numbers, eyewear and guide cards, the photo caption chips, the dark bands' NAP links). Other roles the source styled still render as plain 17px text: the doctor's name and role in the doctor sections, NAP and visit-card names, the hero sub-paragraphs, the category cards' "Designer / Frames", the contact-lens collection titles, review names and dates, the About hero's "Our doctor" kicker and its pull quote, among others (64 checks at 390). They read as plain text, not as broken; restyling them changes the desktop, so it is a design decision |
+| **Dividers the source drew** | The source drew a hairline above several blocks (the doctor sections' stats, NAP blocks, review bylines, the About signature, the hero proof row). The redesign draws none of them and keeps their padding on desktop (40px above the doctor stats); on phones revision 26 removes the empty space instead |
 | **The eyewear photos are generated, and the house cards pair real wordmarks with them** | Revision 21. The eight houses are the source's own lists, but the practice should confirm which it carries today. Brands' rules often govern how their marks appear next to other imagery: check them, or swap in a house's official retailer imagery in the same card (`NOTICE.md`, item 2). The line under the cards says the photographs are not the houses' product shots |
 | **The third material card's `sizes`** | On `/products/designer-frames/` the "whole wall" card keeps its slot's measured `sizes` from `audit/image-widths.json`. Revision 21 measured that slot for the two new cards beside it: those values fall short of the painted width between 401 and 600px (by up to 120px) and at 1024. The two new cards carry their own (`EW_SIZES.card`); the third, and the same slot on other pages, were not changed |
 | **Phones magnify the hero crop** | The square crop each of the six photo cards uses up to 820px is 1648px, the largest a 21:9 render holds. A 3x phone paints it at up to 1.7x; the photo there sits under a 74–90% scrim. From 600px up no file is magnified |

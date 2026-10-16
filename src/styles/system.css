@@ -2584,3 +2584,537 @@ body:not(.pg-home) main > .rw-sec:first-child { padding-top: var(--hero-top, cla
         color-mix(in srgb, var(--c-3) 40%, transparent) 100%);
   }
 }
+
+/* =========================================================================
+   33 · PHONES: ALIGNMENT, SPACING AND PADDING, AND THE DECORATIONS THAT
+        WERE NEVER DRAWN
+   =========================================================================
+   Operator, 2026-10-16: "I need you to optimize the mobile. There are a lot
+   of alignment, spacing and padding issues in mobile".
+
+   All 43 pages were captured at 390px and measured at 360, 390 and 414:
+   text off the gutter, cramped or lopsided card padding, one card mixing
+   centred and left-aligned text, ragged stacks, blocks touching. Two kinds
+   of fault came out of it.
+
+   A. AT EVERY WIDTH: decorations that were never drawn. layout.css keeps
+      the source's geometry and strips its visuals, and a few properties went
+      with them that are not visual at all (list-style:none, the content of a
+      ::before bullet, SVG fills), plus small backgrounds no other file
+      replaced. Every source rule was compared with the built pages to find
+      them. What they did:
+      · custom-bullet lists showed the browser's disc 28px left of the text,
+        on a phone 3-8px from the screen edge, and no bullet of their own;
+      · the map's pin and both its rings were one solid black disc, its
+        roads thin black lines;
+      · empty dot boxes pushed chip labels off centre, and the .et-dot inside
+        a pill took the pill's own skin: an empty white oval;
+      · icon boxes with no tile left the glyph 10-17px in from the text it
+        heads; review initials had no circle; the About quote was indented
+        for a gold bar that was not there;
+      · long reviews had no "See more", so nothing said they open;
+      · bold text in a dark band stayed dark ink (the practice name in
+        "Read enough?" was a ghost).
+      Four faults come from rules meeting: components.css gives glass to two
+      things that are not cards (each FAQ answer, inside its FAQ card, its
+      text on the glass's left edge; the legal pages' "On this page" label);
+      on the one dark band that is also a seam (cataract) the seam's white
+      haze took the dark edge's 92px width, a grey-white block in the corner;
+      and §4 made eyebrows inline-flex, so the eyebrow after the second
+      section's inline icon sat 57-81px right of its heading.
+      They are drawn as the source drew them, in this site's colours. The
+      eyebrow bars stay out (removed on request, §4).
+      Some card text was left as body text too. Only the cards fixed here get
+      their hierarchy back: the related-care cards, the service pages' stat
+      band, the eyewear and guide cards (.et-frame), the hero photo's caption
+      chip. Other text roles across the site are left as they are.
+
+   B. PHONES: layout. Below 641px unless a rule says otherwise. */
+
+/* --- A1 · lists with their own bullets ----------------------------------- */
+.rw-sec :is(.dc-steps, .dc-steplist, .dc-cap__steps, .dc-cap__ul, .dc-worries, .od-facts, .ia-bring, .bw-toc__list) {
+  list-style: none;
+}
+.rw-sec :is(.dc-steps, .dc-steplist, .dc-cap__steps, .dc-cap__ul, .dc-worries, .od-facts, .ia-bring) > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  border-radius: 50%;
+  background: var(--g-teal);
+}
+/* centred on the first line: half a line-height down, less half the dot */
+.rw-sec :is(.dc-steps, .dc-steplist, .dc-cap__steps, .dc-cap__ul, .dc-worries) > li::before {
+  top: .56em;
+  top: calc(.5lh - 4.5px);
+  width: 9px;
+  height: 9px;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--g-teal) 15%, transparent);
+}
+.rw-sec .od-facts > li::before {
+  top: .47em;
+  top: calc(.5lh - 6px);
+  width: 12px;
+  height: 12px;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--g-teal) 16%, transparent);
+}
+.rw-sec .ia-bring > li::before {
+  top: .62em;
+  top: calc(.5lh - 3.5px);
+  width: 7px;
+  height: 7px;
+}
+.surface-dark :is(.dc-steps, .dc-steplist, .dc-cap__steps, .dc-cap__ul, .dc-worries, .od-facts, .ia-bring) > li::before {
+  background: var(--g-gold-lit);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--g-gold-lit) 18%, transparent);
+}
+
+/* --- A2 · the legal pages' "On this page" is a label, not a card -------- */
+.rw-sec .bw-toc .bw-toc__title,
+.rw-sec .bw-toc .bw-toc__title:hover {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  transform: none;
+}
+.rw-sec .bw-toc .bw-toc__title::after { content: none; }
+
+/* --- A3 · the map in the visit card ------------------------------------- */
+.rw-sec .ct-find__art { color: var(--g-teal); }
+.rw-sec .ct-find__roads { stroke-width: 12; opacity: .15; }
+.rw-sec .ct-find__road-main { stroke-width: 5; opacity: .32; }
+.rw-sec .ct-find__ping { fill: var(--g-teal); opacity: .12; }
+.rw-sec .ct-find__ping--out { opacity: .06; }
+.rw-sec .ct-find__pin { fill: var(--g-teal); }
+.rw-sec .ct-find__dot { fill: var(--c-1); }
+
+/* --- A4 · dots ---------------------------------------------------------- */
+.rw-sec .et-pill > .et-dot,
+.rw-sec .et-pill > .et-dot:hover {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--g-teal);
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  transform: none;
+}
+.surface-dark .et-pill > .et-dot { background: var(--g-gold-lit); }
+.rw-sec .tib-chip .tib-chip__dot { border-radius: 50%; background: var(--g-gold); }
+.rw-sec .ethc-house .ethc-house__mk { border-radius: 50%; background: linear-gradient(135deg, var(--g-teal-lit), var(--g-gold)); }
+.rw-sec .ethc-plan .ethc-plan__mk { border-radius: 50%; background: var(--g-teal); }
+.rw-sec .ethc-plan--pay .ethc-plan__mk { background: var(--g-gold); }
+.rw-sec .ethc-close__note .dot { border-radius: 50%; background: var(--g-teal); }
+
+/* --- A5 · review initials ----------------------------------------------- */
+.rw-sec .et-avatar {
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  color: var(--c-1);
+  background: linear-gradient(135deg, var(--g-teal), var(--g-teal-deep));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--c-1) 24%, transparent);
+}
+
+/* --- A6 · icon tiles: the §11 tile, at each box's own size -------------- */
+.rw-sec :is(.ia-panel__ic, .ia-link__ic, .ia-heads__ic, .dc-chip__ic, .tib-hero__ring, .ethc-why__arrow) {
+  border-radius: 14px;
+  color: var(--g-teal);
+  background: linear-gradient(150deg, color-mix(in srgb, var(--g-teal-lit) 16%, transparent), color-mix(in srgb, var(--g-gold) 14%, transparent));
+  border: 1px solid color-mix(in srgb, var(--c-1) 70%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--c-1) 90%, transparent);
+}
+.rw-sec :is(.dc-chip__ic, .tib-hero__ring) { border-radius: 11px; }
+.rw-sec .ethc-why__arrow { border-radius: 50%; }   /* turned 90deg on phones */
+.surface-dark :is(.ia-panel__ic, .ia-link__ic, .ia-heads__ic, .ethc-why__arrow) {
+  color: var(--g-gold-lit);
+  background: color-mix(in srgb, var(--c-1) 9%, transparent);
+  border-color: color-mix(in srgb, var(--c-1) 16%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--c-1) 14%, transparent);
+}
+
+/* --- A7 · "Leave a review" is a <button>: it had the browser's own skin -- */
+.rw-sec button.et-golink {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  font-family: inherit;
+  line-height: inherit;
+  cursor: pointer;
+}
+
+/* --- A8 · reviews: long ones say they open; one colour for every quote ---
+   A short review's quote is a <p>, so ".site-content p" (0,1,1) turned it
+   grey; a long one's is a <span> in <summary> and kept the quote colour. */
+.et-review__more > summary { list-style: none; cursor: pointer; }
+.et-review__more > summary::-webkit-details-marker { display: none; }
+.et-review__more > summary::after {
+  content: "See more";
+  display: block;
+  margin-top: var(--ds-space-xs);
+  font-family: var(--font-display);
+  font-size: var(--fs-19);
+  font-weight: 620;
+  letter-spacing: 0;
+  color: var(--g-teal);
+}
+.et-review__more > summary:hover::after { color: var(--g-teal-deep); }
+.et-review__more[open] > summary::after { content: none; }
+.surface-dark .et-review__more > summary::after { color: var(--g-gold-lit); }
+.site-content .et-review p.et-review__q { color: var(--g-fg); }
+
+/* --- A9 · bold text in a dark band: most already had the on-dark colour
+   from its paragraph; one in a NAP block kept §3's dark ink ------------- */
+.site-content .surface-dark :is(b, strong) { color: var(--g-on-dark); }
+
+/* --- A10 · an FAQ answer is text inside its card, not a second card ----- */
+.rw-sec .dc-faq__item > .dc-faq__a {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* --- A11 · no white seam haze on a dark band ---------------------------- */
+.rw-sec.surface-dark.et-band--seam::before { content: none; }
+
+/* --- A12 · two pages build the visit card's rows as a <ul> -------------- */
+.rw-sec ul.dc-visit__list {
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+/* --- A13 · the second section's icon is a block: its eyebrow and heading
+   share one left edge ------------------------------------------------------ */
+.rw-sec .dc-sq__aside > svg { display: block; }
+
+/* --- A14 · the About quote's gold bar ----------------------------------- */
+.rw-sec .od-hero__quote { border-left: 3px solid var(--g-gold); }
+
+/* --- A15 · a list followed by a paragraph: the lists' margin-bottom is 0 -- */
+.rw-sec .dc-prose > :is(ul, ol) + p { margin-top: var(--ds-space-md); }
+
+/* --- A16 · the parent-hub card sat on the related cards with no gap ----- */
+.rw-sec .dc-relrow { margin-top: var(--et-gap); }
+
+/* --- A17 · card hierarchy ------------------------------------------------ */
+.rw-sec .dc-relhub__ey,
+.rw-sec .et-frame__brand {
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--g-teal);
+}
+.rw-sec .dc-relhub__t {
+  font-family: var(--font-display);
+  font-size: clamp(21px, 2.2vw, 28px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -.025em;
+  color: var(--g-fg);
+}
+.rw-sec :is(.dc-rel__t, .et-frame__name, .ha-cond__t):not(h2, h3, h4) {   /* the eyewear hub's are h3s, styled as headings */
+  font-family: var(--font-display);
+  font-size: 18.5px;
+  font-weight: 650;
+  line-height: 1.25;
+  letter-spacing: -.018em;
+  color: var(--g-fg);
+}
+.rw-sec :is(.dc-relhub__go, .et-frame__add) {
+  font-size: var(--fs-19);
+  font-weight: 620;
+  color: var(--g-teal);
+}
+.rw-sec .et-frame__add { gap: var(--sp-19); padding-inline: 0; }
+.rw-sec .dc-relhub:hover .dc-relhub__go,
+.rw-sec .et-frame__add:hover { color: var(--g-teal-deep); }
+.surface-dark :is(.dc-relhub__ey, .et-frame__brand, .dc-relhub__go, .et-frame__add) { color: var(--g-gold-lit); }
+.surface-dark :is(.dc-relhub__t, .dc-rel__t, .et-frame__name, .ha-cond__t) { color: var(--c-1); }
+/* a second link in the visit card (one page) */
+.rw-sec .dc-visit__more { font-size: var(--fs-19); font-weight: 620; color: var(--g-teal); }
+.rw-sec .dc-visit__more:hover { color: var(--g-teal-deep); }
+/* the visit card's rows are not prose: on the two pages that build them as
+   <li>, §3's "li > a" underline gave their links one that the <div> rows on
+   the other 19 pages do not have */
+.site-content .dc-visit .dc-visit__list li.dc-visit__row > a {
+  box-shadow: none;
+  background-image: none;
+  text-decoration: none;
+}
+/* the dark "Read enough?" band's NAP: its links were plain white text */
+.surface-dark .tib-creed__nap a { color: var(--g-gold-lit); font-weight: 620; }
+.surface-dark .tib-creed__nap a:hover { color: var(--c-1); }
+/* the About page's "Who I am" links, likewise: §32 made them white, gold on
+   hover, and they read as more paragraph text; the doctor sections whose
+   design that section takes give their links the gold */
+.rw-sec.od-biosec--wide .bw-team__contact a { color: var(--g-gold-lit); font-weight: 620; }
+.rw-sec.od-biosec--wide .bw-team__contact a:hover { color: var(--c-1); }
+/* a go-link's arrow keeps its size when the label wraps */
+.rw-sec .et-golink > svg { flex: none; }
+/* the home page's address line: the dot on its first line */
+.rw-sec .ethc-close__note { align-items: flex-start; }
+.rw-sec .ethc-close__note .dot { margin-top: .6em; margin-top: calc(.5lh - 3.5px); }
+/* the numbers of the service pages' dark stat band and the doctor bands'
+   stat tiles: numbers, not a line of body text. components.css gives the
+   site's other stat numbers this treatment (§9); these two were not in its
+   list */
+.rw-sec :is(.dc-stat__k, .et-stat__k) {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(30px, 3.6vw, 46px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -.035em;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(100deg, var(--g-gold-lit), var(--g-teal-lit));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.rw-sec .et-stat__k .et-suf { font-size: .5em; letter-spacing: 0; margin-left: .08em; }
+/* the caption chips on the hero photos: a display line over a small one
+   (the product heroes' chip is dark glass, so its colours are inherited) */
+.rw-sec .tib-hero__chip b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -.015em;
+}
+.rw-sec .tib-hero__chip b + span {
+  display: block;
+  margin-top: 2px;
+  font-size: 12.5px;
+  line-height: 1.35;
+  opacity: .8;
+}
+.rw-sec .dc-chip__k {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -.015em;
+  color: var(--g-fg);
+}
+.rw-sec .dc-chip__l {
+  display: block;
+  margin-top: 2px;
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: var(--g-fg-soft);
+}
+
+/* --- B · phones ---------------------------------------------------------- */
+
+/* B1 · below 1025px a split row stacks and layout.css flattens its text
+   column (display:contents on the column AND its children), so a wrapper's
+   children can be ordered around the photo. Where the column has no
+   wrapper, the flattened children are the eyebrow, heading and paragraphs
+   themselves: their text ran together as one paragraph (seven pages:
+   .ha-depth on five card services and /services/, and /products/). Their
+   boxes come back, in the order the wrapped rows use: eyebrow and heading,
+   photo, text. A go-link in a flattened column no longer stretches across
+   it, so its underline is as long as its text. */
+@media (max-width: 1024px) {
+  .rw-sec .row--split-media > .col:last-child > :is(p, h2, h3, ul, ol) {
+    display: block;
+    margin-block: 0;
+  }
+  .rw-sec .row--split-media > .col:last-child > :is(.et-eyebrow, .et-h2, .et-h3) { order: -1; }
+  .rw-sec .row--split-media > .col:last-child > :is(p, ul, ol):not(.et-eyebrow) { order: 1; }
+  .rw-sec .row--split-media .et-golink { justify-self: start; }
+  .rw-sec .et-lede + .bw-legal__effective { margin-top: var(--ds-space-sm); }
+}
+
+@media (max-width: 640px) {
+  /* B2 · rhythm: 60px above and below every band put 120px between two
+     light blocks on a 390px screen */
+  :root { --flow: 48px; }
+
+  /* B3 · page headings: 36px broke the long ones into 5-7 short lines */
+  .rw-sec :is(.ha-hero__h, .dc-hero__h, .ct-hero__h, .tib-hero__h, .et-hero__h, .bw-founder__h, .et-h1) {
+    font-size: clamp(29px, 7.9vw, 34px);
+    line-height: 1.08;
+  }
+  .rw-sec :is(.et-eyebrow, .ha-hero__eyebrow) { text-wrap: balance; }
+
+  /* B4 · the dark photo hero runs edge to edge: no card corners at the
+     screen's edges and no pale strips above and below it, the text on the
+     page's gutter, the eyebrow close to its heading, the call link on the
+     copy's edge */
+  .rw-sec.ha-hero { --hero-top: 0px; padding-bottom: 0; }
+  .rw-sec.ha-hero .ha-hero__stage { border: 0; border-radius: 0; }
+  .rw-sec.ha-hero .ha-hero__inner { padding-inline: var(--gutter); }
+  .rw-sec.ha-hero .ha-hero__h { margin-top: 0; }
+  .rw-sec :is(.ha-hero__call, .tib-herocall, .ethc-herocall, .et-hero__call) { padding-inline: 0; }
+
+  /* B5 · buttons in a stack are one width; the hero proof tiles too */
+  .rw-sec :is(.et-cta-cluster, .ha-hero__cta) > .btn { flex: 1 1 100%; justify-content: center; }
+  .rw-sec.dc-hero .dc-proof {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  /* B6 · stacks of chips and points that never share a row: one even column
+     instead of a staircase of widths */
+  .rw-sec:is(.surface-dark, .et-band--dark) .et-chips,
+  .rw-sec .ia-trust__stats .et-chips,
+  .rw-sec :is(.dc-cap__list, .tib-creed__chips, .ethc-points, .tib-fit__points) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+  /* the home page's ten plans: a wrapping row of chips at their own widths,
+     as the plan lists on the other pages are, not ten full-width rows (two
+     columns were tried: "Blue Cross Blue Shield" wrapped and its row grew) */
+  .rw-sec .ethc-plans { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  /* B7 · the second section of a service page: icon, eyebrow and heading
+     on one edge, the heading near its text */
+  .rw-sec .dc-sq__aside > svg { margin-bottom: 14px; }
+  .rw-sec .row--split:has(> .col > .dc-sq__aside) { row-gap: 14px; }
+
+  /* B8 · related care: cards left-aligned (chrome.css §12 no longer centres
+     them), the hub's text on the same edge as the cards under it (its 24px
+     padding against their 18px put a 6px jog down the stack), its link on
+     that edge */
+  .rw-sec .dc-relhub { row-gap: 14px; padding: clamp(18px, 2vw, 24px); }
+  .rw-sec .dc-relhub__go { padding-inline: 0; }
+
+  /* B9 · FAQ answers take the card's width (the right padding is the
+     question's +/- column) */
+  .rw-sec .dc-faq__item > .dc-faq__a { padding-right: 0; }
+
+  /* B10 · plain lists inside prose: bullets and numbers inside the gutter
+     (the browser's 40px put them 22px past the paragraphs), items apart */
+  .rw-sec .dc-prose > :is(ul, ol):not([class]) { padding-left: 1.4em; }
+  .rw-sec .dc-prose > :is(ul, ol):not([class]):not([style*="display:grid"]) > li + li { margin-top: 10px; }
+  /* one page's step list carries the source's inline 40px indent */
+  .rw-sec .dc-prose > ul.dc-steps[style*="padding-left"] { padding-left: 0 !important; }
+  /* the patient-forms list sat 38px under the sentence that introduces it */
+  .rw-sec .ia-panel__note + .ia-bring { margin-top: 0; }
+
+  /* B11 · photos that touched the text above or each other */
+  .rw-sec .dc-pillhead > .dc-frame { margin-top: var(--ds-space-md); }
+  .rw-sec .dc-frame + .dc-frame { margin-top: 14px; }
+
+  /* B12 · the dark stat band's labels use the column */
+  .rw-sec .dc-stat__l { max-width: none; }
+
+  /* B13 · doctor sections: the full-bleed portrait opens the band, the
+     stats sit under the chips and fill the column */
+  .rw-sec.et-doctor:has(.row--split .et-doctor__media) { padding-top: 0; }
+  .rw-sec.et-doctor .et-doctor__stats { margin-top: 24px; padding-top: 0; gap: 12px; }
+  .rw-sec.et-doctor .et-doctor__stats > .et-stat { flex: 1 1 100%; }
+  .rw-sec.et-doctor .et-stat__l { max-width: none; }
+
+  /* B14 · cards with an icon column: the icon above, the text full width */
+  .rw-sec .ha-cond:has(> .ha-cond__ic) { flex-direction: column; gap: 14px; }
+  .rw-sec .ia-heads { flex-direction: column; gap: 12px; }
+  .rw-sec .ia-panel__head { gap: 12px; }
+
+  /* B15 · labels that ran into their sentence */
+  .rw-sec .ia-callout__k { display: flex; margin: 0 0 8px; }
+
+  /* B16 · reviews: footer on one edge; the quote's own margin goes (the
+     long reviews have none) */
+  .rw-sec .et-reviews__foot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .rw-sec .et-review p.et-review__q:not(.et-review__rest) { margin-bottom: 0; }
+
+  /* B17 · the guide library: a 264px band of empty icon per card */
+  .rw-sec .et-frame__media:has(> svg) { aspect-ratio: auto; height: 150px; }
+  .rw-sec .et-frame__media > svg { width: 80px; height: 80px; }
+  /* the eyewear hub cards' foot: the link, then the note under it */
+  .rw-sec .et-frame__foot { flex-direction: column; align-items: flex-start; gap: 4px; }
+
+  /* B18 · the product heroes: the eyebrow with its heading */
+  .rw-sec.tib-hero .tib-hero__h { margin-top: 0; }
+
+  /* B19 · the category cards' arrow on the card's padding edge */
+  .rw-sec .et-cat__arrow { width: 18px; height: 18px; }
+
+  /* B20 · service cards: the link near its text */
+  .rw-sec .et-svc { gap: 10px; }
+  .rw-sec .et-svc__foot { padding-top: 0; }
+
+  /* B21 · About page */
+  .rw-sec .od-close__links { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .rw-sec .bw-founder__sig {
+    margin-top: 20px;
+    padding-top: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  /* B22 · NAP blocks: the phone between the address rows is a row too (it
+     sat 5px from the next one with no divider); in the dark bands the
+     eyebrow sits close to the lead (with no heading between, its margin and
+     the lead's added up to 42px) */
+  .rw-sec .tib-creed__nap { gap: 8px; }
+  .rw-sec .tib-creed__copy > .et-eyebrow + .tib-creed__q { margin-top: 0; }
+  .rw-sec .ha-nap > .ha-nap__phone {
+    margin: 0 0 18px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-3) 9%, transparent);
+  }
+
+  /* B23 · legal pages: paragraphs of one section closer than the sections
+     (the last keeps layout.css's 0, or it adds to the section's padding);
+     their table of contents on the label's edge */
+  .rw-sec .bw-legal p:not(:last-child) { margin-bottom: 20px; }
+  .rw-sec .bw-legal h2 { margin-top: 48px; }
+  .rw-sec .bw-legal__callout { padding: 18px; }
+  .rw-sec .bw-toc .bw-toc__link { padding-inline: 0; }
+
+  /* B24 · search: no empty results row before a search */
+  .rw-sec .row:has(.search-results:empty) { display: none; }
+
+  /* B27 · the one heading set between two rows of cards ("Getting here")
+     touched the card above it */
+  .rw-sec .container > .row + .et-h3 { margin: 40px 0 14px; }
+}
+
+/* B25 · numbered rows: the number and its icon side by side on the left,
+   above their left-aligned text (layout.css stacks the row at 560px) */
+@media (max-width: 560px) {
+  .rw-sec .dc-pill__badge {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+  /* the hero photo's caption chip: inside the frame on both sides */
+  .rw-sec .dc-chip { max-width: calc(100% - 2 * clamp(12px, 4vw, 16px)); }
+}
+
+/* B26 · the comparison cards' arrow turns down below 769px: its tile on the
+   text edge */
+@media (max-width: 768px) {
+  .rw-sec .ethc-why__arrow { justify-self: start; }
+}

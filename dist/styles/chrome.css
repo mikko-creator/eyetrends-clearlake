@@ -509,8 +509,13 @@ body.nav-open { overflow: hidden; }
 
      An anchor that contains a picture, a heading or a card sub-element is a
      card, not a text link, and keeps its own display. The :has() test is the
-     rule; .et-cat is named as well so the intent survives a markup change. */
-  .rw-sec a[class]:not(.btn):not(.et-cat):not(:has(img, picture, h2, h3, h4,
+     rule; .et-cat is named as well so the intent survives a markup change.
+     Revision 26 (system.css §33) names three more that the test misses: the
+     related-care cards (.dc-rel, a flex column, and .dc-relhub), whose
+     icon, title and link this rule centred while wrapped descriptions stayed
+     left, and the legal pages' table-of-contents rows, shrink-wrapped here
+     to their text. One :not() for the list keeps the specificity it had. */
+  .rw-sec a[class]:not(.btn):not(.et-cat, .dc-rel, .dc-relhub, .bw-toc__link):not(:has(img, picture, h2, h3, h4,
     [class*="__scene"], [class*="__media"], [class*="__body"], [class*="__scrim"])),
   .rw-sec div > a:not([class]) {
     display: inline-flex; align-items: center;
@@ -519,9 +524,76 @@ body.nav-open { overflow: hidden; }
   .rw-sec p > a:not([class]), .rw-sec li > a:not([class]), .foot-blurb a {
     padding-block: var(--sp-33); margin-block: -14px;   /* hit area without moving prose */
   }
+  /* the legal links wrap 3 + 1: their 46px tap height is the row spacing */
+  .foot-legal nav { row-gap: 0; column-gap: 20px; }
   .brand { min-height: 46px; }
   .head-search { width: 46px; height: 46px; }
   .burger { min-height: 46px; min-width: 46px; justify-content: center; }
   .hp input, .hp label { width: 46px; height: 46px; }
   .search-panel { top: 66px; }
+}
+/* Links in running text, up to 1200px (revision 26, system.css §33).
+   layout.css keeps the source's own tap rule (max-width:1200px), which makes
+   every .et-golink and tel: link a 44px inline-flex box; the rule above makes
+   it 46px below 835px. Inside a paragraph that box made its line 17-18px
+   taller than the others, and the prose underline (an inset shadow at the
+   bottom of the box, system.css §3; on a padded link, of the padding) sat
+   12-14px under the text, through the next line where a link wrapped.
+   Measured before: at 390, links 14px low on every page with prose links;
+   at 1024, 11 paragraphs with a stretched line and 32 links 12-14px low.
+   · A link in running text is inline again; the hit area is padding that
+     does not move the prose, as for plain prose links above.
+   · The line is a real underline, which sits under the glyphs whatever the
+     box: the same 2px and colour, gold on hover. Above 1200px the links are
+     inline with no padding, and §3's shadow line is right there. */
+@media (max-width: 1200px) {
+  .rw-sec p:is(.et-lede, .ha-fine, .dc-faq__a) > a[class]:not(.btn):not(.et-cat),
+  .rw-sec p > a[href^="tel:"]:not([class]) {
+    display: inline;
+    min-height: 0;
+    padding-block: var(--sp-33);
+    margin-block: -14px;
+  }
+  .rw-sec p:is(.et-lede, .ha-fine, .dc-faq__a) > a[class]:not(.btn):not(.et-cat) > svg {
+    display: inline-block;
+    vertical-align: -.15em;
+    margin-left: .35em;
+  }
+  .site-content :is(p, li) > a:not(.btn):not(.bw-toc__link),
+  .site-foot .foot-blurb a {
+    box-shadow: none;
+    background-image: none;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+    text-decoration-color: color-mix(in srgb, var(--c-2) 22%, transparent);
+  }
+  .site-foot .foot-blurb a { text-decoration-color: color-mix(in srgb, var(--c-9) 30%, transparent); }
+  .site-content :is(p, li) > a:not(.btn):not(.bw-toc__link):hover,
+  .site-foot .foot-blurb a:hover { text-decoration-color: var(--g-gold); }
+  /* The dark bands' NAP block: its two links were 44-46px boxes between 28px
+     lines 8px apart, so the gaps around them read 17 and 26px. Same hit
+     area, from padding that does not move the rows. */
+  .rw-sec .tib-creed__nap a:not([class]),
+  .rw-sec .tib-creed__nap a[class][href]:not(.btn):not(.et-cat) {
+    min-height: 0;
+    padding-block: 9px;
+    margin-block: -9px;
+  }
+}
+
+/* ------------------------------------------------- 13 · PHONES (system §33) */
+/* One column of 14px links on a 56px pitch (46px tap height + 10px gap) ran
+   about 1.4 screens: the practice's name and blurb across the top, then the
+   three link columns and the visit block two by two, and the tap height is
+   the spacing. */
+@media (max-width: 580px) {
+  .foot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 20px; }
+  .foot-grid > .foot-brand { grid-column: 1 / -1; }
+  .foot-col { gap: 0; }
+}
+/* The search button wrapped under the full-width field at its own width. */
+@media (max-width: 640px) {
+  .search-form { flex-wrap: nowrap; }
+  .search-form input { flex: 1 1 0; min-width: 0; }
 }

@@ -1972,6 +1972,7 @@ indented list, the doctor-band stat numbers at body size, the uneven dark-band N
 | The photo caption chip | 61px tall (81–109). Covers 11–25% of the frame at 360–414 (16–47%), 19–46% at 320 (29–67%), 2–9% at 600–1024 (3–14%), 5–13% at 1280–1920 (8–21%), measured on all 21 pages |
 | Visual review | five reviewers and four refuters (above). 12 findings went to a refuter and all were real on the build the reviewers saw; three were already fixed when their refuter measured. The build that shipped fixes them, apart from a low remainder of one: the eye-doctor page's two review links now wrap as one line of text |
 | Scope | No markup, text or image changed: the 44 HTML pages differ from revision 25 only in the stylesheet hash, `search-index.json` only in its build time, and only `system.css` and `chrome.css` changed. Refs 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** · build reproducible (two builds identical apart from the search index's build time, 559 of 560 files) |
+| Live preview | gh-pages `035596a`, built from `21402f3`. Ten files byte-identical to the build: both changed stylesheets and eight pages (home, `/services/`, adult exams, `/products/`, the About page, reviews, terms, the visit page); the stylesheets differ from `dist` only by the preview's `/eyetrends-clearlake/` prefix. On the live pages at 390 the fix checks pass on five pages (113 instances) |
 
 **Left as they were, on purpose:**
 - **Text the source styled that is still body text.** Only the cards fixed here got their hierarchy back. The

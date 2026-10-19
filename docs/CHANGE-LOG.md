@@ -2110,3 +2110,105 @@ The refuters also found faults the reviewers had missed, and each is fixed:
 - **The doctor sections' caption and eyebrow** sit 24px apart, the reference's column gap. One reviewer read them
   as close; the other refuter called the gap right.
 - **Wide phones and small tablets** (431–700px) hold the 430px sizes, so a heading steps down at 701px.
+
+---
+
+# Revision 28 — phones: the UXCam mobile UX guide, applied
+
+> *"I'm still not happy with the mobile view of this. Can you use this blog as reference? Review all the contents of
+> this blog and apply what you learn in fixing the mobile view for eyetrends https://uxcam.com/blog/mobile-ux/"*
+
+**The reference.** "Mobile UX Design: A Complete Guide for 2026" (UXCam; updated 22 April 2026), read in full: about
+2,500 words and five figures. Its parts are what mobile UX is; why it matters; eight differences from desktop; ten
+principles; the mistakes it sees most often; and how to check with data. Each rule that applies to a phone website
+became a measurement. All 44 pages were measured before anything changed, at 390x664 (an iPhone in Safari) and
+360x640 (a small Android). The changes apply up to 700px wide, the phone breakpoint since revision 27. Wider screens
+are unchanged (measured, below), apart from two fixes for phones on their side.
+
+**The change.**
+- `system.css` §35, `chrome.css` §15 and edits to §14.
+- `src/scripts/site.js` sections 5, 6, 7, 9 and 10.
+- `tools/build.mjs`: the phone menu, the action bar, the form's attributes, "Leave a review", `data-long` and
+  `data-solo`, the script hashes, and the phone logo's `<source>` up to 700px.
+- A new `tools/hover-gate.mjs`.
+- No word of the practice's changed.
+
+| The guide says | Measured before | What changed |
+|---|---|---|
+| "Primary actions should fall in the bottom two-thirds of the screen where thumbs reach easily"; bottom navigation beats top | 34 of 44 pages had no booking or call button on the first screen at 390 (40 at 360). The only call link on a phone was the top strip's, in the corner a thumb reaches worst | An **action bar** at the bottom of the phone screen: **Call** (a secondary pill) and **Book an Eye Exam** (the primary button). It steps aside while half of one of the page's own primary buttons is on screen, while the booking form shows, while a field has the keyboard up, and while search or the menu is open. At load it waits out the hero's 0.7s reveal before deciding |
+| "Critical content must fit above the fold" | The top strip and header took 111px of a 664px screen. Page headings ran to 7 lines | The top strip is gone on phones (its call link is the bar's Call), so content starts at 75px. The 20 page headings over 80 characters are 30px (34.76): 5 lines at most from 360px |
+| "One primary action per screen. Secondary actions clearly secondary" | No screen held two primary buttons | Still none with the bar. In the service heroes, the three facts under the Book and Call buttons are a plain list instead of glass tiles shaped like those buttons |
+| Tap targets "at least 44pt ... 48dp" | 1,299 of the links, buttons and fields were under 48px at 390 (985 under 44; 1,255 at 360). Footer, legal and menu links were 40px, search 44, the menu button 46, the hero call links 32 (their padding past the link's line took no taps) | Every link, button and field that stands alone has a 48px tap area. Links inside running text keep a hit area the height of their own line. With 14px of padding, a link on one line took taps meant for the link above: a third of "Seniors" opened "macular degeneration" |
+| "Tiny text: below 14pt is hard to read" | 1,353 pieces of text in 39 kinds at 11.5–13.76px. The faint grey was 3.05:1 | No text under 14px. Spaced capitals wrap no more than before: eyebrows and mono labels at `.14em` (`.2em`), stat labels at `.05em` (`.1em`). The faint grey is #5A7279 on phones (4.9:1), and "yrs" is solid instead of gradient |
+| Mega menus "usually don't translate to mobile"; "no third-level navigation"; "hamburger menus ... hurt discoverability" | The menu listed all 38 links: 2.8 screens at 390, 5.3 on its side | The seven main links and Book; Services and Eyewear show their pages behind a chevron button. One screen at 390, 1.8 on its side. The menu button says **Menu** (Close while open). The current page and its section are teal |
+| "Respect the back button" | Back with the menu or search open left the page | Back closes the menu or the search panel, which share one history entry. Closing either by its button leaves no extra step. A menu link or a search goes, and one Back returns |
+| "Unfamiliar affordances create friction"; dead clicks, "taps on elements that aren't interactive" | 336 pill-shaped things were not links. "Leave a review" was a button that did nothing | Chips that are not links are lists, each with its dot, tick or icon, in the running text's colour: feature tags, ticked points, insurance plans, the home hero's services, the designer frames page's houses. Links that look like chips stay buttons. Kept, because they read as labels: badges and captions printed on photos, reviewer initials, the home logo strip. "Leave a review" opens the practice's Google reviews (the source's own link on three pages) |
+| "Hover states don't exist on mobile" | 312 hover selectors, none limited to devices that hover. A tap left 63 of 75 sampled elements in their hover look | `tools/hover-gate.mjs` puts every hover style behind `@media (hover: hover)` as the build writes the stylesheets. Taps leave 0 of 75 changed. With a mouse, hover is unchanged (below) |
+| "Use appropriate keyboards ... Offer autofill"; errors that say "what went wrong ... and what to do next"; never reject valid input; "Save state generously" | No autofill hints, and no messages: an empty form went straight to the not-connected note | **Autofill hints:** name, phone and email carry them, with a Next key.<br>**Messages:** a missing name or phone, a number under 7 digits or an incomplete email gets a message under its field saying what to do, and the first problem takes the focus. Any format with 7 or more digits passes (+44 20 7946 0958 does).<br>**Saved progress:** what is typed is kept for the tab and put back on any page |
+| Portrait first, landscape "a special case" | On its side, the top strip and header took 122–144px (up to 35% of the screen). From 701 to 1040px the open menu covered the header, close button included | **On short screens on their side:** no top strip, and no bar on phones under 700px wide.<br>**Open menu:** the header stays over it at every width the menu button shows.<br>**601–700px wide** (phones on their side) get the phone logo; the desktop one was squeezed to an unreadable 4px tagline |
+
+**Already right, left alone:**
+- no pop-ups or permission prompts;
+- pull-to-refresh works (`overscroll-behavior` is `auto`);
+- no page scrolls sideways;
+- no field rejects valid input;
+- fields are 16px or more, so iOS does not zoom on focus;
+- the main content appears at 2.35–2.6s on a mid-range phone over slow 4G (live preview).
+
+**Not done, and why:**
+- **Offline caching.** A caching service worker could serve old pages while the preview changes, and the phone number
+  and address are in every page's HTML.
+- **Analytics or session replay.** The site ships no tracking, by design.
+
+Both are the practice's call.
+
+**What the review changed.** Four reviewers read the 390px captures of all 44 pages (133 contact sheets plus the
+first and a mid-page screen of each) against the guide, and checked their findings on the served build. They reported
+36 findings, 12 of them medium or high. A refuter per group re-measured each medium or high one on the same build:
+- three groups: 7 confirmed and 1 refuted (the hero facts, which the refuter read as stat cards);
+- the fourth group's refuter was interrupted, so I re-measured its 4 findings myself, each with a control.
+
+Fixed, with the evidence before and after:
+- **Back-to-top** (high, three reviewers) sat over the open menu's Book button and over the form's fields and the
+  FAQ toggles, and took their taps. On a phone it now shows only while the page is scrolled back up (and 1.5s
+  after), never while the bar steps aside, and never over the menu.
+- **The bar at load** covered a hero's primary button that opened in its band (the emergency page's Call), or
+  showed and then left as the hero slid in: 5 of 8 pages flashed. Now 0 of 44 at 390 and at 360 (below).
+- **Neighbouring links** in running text took each other's taps: 6 links on the visit page. Now 0.
+- **Too faint:** "Read on Google" and the search panel's close (3.11 and 3.12:1), and "yrs" (2.85:1). Now 4.96 and
+  4.98:1, with "yrs" in solid teal.
+- **Search:** Back left the page, and its close button was 31x34px. Now Back closes it, and the button is 48x48.
+- **Look-alikes:** the designer frames page's houses were five white pills that did nothing; they are a list now.
+- **Wrapping and spacing:** stat labels wrapped more at 14px (34 against 28 at 390); with `.05em`, 30.
+- **Lists and badges:** the lists that were chips, in the links' teal, looked like links. The home page's arrow
+  badge looked like a button. Arrows on wrapped card labels sat up to 94px from their text.
+- **Small phones on their side:** the bar made the header and bar 140px of a 360px screen.
+
+**Left as they were, offered:**
+- **The phone logo's faint box.** All four reviewers noticed it: the practice's lockup file carries a 33% white
+  fill, which shows as a pale rectangle in the header. It predates this revision. Fixing it means re-exporting the
+  logo.
+- **Content and markup from the source:**
+  - sibling pages draw the same step list with different bullets;
+  - two pages use different icons for the same link;
+  - "Reorder Contacts Online" links to the booking form;
+  - "Read the guide" puts its arrow before the text;
+  - the visit card's address is not a link;
+  - opening hours can break inside a time ("6:30 / PM").
+- **The gradient button.** Its white label measures about 2.7–3.1:1 site-wide (since revision 20). The bar now shows
+  one on most phone screens. A darker gradient would change the brand's button everywhere.
+- **Long section headings.** At the reference build's size, compound words still break at their hyphens.
+
+## How it was checked
+
+| check | result |
+|---|---|
+| The guide's probe: all 44 pages at 390x664, 360x640 and 412x780 | **Text under 14px:** 0 (1,353 at 390 before).<br>**Form fields under 16px:** 0.<br>**Tap targets under 48px:** 0 of 2,183 (before, 1,299 of the links, buttons and fields at 390, form labels left out both times).<br>**Taps a neighbour takes:** 0, both at each target's centre and on a 5x3 grid over each target's own words (the review's method; 6 links on the visit page on the reviewed build).<br>**Screens with two primary buttons:** 0 at all three sizes (a button counts once half of it is on screen under the header, the bar's own rule).<br>**Look-alikes:** only the kinds kept on purpose (82: reviewer initials, the map's place tag, the photos' caption badges, the doctor badge).<br>**Also:** no page scrolls sideways; pull-to-refresh is on.<br>**Controls:** each check has an element that it catches (11px text, a 20px link, a pill span, a 13px field, two primaries side by side) |
+| First screen | The header ends at 75px (top strip and header: 111). After load, every page shows the bar or at least half of its own primary button: 44 of 44 at 390 and at 360. The bar never shows and then leaves at load: 0 of 44 at both sizes (5 of 8 sampled pages did on the reviewed build) |
+| Behaviour, with real touch taps; revision 27 as the control | **Menu:** 12/12 at 390, 360 and 844x390. The control fails the label, the Close name and the length, then cannot continue.<br>**Search:** 10/10 at 390 and 360. Control: a 31x34 close button, and Back leaves the page.<br>**Form:** 14/14. Control: 4/14, the four checks that pass when there is no message at all.<br>**Back-to-top:** 7/7 at 390 and 360. The control fails 5.<br>**Hover:** a tap leaves 0 of 75 sampled elements in a hover look (63 of 75 on revision 27) |
+| Text and contrast | **Two-line eyebrows:** 14 of 355 at 390 and 28 at 360, as on revision 27.<br>**Two-line stat labels:** 30 of 93 at 390 (28).<br>**Contrast:** "Read on Google" 4.96:1 (3.10), the search close 4.98 (3.12), "yrs" in solid teal 5.50, each measured against the pixels behind it. A control that paints the text's colour behind it reads 1.00 |
+| Menu and landscape | **Menu:** one screen at 390 and 360 (2.8), 1.6–1.8 on its side (4.8–5.3).<br>**Back:** closes it.<br>**Header on its side:** 75–79px (111–144) |
+| Desktop | **Style diff:** every element's box and computed style against revision 27 at 768, 1280 and 1920 on all 44 pages (1280 again on the final build, after two last phone-only fixes). No box changed size or place. One property differs: "Leave a review"'s `text-align` (a link now, a button before), pixel-identical at 1280.<br>**Mouse hover:** forced on 641 elements, identical to revision 27 (617 change on hover in both builds). The 7 elements that do not pair up are the page's last one (back-to-top) set against the new bar's hidden button.<br>**Touch:** forcing hover changes 0 elements (610 on revision 27) |
+| The hover gate | 11 unit cases. All 312 hover selectors of the five stylesheets end up inside `(hover: hover)`, none outside, and their count is unchanged |
+| Revision 27's role conformance | At 390 it fails only the roles this revision changed: long page headings, eyebrows, chips and their rows, pill links, the hero facts, tile labels, search, footer and legal links. Every other role still matches the reference build |
+| Scope | **Pages:** the 44 equal revision 27's byte for byte once this revision's markup is folded back (the menu, the bar, the form's attributes, `data-long`, `data-solo`, "Leave a review", the logo's `<source>`, the hashes). A one-word control is caught.<br>**Files:** 510 of 560 identical (all images and fonts).<br>**Verification:** 0 blockers, 0 majors, 0 orphans; 100.000% verbatim.<br>**Reproducible:** two builds of the same source are identical apart from the search index's build time |

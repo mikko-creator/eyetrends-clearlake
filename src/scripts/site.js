@@ -8,6 +8,9 @@
      · depth parallax on framed media
      · count-up statistics
      · scroll progress + back-to-top
+   Revision 28 (the UXCam mobile UX guide) added: Back closes the phone menu,
+   the menu's sub-pages on demand, the appointment form's messages and kept
+   draft, and the phone action bar's hide-while-redundant.
    Everything degrades open: with reduced motion or no IntersectionObserver,
    content is shown, not hidden. */
 (function () {
@@ -133,9 +136,23 @@
   document.body.appendChild(toTop);
 
   var stuck = null, topVis = null, ticking = false;
+  // Revision 28: on a phone the button floats over the page's own column (the
+  // gutter is 16px), where it covered the tap targets that scrolled under it: a
+  // select's arrow, an FAQ's +, the form's button. So on a phone it shows only
+  // while the page is being scrolled back up, the moment someone is heading for
+  // the top, and goes 1.5s after the scrolling stops or turns down. Wider
+  // screens keep it as it was.
+  var phone = window.matchMedia ? window.matchMedia('(max-width: 700px)') : null;
+  var lastY = window.pageYOffset || docEl.scrollTop, upUntil = 0, upTimer = 0;
 
   function frame() {
     var y = window.pageYOffset || docEl.scrollTop;
+    if (phone && phone.matches) {
+      var now = Date.now();
+      if (y < lastY - 2) { upUntil = now + 1500; clearTimeout(upTimer); upTimer = setTimeout(onScroll, 1550); }
+      else if (y > lastY + 2) upUntil = 0;
+    }
+    lastY = y;
 
     if (head) {
       var s = y > 24;
@@ -151,6 +168,7 @@
       progressBar.style.transform = 'scaleX(' + Math.min(1, y / max) + ')';
     }
     var v = y > Math.max(700, window.innerHeight * 1.2);
+    if (phone && phone.matches) v = v && Date.now() < upUntil && !(bar && bar.classList.contains('is-hidden'));
     if (v !== topVis) { topVis = v; toTop.classList.toggle('is-visible', v); }
 
     // depth: media drifts slightly slower than the page
@@ -169,37 +187,115 @@
   window.addEventListener('resize', onScroll, { passive: true });
   frame();
 
-  /* ------------------------------------------------------ 6 · MOBILE NAV -- */
+  /* ------------------------------------------- 6 · OVERLAYS AND BACK ----- */
+  // Revision 28 (the UXCam guide, "Respect the back button": users expect the
+  // system Back, a button or a swipe, to work). The phone menu and the search
+  // panel add one history entry while open, so Back closes whichever is open
+  // and leaves the page where it was; before, Back left the page. Closing one
+  // any other way (its button, Escape) takes the entry back off, and following a
+  // link in the menu, or searching, first takes it off and then goes, so the
+  // history holds no step that does nothing. Opening one while the other is open
+  // hands over the same entry.
+  var overlayEntry = false, afterPop = null, overlayClosers = [];
+  var holdOverlay = function () {
+    if (!overlayEntry && window.history && history.pushState) { history.pushState({ etOverlay: 1 }, ''); overlayEntry = true; }
+  };
+  var leaveOverlay = function (then) {
+    if (overlayEntry) { overlayEntry = false; afterPop = then || null; history.back(); }
+    else if (then) then();
+  };
+  window.addEventListener('popstate', function () {
+    overlayEntry = false;
+    overlayClosers.forEach(function (close) { close(); });
+    if (afterPop) { var go = afterPop; afterPop = null; go(); }
+  });
+
+  /* ------------------------------------------------------ 6a · MOBILE NAV -- */
+  // The header stays over the open menu, where its button reads Close; the
+  // menu's first link starts under it (--head-b, chrome.css §6).
   var burger = document.querySelector('.burger');
   var mob = document.getElementById('mobile-nav');
+  var setNav = null;
   if (burger && mob) {
-    var setNav = function (open) {
+    setNav = function (open) {
       burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      if (open && head) mob.style.setProperty('--head-b', Math.round(head.getBoundingClientRect().bottom) + 'px');
       mob.hidden = !open;
       document.body.classList.toggle('nav-open', open);
     };
-    burger.addEventListener('click', function () { setNav(mob.hidden); });
-    mob.addEventListener('click', function (e) { if (e.target.tagName === 'A') setNav(false); });
+    overlayClosers.push(function () { if (!mob.hidden) setNav(false); });
+    var openNav = function () {
+      if (showSearch && sPanel && !sPanel.hidden) showSearch(false);
+      setNav(true);
+      holdOverlay();
+    };
+    var closeNav = function (then) { setNav(false); leaveOverlay(then); };
+    burger.addEventListener('click', function () { if (mob.hidden) openNav(); else closeNav(); });
+    mob.addEventListener('click', function (e) {
+      var a = e.target.closest ? e.target.closest('a[href]') : null;
+      if (!a) return;
+      // a place on this page (the booking form): the menu's history entry
+      // becomes that place's, and the page goes there (after a Back, the
+      // browser's own scroll restoring would undo a jump made at once)
+      var target = a.hash && a.pathname === location.pathname ? document.getElementById(a.hash.slice(1)) : null;
+      if (target) {
+        e.preventDefault();
+        setNav(false);
+        if (overlayEntry) { overlayEntry = false; history.replaceState(null, '', a.hash); }
+        else history.pushState(null, '', a.hash);
+        target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+        return;
+      }
+      if (overlayEntry) { e.preventDefault(); var href = a.href; closeNav(function () { location.assign(href); }); }
+      else setNav(false);
+    });
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && !mob.hidden) { setNav(false); burger.focus(); }
+      if (e.key === 'Escape' && !mob.hidden) { closeNav(); burger.focus(); }
+    });
+    // Services and Eyewear show their sub-pages on demand (the guide: navigation
+    // built for a large monitor does not translate to a phone)
+    [].slice.call(mob.querySelectorAll('.mob-more')).forEach(function (btn) {
+      var panel = document.getElementById(btn.getAttribute('aria-controls'));
+      if (!panel) return;
+      btn.addEventListener('click', function () {
+        var open = btn.getAttribute('aria-expanded') !== 'true';
+        btn.setAttribute('aria-expanded', String(open));
+        panel.hidden = !open;
+      });
     });
   }
 
   /* --------------------------------------------------- 7 · SEARCH PANEL --- */
   var sBtn = document.querySelector('.head-search');
   var sPanel = document.getElementById('site-search');
+  var showSearch = null;
   if (sBtn && sPanel) {
     var sInput = sPanel.querySelector('input[name="s"]');
     var sClose = sPanel.querySelector('.search-panel__close');
-    var openSearch = function (open) {
+    var sForm = sPanel.querySelector('form');
+    showSearch = function (open) {
       sPanel.hidden = !open;
       sBtn.setAttribute('aria-expanded', String(open));
       if (open && sInput) sInput.focus();
     };
-    sBtn.addEventListener('click', function () { openSearch(sPanel.hidden); });
-    if (sClose) sClose.addEventListener('click', function () { openSearch(false); sBtn.focus(); });
+    overlayClosers.push(function () { if (!sPanel.hidden) showSearch(false); });
+    var openSearch = function () {
+      if (setNav && mob && !mob.hidden) setNav(false);
+      showSearch(true);
+      holdOverlay();
+    };
+    var closeSearch = function (then) { showSearch(false); leaveOverlay(then); };
+    sBtn.addEventListener('click', function () { if (sPanel.hidden) openSearch(); else closeSearch(); });
+    if (sClose) sClose.addEventListener('click', function () { closeSearch(); sBtn.focus(); });
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && !sPanel.hidden) { openSearch(false); sBtn.focus(); }
+      if (e.key === 'Escape' && !sPanel.hidden) { closeSearch(); sBtn.focus(); }
+    });
+    // searching leaves the panel's history entry first, then goes
+    if (sForm) sForm.addEventListener('submit', function (e) {
+      if (!overlayEntry) return;
+      e.preventDefault();
+      closeSearch(function () { sForm.submit(); });
     });
   }
 
@@ -319,12 +415,95 @@
     });
   }
 
-  /* --------------------------------------------------- 9 · UNWIRED FORMS -- */
+  /* ------------------------------------------- 9 · THE APPOINTMENT FORM --- */
+  // Revision 28, the UXCam guide:
+  // · "Every error message should tell users what went wrong, why it happened
+  //   (if useful), and what to do next." The form is novalidate and checked
+  //   nothing: an empty form went straight to the note below. Now a missing
+  //   name or phone, a number too short to call or an email that cannot be one
+  //   gets a message under its field saying what to do, the field is marked
+  //   (aria-invalid, aria-describedby) and the first one takes the focus.
+  //   Messages go as soon as the field is right.
+  // · "Forms that reject valid input ... phone number fields that reject
+  //   international formats": any number with 7 digits or more passes, in any
+  //   format.
+  // · "Save state generously so users can resume": what is typed is kept for
+  //   the tab (sessionStorage) and put back when the page is opened again, on
+  //   any page, since every page has the same form. It stays on the device and
+  //   goes when the tab is closed. When the form is wired, clear it
+  //   (sessionStorage.removeItem(DRAFT)) once a request is sent.
   // No backend here: a form must never post patient details somewhere wrong.
+  var DRAFT = 'et-appointment-draft';
+  var MSG = {
+    name: 'Please enter your name, so we know who the appointment is for.',
+    phone: 'Please enter a phone number, so we can call you back to set a time.',
+    phoneShort: 'This number looks too short: please enter it with the area code, for example (281) 555-0142.',
+    email: 'This email address looks incomplete: it should look like name@example.com. It is optional, so you can also leave it empty.'
+  };
   [].slice.call(document.querySelectorAll('form[data-sr-unwired]')).forEach(function (form) {
+    var fields = [].slice.call(form.querySelectorAll('input[name], select[name], textarea[name]')).filter(function (f) {
+      return !f.closest('.hp') && f.type !== 'hidden';
+    });
+    var store = null;
+    try { store = window.sessionStorage; store.setItem(DRAFT + '-t', '1'); store.removeItem(DRAFT + '-t'); } catch (err) { store = null; }
+    if (store) {
+      try {
+        var saved = JSON.parse(store.getItem(DRAFT) || 'null');
+        if (saved) fields.forEach(function (f) { if (typeof saved[f.name] === 'string' && saved[f.name] !== '') f.value = saved[f.name]; });
+      } catch (err) { /* a damaged draft is ignored */ }
+      var save = function () {
+        var o = {};
+        fields.forEach(function (f) { o[f.name] = f.value; });
+        try { store.setItem(DRAFT, JSON.stringify(o)); } catch (err) { /* storage full or blocked */ }
+      };
+      form.addEventListener('input', save);
+      form.addEventListener('change', save);
+    }
+
+    var problem = function (f) {
+      var v = (f.value || '').trim();
+      if (f.name === 'name') return v ? '' : MSG.name;
+      if (f.name === 'phone') {
+        if (!v) return MSG.phone;
+        return v.replace(/\D/g, '').length >= 7 ? '' : MSG.phoneShort;
+      }
+      if (f.name === 'email') return !v || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? '' : MSG.email;
+      return '';
+    };
+    var show = function (f, msg) {
+      var id = f.id + '-err';
+      var p = document.getElementById(id);
+      if (msg) {
+        if (!p) { p = document.createElement('p'); p.className = 'fld-err'; p.id = id; f.parentNode.appendChild(p); }
+        p.textContent = msg;
+        f.setAttribute('aria-invalid', 'true');
+        f.setAttribute('aria-describedby', id);
+      } else {
+        if (p) p.parentNode.removeChild(p);
+        f.removeAttribute('aria-invalid');
+        f.removeAttribute('aria-describedby');
+      }
+    };
+    // once a field has been flagged, its message follows what is typed
+    form.addEventListener('input', function (e) {
+      var f = e.target;
+      if (f && f.getAttribute && f.getAttribute('aria-invalid') === 'true') show(f, problem(f));
+    });
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+      var first = null;
+      fields.forEach(function (f) {
+        var msg = problem(f);
+        show(f, msg);
+        if (msg && !first) first = f;
+      });
       var note = form.querySelector('[data-sr-note]');
+      if (first) {
+        if (note) note.hidden = true;
+        first.focus();
+        return;
+      }
       if (note) {
         note.hidden = false;
         note.textContent = 'This form is not connected to a mail handler in this build. '
@@ -332,4 +511,80 @@
       }
     });
   });
+
+  /* ----------------------------------------------- 10 · PHONE ACTION BAR -- */
+  // Revision 28 (chrome.css §15, tools/build.mjs actBarHTML): Call and Book at
+  // the bottom of a phone screen, where a thumb reaches. The guide also asks for
+  // one primary action per screen, so the bar steps aside while half or more of
+  // one of the page's own primary buttons is on screen under the header, or the
+  // booking form has faded in: the screen has one primary button, not two. It
+  // also steps aside while a field has the keyboard up, and while search is
+  // open. Without IntersectionObserver it stays.
+  var bar = document.querySelector('.act-bar');
+  if (bar) {
+    var inView = [], typing = false, settled = !hasIO;
+    var sync = function () {
+      var searching = sPanel && !sPanel.hidden;
+      bar.classList.toggle('is-hidden', !settled || inView.length > 0 || typing || !!searching);
+      onScroll();                                          // back-to-top follows the bar on a phone
+    };
+    if (!hasIO) bar.classList.add('is-live');
+    // A page opens with its hero still sliding in (the reveal, section 1): a
+    // hero button that ends near the bar's band starts lower, outside it, so the
+    // bar showed and then left by itself (review). The bar waits, out of sight,
+    // until the reveal has settled, then slides in if the screen has no primary
+    // button of its own. Without the script it simply stays.
+    if (hasIO) {
+      bar.classList.add('is-hidden');
+      setTimeout(function () {
+        settled = true;
+        bar.classList.add('is-live');
+        raf(sync);
+      }, reduce ? 0 : 1100);
+    }
+    if (hasIO) {
+      // the page's primary buttons, booking or not: a screen shows one primary
+      // action. Secondary ways to book (a ghost button, an arrow link) leave the
+      // bar where it is: its Book is then still the screen's only primary
+      var sameActions = [].slice.call(document.querySelectorAll('main .btn-primary'));
+      var formBand = document.querySelector('#book .book-form');
+      var mark = function (el, on) {
+        var at = inView.indexOf(el);
+        if (on && at < 0) inView.push(el);
+        if (!on && at >= 0) inView.splice(at, 1);
+      };
+      // half of a button on screen under the header is enough: one that opens
+      // in the bar's own band (the emergency page's Call) must not load covered
+      // and then trade places with the bar at the first touch (review)
+      var bio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { mark(en.target, en.isIntersecting && en.intersectionRatio >= 0.5); });
+        sync();
+      }, { rootMargin: '-66px 0px 0px 0px', threshold: [0, 0.5, 1] });   // the floating header ends at 66px
+      sameActions.forEach(function (a) { bio.observe(a); });
+      // the form counts from the moment it fades in, with the reveal's own
+      // settings (section 1): measured, the bar stepped aside some 60px of
+      // scrolling before the form showed, leaving no Book button on screen
+      if (formBand) {
+        var fio = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) { mark(en.target, en.isIntersecting && en.intersectionRatio >= 0.08); });
+          sync();
+        }, { rootMargin: '0px 0px -8% 0px', threshold: [0, 0.08] });
+        fio.observe(formBand);
+      }
+    }
+    document.addEventListener('focusin', function (e) {
+      if (e.target && e.target.matches && e.target.matches('input, select, textarea')) { typing = true; sync(); }
+    });
+    document.addEventListener('focusout', function () {
+      setTimeout(function () {
+        var a = document.activeElement;
+        typing = !!(a && a.matches && a.matches('input, select, textarea'));
+        sync();
+      }, 0);
+    });
+    if (sBtn) sBtn.addEventListener('click', function () { setTimeout(sync, 0); });
+    if (sPanel) sPanel.addEventListener('click', function () { setTimeout(sync, 0); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setTimeout(sync, 0); });
+    window.addEventListener('popstate', function () { setTimeout(sync, 0); });
+  }
 })();

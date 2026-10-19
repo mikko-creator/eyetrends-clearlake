@@ -31,7 +31,7 @@
   50%     { box-shadow: 0 0 0 7px color-mix(in srgb, var(--g-teal-lit) 4%, transparent); }
 }
 .topbar-call { color: var(--g-gold-lit); font-weight: 700; white-space: nowrap; }
-.topbar-call:hover { color: var(--c-1); }
+@media (hover: hover){.topbar-call:hover { color: var(--c-1); }}
 /* the top bar slides away once the header detaches */
 body.is-scrolled .topbar { opacity: 0; transform: translateY(-100%); }
 
@@ -98,8 +98,10 @@ body.is-scrolled .topbar { opacity: 0; transform: translateY(-100%); }
   background: var(--grad-gold);
   transition: left var(--t-mid) var(--ease), right var(--t-mid) var(--ease);
 }
-.nv-link:hover, .nv-item:hover > .nv-link { color: var(--g-teal); background: color-mix(in srgb, var(--g-teal-lit) 8%, transparent); }
-.nv-link:hover::after, .nv-item:hover > .nv-link::after { left: var(--sp-33); right: var(--sp-33); }
+@media (hover: hover){.nv-link:hover,
+.nv-item:hover > .nv-link { color: var(--g-teal); background: color-mix(in srgb, var(--g-teal-lit) 8%, transparent); }}
+@media (hover: hover){.nv-link:hover::after,
+.nv-item:hover > .nv-link::after { left: var(--sp-33); right: var(--sp-33); }}
 .nv-link[aria-current="page"] { color: var(--g-teal); }
 .nv-link[aria-current="page"]::after { left: var(--sp-33); right: var(--sp-33); }
 .nv-caret {
@@ -108,7 +110,7 @@ body.is-scrolled .topbar { opacity: 0; transform: translateY(-100%); }
   transform: rotate(45deg) translateY(-2px);
   transition: transform var(--t-mid) var(--ease);
 }
-.nv-has-mega:hover .nv-caret { transform: rotate(-135deg) translateY(-2px); }
+@media (hover: hover){.nv-has-mega:hover .nv-caret { transform: rotate(-135deg) translateY(-2px); }}
 
 /* ------------------------------------------------------------ 4 · MEGA MENU */
 .mega {
@@ -124,9 +126,11 @@ body.is-scrolled .topbar { opacity: 0; transform: translateY(-100%); }
   transform: translateY(-10px) scale(.99);
   transition: opacity var(--t-mid) var(--ease), transform var(--t-mid) var(--ease), visibility var(--t-mid);
 }
-.nv-has-mega:hover > .mega, .nv-has-mega:focus-within > .mega {
+.nv-has-mega:focus-within > .mega {
   opacity: 1; visibility: visible; transform: none;
-}
+}@media (hover: hover){.nv-has-mega:hover > .mega {
+  opacity: 1; visibility: visible; transform: none;
+}}
 .mega-inner {
   width: 100%; max-width: var(--wrap); margin-inline: auto;
   padding: 32px var(--gutter) 36px;
@@ -165,12 +169,12 @@ body.is-scrolled .topbar { opacity: 0; transform: translateY(-100%); }
   border-bottom: 1px solid color-mix(in srgb, var(--c-3) 10%, transparent);
   transition: color var(--t-mid) var(--ease), border-color var(--t-mid) var(--ease);
 }
-.mcol-head:hover { color: var(--g-teal); border-color: color-mix(in srgb, var(--g-teal-lit) 50%, transparent); }
+@media (hover: hover){.mcol-head:hover { color: var(--g-teal); border-color: color-mix(in srgb, var(--g-teal-lit) 50%, transparent); }}
 .mlink {
   font-size: 13.5px; color: var(--g-fg-soft); padding: 4px 0;
   transition: color var(--t-mid) var(--ease), transform var(--t-mid) var(--ease);
 }
-.mlink:hover { color: var(--g-teal); transform: translateX(4px); }
+@media (hover: hover){.mlink:hover { color: var(--g-teal); transform: translateX(4px); }}
 
 .mega-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: var(--sp-33); align-content: start; }
 .mcard { display: flex; flex-direction: column; gap: var(--sp-10); padding: var(--sp-41) var(--sp-43); border-radius: var(--r-md); }
@@ -207,7 +211,7 @@ body.is-scrolled .topbar { opacity: 0; transform: translateY(-100%); }
   visibility: hidden;
   transition: visibility 0s linear calc(.2s + var(--t-mid));
 }
-.nv-has-mega:hover > .nv-link::before { visibility: visible; transition: none; }
+@media (hover: hover){.nv-has-mega:hover > .nv-link::before { visibility: visible; transition: none; }}
 @media (prefers-reduced-motion: reduce) {
   .nv-has-mega > .nv-link::before { transition-delay: .2s; }
 }
@@ -217,7 +221,7 @@ body.is-scrolled .topbar { opacity: 0; transform: translateY(-100%); }
       second off the item, took the panel down to 20-30% opacity. Opening keeps the quick ease. Reduced
       motion zeroes durations, not delays, so the wait holds there too. */
 .mega { transition-delay: .2s; transition-timing-function: ease-in; }
-.nv-has-mega:hover > .mega, .nv-has-mega:focus-within > .mega { transition-delay: 0s; transition-timing-function: var(--ease); }
+.nv-has-mega:focus-within > .mega { transition-delay: 0s; transition-timing-function: var(--ease); }@media (hover: hover){.nv-has-mega:hover > .mega { transition-delay: 0s; transition-timing-function: var(--ease); }}
 
 /* 3. When the pointer reaches the other mega item, the old panel and its strip go at once.
       - The panels share one box, and the eyewear one comes later in the DOM, so a closing eyewear panel
@@ -226,8 +230,8 @@ body.is-scrolled .topbar { opacity: 0; transform: translateY(-100%); }
       - Changing the delay can't stop a fade that is already running (a pointer that crosses the 2px gap
         between the links starts it). `transition: none` cancels it, and the end state applies at once.
       - The rule stands alone, so a browser without :has() keeps everything else. */
-.nv-list:has(> .nv-has-mega:hover) > .nv-has-mega:not(:hover) > .mega,
-.nv-list:has(> .nv-has-mega:hover) > .nv-has-mega:not(:hover) > .nv-link::before { transition: none; }
+@media (hover: hover){.nv-list:has(> .nv-has-mega:hover) > .nv-has-mega:not(:hover) > .mega,
+.nv-list:has(> .nv-has-mega:hover) > .nv-has-mega:not(:hover) > .nv-link::before { transition: none; }}
 
 /* 4. Menu aim (site.js section 8b). The straight line from "Services" down to its right-hand columns crosses
       the "Eyewear" link, and CSS cannot tell that from choosing Eyewear. Measured: up to 19 such paths per
@@ -258,18 +262,24 @@ body.is-scrolled .topbar { opacity: 0; transform: translateY(-100%); }
         keeps the pointer on it. */
 .mcard { position: relative; transition: background-color var(--t-mid) var(--ease), box-shadow var(--t-mid) var(--ease), transform var(--t-mid) var(--ease); }
 .mcard-t { transition: color var(--t-mid) var(--ease); }
-.mcard:hover, .mcard:focus-visible {
+.mcard:focus-visible {
   background-color: var(--glass-bg-2);
   box-shadow:
     inset 0 0 0 1px color-mix(in srgb, var(--g-teal-lit) 45%, transparent),
     0 18px 36px -22px color-mix(in srgb, var(--c-3) 45%, transparent);
   transform: translateY(-3px);
-}
-.mcard:hover::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 3px; }
+}@media (hover: hover){.mcard:hover {
+  background-color: var(--glass-bg-2);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--g-teal-lit) 45%, transparent),
+    0 18px 36px -22px color-mix(in srgb, var(--c-3) 45%, transparent);
+  transform: translateY(-3px);
+}}
+@media (hover: hover){.mcard:hover::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 3px; }}
 .mcard:focus-visible { border-radius: var(--r-md); }
-.mcard:hover .mcard-t, .mcard:focus-visible .mcard-t { color: var(--g-teal); }
+.mcard:focus-visible .mcard-t { color: var(--g-teal); }@media (hover: hover){.mcard:hover .mcard-t { color: var(--g-teal); }}
 @media (prefers-reduced-motion: reduce) {
-  .mcard:hover, .mcard:focus-visible { transform: none; }
+  .mcard:focus-visible { transform: none; }@media (hover: hover){.mcard:hover { transform: none; }}
 }
 
 /* ------------------------------------------------- 5 · SEARCH + BURGER */
@@ -283,7 +293,7 @@ body.is-scrolled .topbar { opacity: 0; transform: translateY(-100%); }
   cursor: pointer;
   transition: background-color var(--t-mid) var(--ease), color var(--t-mid) var(--ease), transform var(--t-fast) var(--ease);
 }
-.head-search:hover { background: var(--grad-brand); color: var(--c-1); transform: translateY(-2px); border-color: transparent; }
+@media (hover: hover){.head-search:hover { background: var(--grad-brand); color: var(--c-1); transform: translateY(-2px); border-color: transparent; }}
 
 .burger { display: none; flex-direction: column; gap: var(--sp-7); background: none; border: 0; padding: 11px; cursor: pointer; }
 .burger span { display: block; width: 24px; height: 2px; border-radius: 2px; background: var(--g-fg); transition: transform var(--t-mid) var(--ease), opacity var(--t-mid) var(--ease); }
@@ -305,7 +315,7 @@ body.is-scrolled .topbar { opacity: 0; transform: translateY(-100%); }
 .search-panel__h { font-family: var(--font-display); font-size: 17px; font-weight: 700; color: var(--g-fg); margin: 0; flex: none; }
 .search-panel__form { display: flex; gap: var(--sp-26); flex: 1 1 320px; min-width: 0; }
 .search-panel__close { background: none; border: 0; font-size: 26px; line-height: 1; cursor: pointer; color: var(--g-fg-faint); padding: var(--sp-5) var(--sp-19); flex: none; }
-.search-panel__close:hover { color: var(--g-fg); }
+@media (hover: hover){.search-panel__close:hover { color: var(--g-fg); }}
 
 /* ------------------------------------------------------------ 6 · MOBILE NAV */
 .mobile-nav {
@@ -332,6 +342,44 @@ body.is-scrolled .topbar { opacity: 0; transform: translateY(-100%); }
 .mob-sub { font-size: var(--fs-19); padding: 9px 0; color: var(--g-fg-soft); }
 .mob-cta { margin-top: var(--sp-54); }
 body.nav-open { overflow: hidden; }
+/* Revision 28 (the UXCam guide: mega menus "usually don't translate to
+   mobile"). The menu listed all 38 links, 2.8 screens at 390px and 5.3 in
+   landscape. Services and Eyewear now keep their sub-pages behind a button
+   beside the link (site.js opens them): the menu opens as its seven links
+   and the booking button. The current page, and the section it is in, are
+   teal, as in the desktop nav. */
+.mob-row { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid color-mix(in srgb, var(--c-3) 10%, transparent); }
+.mob-row > .mob-link { flex: 1 1 auto; min-width: 0; border-bottom: 0; }
+.mob-more {
+  flex: none;
+  display: grid; place-items: center;
+  width: 48px; height: 48px; padding: 0;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--glass-brd);
+  background: color-mix(in srgb, var(--c-1) 55%, transparent);
+  color: var(--g-fg);
+  cursor: pointer;
+}
+.mob-more::before {
+  content: "";
+  width: 8px; height: 8px;
+  border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform var(--t-mid) var(--ease);
+}
+.mob-more[aria-expanded="true"]::before { transform: translateY(2px) rotate(-135deg); }
+.mobile-nav .mob-group { margin: 6px 0 14px; padding-left: 14px; border-left: 2px solid color-mix(in srgb, var(--g-teal-lit) 35%, transparent); }
+.mobile-nav .mob-group[hidden] { display: none; }
+.mobile-nav a[aria-current] { color: var(--g-teal); }
+/* The menu covered the header, the close button included, wherever the menu
+   button shows (up to 1040px): only phones under 700px had the header kept
+   over it (§14), so a phone on its side could close it only by leaving the
+   page. The header stays on top while the menu is open, and the menu's
+   first link starts under it (site.js measures where the header ends). */
+@media (max-width: 1040px) {
+  body.nav-open .site-head { z-index: 80; }
+  .mobile-nav { padding-top: calc(var(--head-b, 80px) + var(--sp-51)); }
+}
 
 @media (max-width: 1040px) {
   .nv { display: none; }
@@ -368,7 +416,10 @@ body.nav-open { overflow: hidden; }
   transition: opacity var(--t-mid) var(--ease), transform var(--t-mid) var(--ease), visibility var(--t-mid), background-color var(--t-mid) var(--ease);
 }
 .rf-top.is-visible { opacity: 1; visibility: visible; transform: none; }
-.rf-top:hover { background: var(--grad-brand); color: var(--c-1); border-color: transparent; }
+/* never over the open phone menu (revision 28: it sat on the menu's Book
+   button and took its taps) */
+body.nav-open .rf-top { opacity: 0; visibility: hidden; }
+@media (hover: hover){.rf-top:hover { background: var(--grad-brand); color: var(--c-1); border-color: transparent; }}
 
 /* ------------------------------------------------------- 8 · BOOKING FORM */
 .book-band {
@@ -434,9 +485,9 @@ body.nav-open { overflow: hidden; }
   box-shadow: var(--glass-edge);
   transition: transform var(--t-mid) var(--ease), box-shadow var(--t-mid) var(--ease), border-color var(--t-mid) var(--ease);
 }
-.search-hit:hover { transform: translateY(-4px); box-shadow: var(--glass-lift); border-color: color-mix(in srgb, var(--g-teal-lit) 45%, transparent); }
+@media (hover: hover){.search-hit:hover { transform: translateY(-4px); box-shadow: var(--glass-lift); border-color: color-mix(in srgb, var(--g-teal-lit) 45%, transparent); }}
 .search-hit__t { font-family: var(--font-display); font-weight: 700; font-size: 18.5px; letter-spacing: -.02em; color: var(--g-fg); }
-.search-hit__t:hover { color: var(--g-teal); }
+@media (hover: hover){.search-hit__t:hover { color: var(--g-teal); }}
 .search-hit__u { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--g-teal); margin: 5px 0 9px; }
 .search-hit__s { margin: 0; font-size: var(--fs-16); line-height: 1.6; color: var(--g-fg-soft); }
 .search-hit__s mark { background: color-mix(in srgb, var(--g-gold) 34%, transparent); color: inherit; padding: 0 3px; border-radius: 3px; }
@@ -464,7 +515,7 @@ body.nav-open { overflow: hidden; }
 .foot-h { font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: .2em; font-size: 11.5px; color: var(--g-gold-lit); margin: 0 0 16px; font-weight: 700; }
 .foot-col { display: flex; flex-direction: column; gap: var(--sp-26); }
 .foot-col a { font-size: 14px; color: var(--g-on-dark-soft); transition: color var(--t-mid) var(--ease), transform var(--t-mid) var(--ease); }
-.foot-col a:hover { color: var(--c-1); transform: translateX(4px); }
+@media (hover: hover){.foot-col a:hover { color: var(--c-1); transform: translateX(4px); }}
 .foot-addr, .foot-hours { margin: 0; font-size: 14px; line-height: 1.65; }
 .foot-hours { color: color-mix(in srgb, var(--c-7) 55%, transparent); font-size: var(--fs-8); }
 .foot-phone { font-weight: 700; color: var(--g-gold-lit) !important; font-size: 16.5px !important; }
@@ -477,7 +528,7 @@ body.nav-open { overflow: hidden; }
 .foot-legal p { margin: 0; }
 .foot-legal nav { display: flex; flex-wrap: wrap; gap: var(--sp-43); }
 .foot-legal a { color: color-mix(in srgb, var(--c-7) 62%, transparent); }
-.foot-legal a:hover { color: var(--c-1); }
+@media (hover: hover){.foot-legal a:hover { color: var(--c-1); }}
 @media (max-width: 1000px) { .foot-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 580px) { .foot-grid { grid-template-columns: 1fr; } }
 
@@ -569,8 +620,8 @@ body.nav-open { overflow: hidden; }
     text-decoration-color: color-mix(in srgb, var(--c-2) 22%, transparent);
   }
   .site-foot .foot-blurb a { text-decoration-color: color-mix(in srgb, var(--c-9) 30%, transparent); }
-  .site-content :is(p, li) > a:not(.btn):not(.bw-toc__link):hover,
-  .site-foot .foot-blurb a:hover { text-decoration-color: var(--g-gold); }
+  @media (hover: hover){.site-content :is(p, li) > a:not(.btn):not(.bw-toc__link):hover,
+.site-foot .foot-blurb a:hover { text-decoration-color: var(--g-gold); }}
   /* The dark bands' NAP block: its two links were 44-46px boxes between 28px
      lines 8px apart, so the gaps around them read 17 and 26px. Same hit
      area, from padding that does not move the rows. */
@@ -602,26 +653,28 @@ body.nav-open { overflow: hidden; }
 /* Revision 27: the reference build's phone sizes for the chrome, up to 700px
    (its breakpoint). Values at 390px. */
 @media (max-width: 700px) {
-  /* the top strip 36px tall, its text .74rem */
-  .topbar { font-size: .74rem; }
-  .topbar-in { padding-block: 0; }
-  .topbar .topbar-call { min-height: 36px; }
+  /* the top strip is gone on phones (revision 28): all it showed under 620px
+     was its call link, 36px of the first screen in the corner a thumb
+     reaches worst. Call is in the action bar now (§15), at the bottom. */
+  .topbar { display: none; }
 
   /* the header: 8px above and below a 58px bar, 10px between its parts,
-     the logo 132px wide, search 44px; search sits with the menu button.
+     the logo 132px wide, search 48px (revision 28: the guide's 48dp; it was
+     the reference's 44); search sits with the menu button.
      Scrolled, the floating bar is 6px from the top and on the page gutters,
      its contents 14px from its left end and 6px from its right. */
   .site-head { padding-block: 8px; }
   .head-in, .site-head.is-stuck .head-in { min-height: 58px; gap: 10px; }
   .brand img, .site-head.is-stuck .brand img { width: 132px; height: auto; max-width: none; }
-  .head-search { width: 44px; height: 44px; }
+  .brand { min-height: 48px; }
+  .head-search { width: 48px; height: 48px; }
   .head-ctas { margin-left: auto; }
-  /* the menu button is a 46px circle beside search, as the reference's two
-     header buttons are, in search's own glass */
+  /* the menu button sits beside search in search's glass: 48px tall, its
+     three bars and the word Menu (Close while open; revision 28, §15) */
   .burger {
     margin-left: 0;
-    width: 46px;
-    height: 46px;
+    min-width: 48px;
+    height: 48px;
     padding: 0;
     align-items: center;
     border-radius: var(--r-pill);
@@ -631,21 +684,15 @@ body.nav-open { overflow: hidden; }
   .site-head.is-stuck { top: 6px; padding-block: 0; max-width: calc(100% - 2 * var(--gutter)); }
   .site-head.is-stuck .head-in { padding-inline: 14px 6px; }
 
-  /* the menu opens under the header, which stays as it was, with the menu
-     button (now a close button) on it: 40px down to the first link (at the
-     top of a page the menu starts under the top strip and header; scrolled,
-     it fills the screen under the floating bar, as the reference's does);
-     links 25.4px on 1.05 with 10px above and below, 4px apart; the groups
-     28px down, their heads .95rem with 8px under, their links on a 40px
-     pitch */
-  .mobile-nav { top: calc(36px + 75px); padding-block: 40px; }
-  body.is-scrolled .mobile-nav { top: 0; padding-top: calc(6px + 60px + 40px); }
-  body.is-scrolled.nav-open .site-head { z-index: 80; }
+  /* the menu: under the header, which stays on top with the menu button
+     (now Close) on it, 40px down to the first link; links 25.4px on 1.05,
+     at least 48px tall (revision 28: they were 46.7, 10px above and below),
+     4px apart; the sub-pages 48px apart, in the running text's size */
+  .mobile-nav { padding-top: calc(var(--head-b, 75px) + 40px); padding-bottom: 40px; }
   .mobile-in { gap: 4px; }
-  .mob-link { padding-block: 10px; font-size: clamp(1.5rem, 1.1rem + 2vw, 1.6375rem); line-height: 1.05; }
-  .mob-group { margin-top: 24px; gap: 0; }
-  .mob-h { font-size: .95rem; margin-bottom: 8px; }
-  .mobile-nav .mob-sub { display: flex; min-height: 40px; padding-block: 0; font-size: inherit; }
+  .mob-link { display: flex; align-items: center; min-height: 48px; padding-block: 10px; font-size: clamp(1.5rem, 1.1rem + 2vw, 1.6375rem); line-height: 1.05; }
+  .mobile-nav .mob-group { gap: 0; }
+  .mobile-nav .mob-sub { display: flex; align-items: center; min-height: 48px; padding-block: 0; font-size: inherit; }
   .mob-cta { margin-top: 24px; }
   .mobile-nav .btn, .search-panel__form .btn {
     width: 100%;
@@ -659,26 +706,33 @@ body.nav-open { overflow: hidden; }
   /* links in a card or a line: the reference's .92rem with .45em to the
      arrow, and its spacing, which is the text's own. The reference's line
      of 1 is for labels that never wrap; some here do, and on 1 their lines
-     touched, so the line is 1.3. The 44px tap area stays, as padding that
-     moves nothing (prose links have it so, §12). Pill links are the
-     reference's small button: 44px, .7em 1.15em, .82rem. Both selectors
-     match §12's tap rule in weight and come after it. */
+     touched, so the line is 1.3. The tap area is padding that moves nothing
+     (prose links have it so, §12): 14.5px above and below a 19.1px line,
+     48px (revision 28, the guide's 48dp; it was 13px, 45px). The link is
+     position: relative, or that padding would not take taps where it hangs
+     past the link's line: Chrome's hit test (document.elementFromPoint, the
+     one taps use) gave the block around it there, though the link paints
+     there, and the hero's call link had 32px of its 48 (measured, revision
+     28). Pill links are the reference's small button, at 48px and 14px text
+     (revision 28; it was 44px and .82rem). Both selectors match §12's tap
+     rule in weight and come after it. */
   .rw-sec a[class]:not(.btn):not(.et-cat):is(.et-golink, .et-frame__add, .dc-visit__more, .ct-map__dir, .ia-link__go,
     .ct-route__go, .ethc-herocall, .ha-hero__call, .tib-herocall, .et-hero__call),
   .rw-sec button.et-golink {
+    position: relative;
     min-height: 0;
-    padding-block: 13px;
-    margin-block: -13px;
+    padding-block: 14.5px;
+    margin-block: -14.5px;
     font-size: .92rem;
     line-height: 1.3;
     gap: .45em;
   }
   .rw-sec :is(.dc-rel__go, .ha-cond__go, .dc-relhub__go) { min-height: 0; font-size: .92rem; line-height: 1.3; gap: .45em; }
-  /* a stack of such links is the reference's link list: at least 40px a
-     link, so tap areas no longer overlap (stacked 4px apart, a tap on one of
-     the About page's closing links landed on the next). One-line links
-     touch, on a 40px pitch; the services page's routes run to two and three
-     lines, so 14px keeps each a separate link. */
+  /* a stack of such links is the reference's link list: at least 48px a
+     link (revision 28; the reference's 40), so tap areas never overlap
+     (stacked 4px apart, a tap on one of the About page's closing links
+     landed on the next). One-line links touch; the services page's routes
+     run to two and three lines, so 14px keeps each a separate link. */
   .rw-sec :is(.od-close__links, .ha-routes__list) {
     display: flex;
     flex-direction: column;
@@ -687,25 +741,35 @@ body.nav-open { overflow: hidden; }
   }
   .rw-sec .ha-routes__list { gap: 14px; }
   .rw-sec :is(.od-close__links, .ha-routes__list) > a[class]:not(.btn):not(.et-cat) {
-    min-height: 40px;
+    min-height: 48px;
     padding-block: 0;
     margin-block: 0;
   }
-  /* a review's "Read on Google" keeps its size; its tap area moves nothing */
-  .rw-sec a[class]:not(.btn):not(.et-cat).et-review__src { min-height: 0; padding-block: 15px; margin-block: -15px; }
+  /* a review's "Read on Google": 14px text (revision 28; it was 13.5) and a
+     48px tap area that moves nothing */
+  .rw-sec a[class]:not(.btn):not(.et-cat).et-review__src { position: relative; min-height: 0; padding-block: 15px; margin-block: -15px; font-size: .875rem; line-height: 1.3; }
+  /* the dark bands' NAP block (§12): 11px above and below a 26.6px line,
+     48px (9px, 44.6) */
+  .rw-sec .tib-creed__nap a:not([class]),
+  .rw-sec .tib-creed__nap a[class][href]:not(.btn):not(.et-cat) { position: relative; padding-block: 11px; margin-block: -11px; }
+  /* its phone number and "Hours and location" sat 35px apart, line to
+     line, so their 48px tap areas overlapped and the second took the bottom
+     of the first's words: 13px more, a 48px pitch */
+  .rw-sec .tib-creed__nap > a + span:has(> .tib-creed__pillar) { margin-top: 13px; }
   .rw-sec a[class]:not(.btn):not(.et-cat).et-pill {
-    min-height: 44px;
+    min-height: 48px;
     padding: .7em 1.15em;
-    font-size: .82rem;
+    font-size: .875rem;
     line-height: 1;
   }
 
   /* the booking band: the reference's section head, columns 24px apart and
      18px between blocks; the form padded 18px with 16px between fields, a
-     label .86rem 6px over its field, fields at least 50px, padded 12px 16px
-     with 14px corners, in the running text's size; notes 130px */
+     label 14px (revision 28; the reference's .86rem) 6px over its field,
+     fields at least 50px, padded 12px 16px with 14px corners, in the
+     running text's size; notes 130px */
   .book-grid { gap: 24px; }
-  .book-band .eyebrow { display: flex; width: fit-content; max-width: 100%; font-size: .8rem; line-height: 1.3; }
+  .book-band .eyebrow { display: flex; width: fit-content; max-width: 100%; font-size: .875rem; line-height: 1.3; letter-spacing: .14em; }
   .book-band .h2 { font-size: clamp(1.75rem, 1.2rem + 3.2vw, 2.06rem); line-height: .98; }
   .book-band .lede { font-size: 1rem; line-height: 1.65; }
   .book-band .book-copy > * { margin-block: 0; }
@@ -720,7 +784,7 @@ body.nav-open { overflow: hidden; }
   }
   .book-form { padding: clamp(18px, 3vw, 30px); gap: 16px; }
   .fld { gap: 6px; }
-  .fld label { font-size: .86rem; line-height: 1.2; }
+  .fld label { font-size: .875rem; line-height: 1.2; }
   .fld :is(input, select, textarea) { min-height: 50px; padding: 12px 16px; border-radius: 14px; font-size: inherit; }
   .fld textarea { min-height: 130px; }
   /* the search field: a 56px pill, padded 0 20px, 1.1rem, the width of the
@@ -733,20 +797,21 @@ body.nav-open { overflow: hidden; }
 
   /* the footer: columns 26px apart down and 18px across, heads .95rem on a
      line of 1 with 8px under, text and links in the running text's size and
-     leading, links on a 40px pitch, the hours .94rem; the practice's blurb
-     16px under its name; the legal row 36px under the columns, 22px inside
-     its rule and 28px from the bottom, .88rem, the line over the links 14px
-     apart, links 18px apart and 40px tall. As in the reference, two link
-     columns share a row and the rest take the width: "Eye Care Services"
-     at .95rem is wider than half the row, and the visit block is the
-     reference's contact and hours. */
+     leading, links on a 48px pitch (revision 28, the guide's 48dp; the
+     reference's 40), the hours .94rem; the practice's blurb 16px under its
+     name; the legal row 36px under the columns, 22px inside its rule and
+     28px from the bottom, .88rem, the line over the links 14px apart, links
+     18px apart and 48px tall (40). As in the reference, two link columns
+     share a row and the rest take the width: "Eye Care Services" at .95rem
+     is wider than half the row, and the visit block is the reference's
+     contact and hours. */
   .foot-grid { gap: 26px 18px; }
   .foot-grid > .foot-col:is(:nth-child(2), .foot-visit) { grid-column: 1 / -1; }
   .foot-h { font-size: .95rem; line-height: 1; margin-bottom: 8px; }
   .foot-name { margin-bottom: 16px; }
   .foot-blurb, .foot-addr { font-size: inherit; line-height: 1.65; }
   .foot-hours { font-size: .94rem; }
-  .site-foot .foot-col a { min-height: 40px; font-size: inherit; }
+  .site-foot .foot-col a { min-height: 48px; font-size: inherit; }
   .foot-legal {
     flex-direction: column;
     align-items: flex-start;
@@ -756,5 +821,158 @@ body.nav-open { overflow: hidden; }
     font-size: .88rem;
   }
   .foot-legal nav { column-gap: 18px; }
-  .site-foot .foot-legal a { min-height: 40px; }
+  .site-foot .foot-legal a { min-height: 48px; }
+}
+
+/* ------------------------ 15 · PHONES: THE UXCAM MOBILE UX GUIDE (system §35) */
+/* Revision 28. Operator, 2026-10-19: "Can you use this blog as reference?
+   Review all the contents of this blog and apply what you learn in fixing
+   the mobile view" (uxcam.com/blog/mobile-ux). The chrome's share: the
+   action bar, the menu button's label, 48px tap targets, the form's error
+   messages, and short screens on their side. */
+
+/* The action bar (tools/build.mjs actBarHTML). The guide: "Primary actions
+   should fall in the bottom two-thirds of the screen where thumbs reach
+   easily", and bottom navigation over top. Call and Book an Eye Exam, the
+   practice's two actions, at the bottom of every phone screen: Call a
+   secondary pill, Book the one primary button. site.js hides it (.is-hidden)
+   while the page's own booking or call button, or the booking form, is on
+   screen, and while a field has the keyboard up; the open menu has its own
+   booking button. Without the script it simply stays. */
+.act-bar { display: none; }
+@media (max-width: 700px) {
+  .act-bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 65;
+    display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px;
+    padding: 8px var(--gutter) calc(8px + env(safe-area-inset-bottom, 0px));
+    background: color-mix(in srgb, var(--c-1) 94%, transparent);
+    -webkit-backdrop-filter: blur(22px) saturate(180%);
+    backdrop-filter: blur(22px) saturate(180%);
+    border-top: 1px solid var(--glass-brd);
+    box-shadow: 0 -14px 30px -20px color-mix(in srgb, var(--c-3) 50%, transparent);
+  }
+  .act-bar.is-hidden { transform: translateY(calc(100% + 2px)); visibility: hidden; }
+  /* it slides only once the page has been looked at (.is-live), so a page
+     that opens on its own booking button does not show the bar leaving */
+  .act-bar.is-live { transition: transform .24s var(--ease), visibility 0s linear 0s; }
+  .act-bar.is-live.is-hidden { transition: transform .24s var(--ease), visibility 0s linear .24s; }
+  body.nav-open .act-bar { display: none; }
+  .act-bar__call {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 48px; padding: 0 20px;
+    border-radius: var(--r-pill);
+    border: 1px solid color-mix(in srgb, var(--g-teal) 38%, transparent);
+    background: color-mix(in srgb, var(--c-1) 72%, transparent);
+    color: var(--g-teal);
+    font-weight: 700; font-size: .95rem; line-height: 1;
+  }
+  .act-bar .act-bar__book {
+    min-height: 48px; padding: 0 18px;
+    justify-content: center;
+    font-size: .95rem; line-height: 1; gap: .6em;
+    white-space: nowrap;
+  }
+  /* the bar is 64px: the footer runs on under it, so its last links clear
+     it at the end of the page, and back-to-top sits above it */
+  .site-foot { padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+  .rf-top { right: var(--gutter); bottom: calc(64px + 14px + env(safe-area-inset-bottom, 0px)); }
+
+  /* The menu button says Menu (Close while open). The guide lists "hidden
+     navigation: hamburger menus for primary navigation hurt
+     discoverability" among the commonest mistakes; the three bars stay, the
+     word says what they are. The bars keep their 7px pitch, so the X they
+     turn into is the same. */
+  .burger {
+    display: grid;
+    grid-template-columns: 22px auto;
+    grid-template-rows: repeat(3, 2px);
+    row-gap: 5px;
+    column-gap: 8px;
+    align-content: center;
+    justify-content: center;
+    padding: 0 16px 0 14px;
+  }
+  .burger span { grid-column: 1; width: 22px; }
+  .burger::after {
+    content: "Menu";
+    grid-column: 2; grid-row: 1 / -1; align-self: center;
+    font-size: .95rem; font-weight: 700; line-height: 1; color: var(--g-fg);
+  }
+  .burger[aria-expanded="true"]::after { content: "Close"; }
+
+  /* links that stand alone (the source's tap rule, §12, and the links in a
+     div): 48px tall, the guide's 48dp (they were 46px). Same selector as
+     §12, so the same weight, later. */
+  .rw-sec a[class]:not(.btn):not(.et-cat, .dc-rel, .dc-relhub, .bw-toc__link):not(:has(img, picture, h2, h3, h4,
+    [class*="__scene"], [class*="__media"], [class*="__body"], [class*="__scrim"])),
+  .rw-sec div > a:not([class]) {
+    min-height: 48px;
+  }
+  /* Links inside running text (§12 gave them 14px of padding above and below,
+     a 48px hit area on a 26.6px line). Where two such links sit on lines one
+     above the other, the lower one's padding reached into the upper one's
+     words and took their taps: on the visit page a third of the points on
+     "Seniors" opened "macular degeneration" (review, revision 28). Their hit
+     area is now their own line (4px of padding, which meets the next line's
+     in the space between the lines, not over its words); WCAG 2.2 sizes
+     inline links by their line. A link that is all of its paragraph (the
+     build marks it data-solo) keeps 14.5px: 48px. */
+  .rw-sec p > a:not([class]), .rw-sec li > a:not([class]), .site-foot .foot-blurb a,
+  .rw-sec p:is(.et-lede, .ha-fine, .dc-faq__a) > a[class]:not(.btn):not(.et-cat),
+  .rw-sec p > a[href^="tel:"]:not([class]) {
+    padding-block: 4px;
+    margin-block: -4px;
+  }
+  .rw-sec p > a[data-solo]:not([class]),
+  .rw-sec p:is(.et-lede, .ha-fine, .dc-faq__a) > a[class][data-solo]:not(.btn):not(.et-cat) {
+    padding-block: 14.5px;
+    margin-block: -14.5px;
+  }
+  /* the search panel's close button: 48px (it was 31x34) */
+  .search-panel__close { min-width: 48px; min-height: 48px; display: inline-grid; place-items: center; padding: 0; }
+  /* the visit card's "Get directions" sat 12px over "Hours, map &
+     directions": their tap areas overlapped and the lower link took the
+     bottom of the upper one (31px of 48 left). 29px between the two lines
+     keeps each 48px its own. */
+  .rw-sec .dc-visit > figure.ct-map + a[class]:not(.btn):not(.et-cat).dc-visit__more { margin-top: 3px; }
+}
+/* a narrow phone (under 340px) keeps the bars alone: the word would push the
+   header past the screen */
+@media (max-width: 339px) {
+  .burger { display: flex; flex-direction: column; padding: 0; width: 48px; }
+  .burger::after { content: none; }
+  .burger[aria-expanded="true"]::after { content: none; }
+}
+/* a small phone on its side (640x360, 667x375): the bar and the header took
+   140px of 360 (review, revision 28). Landscape is the guide's "special
+   case": the bar goes there, as on the wider phones on their side, and the
+   menu keeps its Book button */
+@media (max-width: 700px) and (max-height: 500px) and (orientation: landscape) {
+  .act-bar { display: none; }
+  .site-foot { padding-bottom: 0; }
+  .rf-top { bottom: var(--sp-45); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .act-bar.is-live, .act-bar.is-live.is-hidden { transition: none; }
+}
+
+/* The booking form's messages (site.js), at every width. The guide: "Every
+   error message should tell users what went wrong ... and what to do next".
+   The form said nothing at all: with novalidate and no script checks, an
+   empty form went straight to the not-connected note. */
+.fld-err {
+  margin: 0;
+  font-size: .875rem; line-height: 1.4; font-weight: 600;
+  color: #b42318;
+}
+.fld :is(input, select, textarea)[aria-invalid="true"] {
+  border-color: #d92d20;
+  box-shadow: 0 0 0 3px color-mix(in srgb, #d92d20 16%, transparent);
+}
+
+/* A phone on its side (the guide: portrait first, landscape "a special
+   case"): at 390px tall the top strip and the header took 122-144px, up to
+   35% of the screen. The strip goes; the header stays. */
+@media (max-height: 500px) and (orientation: landscape) and (max-width: 1040px) {
+  .topbar { display: none; }
 }

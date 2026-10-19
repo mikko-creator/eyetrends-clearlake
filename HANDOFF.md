@@ -142,8 +142,9 @@ to 1440px nothing changed: all 44 pages lay out identically at 1440, 1280 and 39
 
 **Internal page heroes are short and spread across the width** (revision 20, `system.css` §28). Every internal
 page's first section starts closer to the header (36–64px, was 95–160), and every internal hero heading shares one
-size: on phones the reference build's (revision 27), 33.4–36.5px from 360 to 430px (34.8 at 390) and held to 700px;
-36 from 701px, 44.8 at 1280, 50.4 at 1440, 55.4 at 1920, 62 at 2560. The home hero keeps its own.
+size: on phones the reference build's (revision 27), 33.4–36.5px from 360 to 430px (34.8 at 390) and held to 700px,
+except the 20 over 80 characters, 30px on phones (revision 28); 36 from 701px, 44.8 at 1280, 50.4 at 1440, 55.4 at
+1920, 62 at 2560. The home hero keeps its own.
 - **The six photo cards** (`/services/` and five service pages): from 1025px the copy is two blocks centred on each
   other, eyebrow and heading on the left (`.ha-hero__lead`), paragraph and buttons on the right (`.ha-hero__side`).
   `tools/build.mjs` (`splitInnerHeroCopy`) adds the two wrappers and stops if the copy is anything but eyebrow,
@@ -218,13 +219,65 @@ and the Book button (201px at 1041px wide).
 element here that does the same job (`docs/CHANGE-LOG.md` has the role table). Fonts, colours and the glass stay
 this site's.
 - **Sizes at 390px:** 16px gutter, 60px section padding, 16.14px text, a 41.6px home heading and 34.8px page
-  headings on .96, 31.7px section headings, 12.8px eyebrows, 52px buttons, 22.9px chips, cards with 32px corners
-  padded 22px, a 58px header bar, footer and menu links on a 40px pitch.
+  headings on .96, 31.7px section headings, 52px buttons, cards with 32px corners padded 22px, a 58px header bar.
+  Revision 28 (below) moved the reference's 12.8px eyebrows to 14px, its chips to lists, its 40px footer and menu
+  links to 48px, and long page headings to 30px.
 - **Change a size in one place:** §34 and §14 hold all of them; they sit last in their files and outweigh the older
   phone rules. Two use `!important` on purpose: large buttons' padding (`layout.css` keeps the source's padding with
   `!important`) and two centred button rows on the visit page (the source's inline style).
-- **In the header** search sits beside the menu button, both circles. The open menu starts under the header and
-  leaves its button visible, as a close button; the menu used to cover it.
+- **In the header** search sits beside the menu button. The open menu starts under the header and leaves its
+  button visible, as a close button; the menu used to cover it.
+
+**Phones follow the UXCam mobile UX guide** (revision 28, `system.css` §35, `chrome.css` §15, `src/scripts/site.js`
+sections 6, 9 and 10, `tools/build.mjs`, `tools/hover-gate.mjs`; up to 700px unless noted; no text changed). On the
+operator's request, each rule of uxcam.com/blog/mobile-ux that applies to a phone website was measured on all 44
+pages and applied (`docs/CHANGE-LOG.md` has the table, before and after).
+- **The action bar** (`actBarHTML()` in the build, §15): Call and Book an Eye Exam fixed at the bottom of every
+  phone screen. `site.js` keeps it out of sight while half or more of one of the page's own primary buttons
+  (`main .btn-primary`) is on screen under the header, once the booking form has faded in (the reveal's own
+  settings), while a field has focus, and while search or the menu is open, so a screen has one primary button. It
+  waits 1.1s after load, out of sight, for the hero's reveal to settle, then slides in if needed (no show-then-leave
+  at load). Not on phones on their side under 500px tall. The footer has 64px of padding so its last links clear it.
+  To keep the bar from stepping aside for a new primary button, give that button another class than
+  `.btn-primary`.
+- **Back-to-top on phones** shows only while the page is being scrolled back up (and 1.5s after), never while the
+  bar is out of sight (the form, a primary button, a field in use) and never over the open menu: it sat over the
+  form's fields and the FAQ toggles and took their taps. Wider screens keep it as it was.
+- **The top strip is gone on phones** (its call link is the bar's Call), and on short screens on their side. Phones
+  up to 700px wide show the phone logo (the header's `<source>` was 600px, which left phones on their side with the
+  desktop logo squeezed to 132px).
+- **48px tap areas** for every standalone link, button and field: footer, legal and menu links, search and its
+  close button, the menu button, the arrow links (padding that moves nothing, `position: relative` so the padding
+  takes taps where it hangs past the link's line), pill links, a link that is all of its paragraph (`data-solo`,
+  added by the build). Links inside running text have 4px of padding, their own line: with §12's 14px the lower of
+  two links on adjacent lines took taps on the upper one's words.
+- **14px at least** for all text. The spaced capitals take less letter-spacing on phones so the larger size wraps
+  about as often as before: eyebrows and mono labels `.14em` (`.2em`), stat labels `.05em` (`.1em`). The faint grey
+  `--g-fg-faint` is #5A7279 on phones (4.9:1; #7C949B, 3.05:1, elsewhere).
+- **Chips that are not links are lists** on phones (§35 D2, D7): no pill, glass or border; their dot, tick or icon
+  is the marker, and those with none get a dot; on light sections in the running text's colour and weight, not the
+  links' teal. That includes the designer frames page's "houses we carry". Chips that are links (`a.et-pill`) stay
+  buttons. Badges printed on photos, reviewer initials and the home logo strip are unchanged. The service heroes'
+  three facts under their buttons are a hairline list, not glass tiles (D5), and the home page's "At a chain /
+  Here" arrow is not a button-like circle (D8).
+- **Page headings over 80 characters** are 30px on phones (`data-long`, added by the build): 5 lines at most.
+- **The menu** (`mobileNavItems()` in the build): the seven main links and Book; Services and Eyewear show their
+  pages behind a chevron button (`.mob-more`). The button reads Menu, Close while open. Up to 1040px the header
+  stays over the open menu.
+- **Back closes the menu and the search panel** (`site.js` section 6): opening either adds one history entry
+  (they share it); closing by a button or Escape removes it; a menu link or a search leaves through
+  `history.back()` first, so Back from the next page returns in one step.
+- **Hover only where there is a hover:** `tools/hover-gate.mjs` wraps every `:hover` selector in
+  `@media (hover: hover)` when the build writes `dist/styles` (selectors with `:hover` only inside `:not()` are left
+  alone). New hover styles are gated automatically; `src/styles` stays as written. The stylesheet hash covers the
+  gated output. Scripts now carry a `?v=` hash too (`jsHref()`).
+- **The appointment form:** autofill hints (`name`, `tel`, `email`) and a Next key; `site.js` gives a message under
+  a missing name or phone, a number under 7 digits or an incomplete email, marks the field and focuses the first.
+  What is typed is kept in `sessionStorage` for the tab (it never leaves the device and goes when the tab closes).
+  When the form is wired, clear it after a successful send (`sessionStorage.removeItem('et-appointment-draft')`).
+- **"Leave a review"** on `/reviews/` is a link to the practice's Google listing on its reviews (the source's own
+  link from its Accessibility, Disclaimer and Visit pages). Swap in a direct "write a review" link if the practice
+  has one (`REVIEWS_URL` in the build).
 
 **Text is verbatim.** Every phrase on the source site appears in this rebuild character
 for character, with three declared exceptions, all listed in `tools/verify-text.mjs` under
@@ -361,20 +414,22 @@ The home page's **quote section** ("In Dr. Hyder's words") was redesigned in rev
 | **Some `sizes` values at 1440 are too small** | A re-check at 1440 on 2026-10-08 found 17 of 39 images declared in `audit/image-widths.json` narrower than they paint. The shortfall runs from 8px (the 530 vs 538 portraits) to 1464px (`optical-interior`, 513 vs 1977), so the browser can pick a smaller file than the screen needs. The likely cause is that the earlier measurement took the box width of cover-cropped images; this is not verified for each image. The 390–1024 values were not re-checked. The 1920 and 2560 values are painted widths. Re-measuring the lower buckets the same way would sharpen these images |
 | **Long lines at 1440 and below** | 30 sections on 20 pages already ran past 75 characters a line at 1440, the longest at 134 on `/eye-doctor-clear-lake/`. Above 1440 they are capped. At 1440 and below the original layout was kept as tuned |
 | **Mega menu edge cases** | Measured after revision 19 (`docs/CHANGE-LOG.md`). A panel takes about 0.55–0.6s to close after the pointer leaves (0.34–0.40s before). Leaving Eyewear sideways onto "Insurance" and then moving straight down onto the page within about half a second re-opens it; the old build did the same within 0.25s. With one menu open, crossing another nav link on a downward path keeps the open menu (menu aim). To switch, move along the nav, turn straight down onto the link, or pause on it for 350ms. At 1920px a few very slow (about 120 px/s), very shallow paths to the far-right Services columns still dim or close the panel: 6 of 204 in the path matrix. In 96 repeated runs, 4 closed and 2 ended in Eyewear. The old build failed all 6 matrix paths, and in the same repeats ended in Eyewear 37 times and closed 29. A logged failure traced to a 352ms gap in the headless test driver's pointer events, which the script reads, by design, as a pause. Escape does not close an open mega menu; it never did |
-| **The "Book an Eye Exam" gradient button** | `.btn-primary` (226 on the site) puts white text on teal → bright teal (#16B393) → gold. Measured behind its label: 3.08:1 on average, 2.66 at the 95th percentile, the same before and after revision 20, and the same on revision 21's dark eyewear heroes (2.61 at the worst pixel), since it paints its own background. AA asks 4.5:1 at its size. Darkening the gradient's middle stop, or dark text on the light end, would fix it; it is a brand decision, so it was not changed. The service-page proof labels (`.dc-proof__l`) were `--g-fg-faint` (#7C949B) on light glass at 3.04–3.11:1; revision 20 darkened them (6.04–6.25:1). Five other label classes share that colour (`.et-stat__l`, `.ethc-hero__l`, `.od-record__l`, `.bw-stat__l`, `.ia-stat__suf`) and were not re-measured |
+| **The "Book an Eye Exam" gradient button** | `.btn-primary` (226 on the site) puts white text on teal → bright teal (#16B393) → gold. Measured behind its label: 3.08:1 on average, 2.66 at the 95th percentile, the same before and after revision 20, and the same on revision 21's dark eyewear heroes (2.61 at the worst pixel), since it paints its own background. AA asks 4.5:1 at its size. Darkening the gradient's middle stop, or dark text on the light end, would fix it; it is a brand decision, so it was not changed. The service-page proof labels (`.dc-proof__l`) were `--g-fg-faint` (#7C949B) on light glass at 3.04–3.11:1; revision 20 darkened them (6.04–6.25:1). Five other label classes share that colour (`.et-stat__l`, `.ethc-hero__l`, `.od-record__l`, `.bw-stat__l`, `.ia-stat__suf`) and were not re-measured Since revision 28 the phone action bar shows one on most phone screens, so the contrast is more visible there |
 | **Reveal content needs JavaScript** | `.reveal` starts at opacity 0 and `site.js` adds `.in-view` as it scrolls into view. With scripts off, or before the script runs, that content is invisible, including most hero text (measured on five pages at 1440 and 390, in the build before revision 20 too). A `<noscript>` style or a `.js` class on `<html>` that gates the hidden state would fix it |
 | **The service-page hero photos are generated** | Every service page's hero shows a generated still life of its service, with no people (revision 25), and `/services/` a generated room (revision 20). None is the practice's office or equipment (`assets/generated-hf/README.md`). The practice should approve them, or supply its own photographs for the same slots |
 | **The framed hero's badge covers part of the photo** | On the 21 framed service heroes the badge (`.dc-chip`) sits over the photograph's lower left. Revision 26 drew its two lines as a heading and a small caption (both were 17px body text) and keeps it inside the frame on phones, so it is 61px tall instead of 81–109. Measured on all 21 pages after that: it covers 5–13% of the frame at 1280–1920 (was 8–21%), 2–9% from 600 to 1024px (was 3–14%), 11–25% on phones from 360 to 414px (was 16–47%) and 19–46% at 320 (was 29–67%). Each new photograph keeps its subject in the middle, but the badge still covers part of some; the foreign-body tray was mirrored for this (revision 25). Moving the badge below the photo would show every picture whole |
-| **"Leave a review" does nothing** | On `/reviews/` it is a `<button>` with no handler, in the source too. Revision 26 gave it its neighbours' link style (it had the browser's grey button skin), so it now looks like a working link. Make it a link to the practice's Google review page, or remove it |
+| ~~"Leave a review" does nothing~~ **fixed** | Revision 28: on `/reviews/` it is now a link to the practice's Google listing, opened on its reviews (the source's own link from its Accessibility, Disclaimer and Visit pages; `REVIEWS_URL` in `tools/build.mjs`). If the practice has a direct "write a review" link, use that instead |
 | **Text the source styled that is still body text** | Revision 26 gave back the hierarchy of the cards it fixed (related-care and service cards, stat numbers, eyewear and guide cards, the photo caption chips, the dark bands' NAP links). Other roles the source styled still render as plain 17px text: the doctor's name and role in the doctor sections, NAP and visit-card names, the hero sub-paragraphs, the category cards' "Designer / Frames", the contact-lens collection titles, review names and dates, the About hero's "Our doctor" kicker and its pull quote, among others (64 checks at 390). They read as plain text, not as broken; restyling them changes the desktop, so it is a design decision |
-| **Long headings run to more lines on phones** | Revision 27 gives phones the reference build's heading sizes (34.8px page headings, 31.7px section headings at 390, where they were 30.8 and 27). This site's headings are longer than the reference's, so some now take 4–7 lines at 390 (the myopia and cataract heroes), and compound words break at their hyphens ("co- / management", "follow- / up"), which only the text or the markup can prevent. A build step that keeps hyphenated words together, or a smaller size for headings over a length, would fix it; both go beyond "the reference's sizes" |
-| **Phone sizes run to 700px** | The reference's breakpoint. From 431 to 700px the phone sizes hold their 430px values, and at 701px this site's own sizes take over: the home heading steps from 41.6 to 36px and section headings from 33 to 27px; page headings by half a pixel |
-| **Tap areas follow the reference** | The footer's, menu's and legal row's links are 40px tall, the top strip's call link 36px (they were 46px). Links with an arrow keep a 44px tap area, as padding that moves nothing. WCAG 2.2's minimum (2.5.8) is 24px |
+| **Long headings run to more lines on phones** | Revision 27 gave phones the reference build's heading sizes (34.8px page headings, 31.7px section headings at 390). Revision 28 sets the 20 page headings over 80 characters at 30px, so none takes more than 5 lines from 360px (they took up to 7). Section headings keep the reference's size, and compound words still break at their hyphens ("co- / management"), which only the text or the markup can prevent |
+| **Phone sizes run to 700px** | The reference's breakpoint, and revision 28's. From 431 to 700px the phone sizes hold their 430px values, and at 701px this site's own sizes take over: the home heading steps from 41.6 to 36px and section headings from 33 to 27px; page headings by half a pixel. A phone on its side (667–932px wide) gets the tablet layout: no action bar (the guide calls landscape "a special case"); its top strip is hidden when the screen is under 500px tall |
+| ~~Tap areas follow the reference~~ **48px since revision 28** | Every standalone link, button and field on a phone has a 48px tap area (the UXCam guide's 48dp; the reference's footer, menu and legal links were 40px). Links inside running text keep their line, as WCAG 2.2 allows for inline links; their padded hit area does not grow their line |
+| **Two of the guide's rules are owner decisions** | The UXCam guide also asks for offline handling ("cache aggressively") and for measuring what users do (analytics, session replay). Neither was added: a caching service worker could serve old pages while the preview changes, and the site ships no tracking by design. The phone number and address are in every page's HTML, and `tel:` links work offline |
+| **The appointment draft is kept for the tab** | Revision 28: what a visitor types in the booking form is kept in `sessionStorage` (`et-appointment-draft`) so an interruption does not lose it. It stays on the device and goes when the tab closes. When the form is wired, clear it after a successful send |
 | **Dividers the source drew** | The source drew a hairline above several blocks (the doctor sections' stats, NAP blocks, review bylines, the About signature, the hero proof row). The redesign draws none of them and keeps their padding on desktop (40px above the doctor stats); on phones revision 26 removes the empty space instead |
 | **The eyewear photos are generated, and the house cards pair real wordmarks with them** | Revision 21. The eight houses are the source's own lists, but the practice should confirm which it carries today. Brands' rules often govern how their marks appear next to other imagery: check them, or swap in a house's official retailer imagery in the same card (`NOTICE.md`, item 2). The line under the cards says the photographs are not the houses' product shots |
 | **The third material card's `sizes`** | On `/products/designer-frames/` the "whole wall" card keeps its slot's measured `sizes` from `audit/image-widths.json`. Revision 21 measured that slot for the two new cards beside it: those values fall short of the painted width between 401 and 600px (by up to 120px) and at 1024. The two new cards carry their own (`EW_SIZES.card`); the third, and the same slot on other pages, were not changed |
 | **Phones magnify the hero crop** | The square crop each of the six photo cards uses up to 820px is 1648px, the largest a 21:9 render holds. A 3x phone paints it at up to 1.7x; the photo there sits under a 74–90% scrim. From 600px up no file is magnified |
-| **`site.js` has no cache-buster** | The stylesheets are linked with `?v=<hash>`, but `/scripts/site.js` is not, and GitHub Pages serves it with `Cache-Control: max-age=600` (measured). After an update a returning visitor can run the old script for up to 10 minutes. Revision 19 is safe either way: its CSS works without the new script. Adding the same `?v=` to the script tag in `tools/build.mjs` would close this |
+| ~~`site.js` has no cache-buster~~ **fixed** | Revision 28: `/scripts/site.js` and `/scripts/search.js` are linked with `?v=<hash>` like the stylesheets (`jsHref()` in `tools/build.mjs`) |
 | **Full-bleed bands overshoot by half a scrollbar** | The home page's doctor and kids photo bands (revisions 13 and 14) reach the screen edges with `calc(50% - 50vw)`, and `100vw` includes a classic scrollbar, so below 1200px the page is 8px wider than the window. It is invisible because `body` sets `overflow-x: hidden`: no horizontal scrollbar, and a sideways wheel gesture does not move the page (measured; with that rule removed, a 15px scrollbar appears). Only a script's `scrollTo` can shift it. Keep that rule, or clip those two sections, if you change it. The eyewear heroes' bands (revision 21, below 1200px) use the same offsets, but their sections clip them (`overflow: hidden`, measured), so they do not widen the page. So does the About page's "Who I am" band (revision 24, below 1025px): measured at 820 and 1024, it runs 7.5px past each side and the page stays the window's width; with the section's `overflow: hidden` lifted the page is 8px wider |
 | **Portrait bands at 961–1024px on 2x screens** | Below 1025px the doctor sections, the About hero and "Who I am" show the edited portrait as a 100vw band. Its largest file is 1920px wide, so from 961px on a 2x screen (an iPad in landscape is 1024) the band needs more pixels than that file holds: at 1024@2x the browser stretches it 1.07x (measured on the home page's doctor section and both About sections; the seven other doctor pages use the same files and band). The master is 2628px wide (`assets/edited/`): a 2400w rendition would close it, on every page that uses the portrait |
 

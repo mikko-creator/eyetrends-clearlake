@@ -92,7 +92,7 @@
   transition: opacity var(--t-mid) var(--ease);
   background: radial-gradient(20rem 20rem at var(--mx, 50%) var(--my, 0%), color-mix(in srgb, var(--c-1) 50%, transparent), transparent 60%);
 }
-.et-cat:hover::after,
+@media (hover: hover){.et-cat:hover::after,
 .et-review:hover::after,
 .et-frame:hover::after,
 .dc-rel:hover::after,
@@ -118,9 +118,9 @@
 .bw-timeline__entry:hover::after,
 .bw-toc__title:hover::after,
 .et-svc:hover::after,
-.ia-portrait:hover::after { opacity: 1; }
+.ia-portrait:hover::after { opacity: 1; }}
 
-.et-cat:hover,
+@media (hover: hover){.et-cat:hover,
 .et-review:hover,
 .et-frame:hover,
 .dc-rel:hover,
@@ -151,7 +151,7 @@
   box-shadow: var(--glass-lift), var(--glass-edge);
   border-color: color-mix(in srgb, var(--g-teal-lit) 45%, transparent);
   background: var(--glass-bg-2);
-}
+}}
 
 /* dark-band variants */
 .surface-dark .et-cat,
@@ -185,7 +185,7 @@
   border-color: var(--glassd-brd);
   box-shadow: 0 24px 56px -26px color-mix(in srgb, var(--c-3) 60%, transparent), var(--glassd-edge);
 }
-.surface-dark .et-cat:hover,
+@media (hover: hover){.surface-dark .et-cat:hover,
 .surface-dark .et-review:hover,
 .surface-dark .et-frame:hover,
 .surface-dark .dc-rel:hover,
@@ -214,7 +214,7 @@
 .surface-dark .ia-portrait:hover {
   border-color: color-mix(in srgb, var(--g-teal-lit) 55%, transparent);
   background: color-mix(in srgb, var(--c-3) 68%, transparent);
-}
+}}
 
 /* ------------------------------------------------------ MEDIA FRAMES (16) */
 .dc-frame,
@@ -264,7 +264,7 @@
               inset 0 -70px 90px -70px color-mix(in srgb, var(--c-3) 55%, transparent);
   transition: box-shadow var(--t-mid) var(--ease);
 }
-.dc-frame:hover::after,
+@media (hover: hover){.dc-frame:hover::after,
 .ethc-hero__media:hover::after,
 .ethc-close__media:hover::after,
 .ethc-house__logo:hover::after,
@@ -282,7 +282,7 @@
 .bw-founder__portrait:hover::after {
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--g-teal-lit) 55%, transparent),
               inset 0 -70px 90px -70px color-mix(in srgb, var(--c-3) 35%, transparent);
-}
+}}
 /* inner images: full-bleed cover, slow zoom. Position is layout.css's job. */
 .et-media-img,
 .et-cat__scene,
@@ -307,7 +307,7 @@
   transition: transform 1.1s var(--ease), filter var(--t-slow) var(--ease);
   will-change: transform;
 }
-.dc-frame:hover img,
+@media (hover: hover){.dc-frame:hover img,
 .ethc-hero__media:hover img,
 .ethc-close__media:hover img,
 .ethc-house__logo:hover img,
@@ -322,7 +322,7 @@
 .ia-hero__media:hover img,
 .ia-media:hover img,
 .ia-portrait:hover img,
-.bw-founder__portrait:hover img { transform: scale(1.055); }
+.bw-founder__portrait:hover img { transform: scale(1.055); }}
 
 /* ------------------------------------------------------- CTA / GO LINKS (13) */
 .et-golink,
@@ -346,7 +346,7 @@
   color: var(--g-teal);
   transition: color var(--t-mid) var(--ease), gap var(--t-mid) var(--ease);
 }
-.et-golink:hover,
+@media (hover: hover){.et-golink:hover,
 .et-cat__arrow:hover,
 .dc-rel__go:hover,
 .dc-visit__phone:hover,
@@ -358,7 +358,7 @@
 .od-close__links:hover,
 .ct-map__dir:hover,
 .ct-route__go:hover,
-.ia-link__go:hover { color: var(--g-teal-deep); gap: var(--sp-30); }
+.ia-link__go:hover { color: var(--g-teal-deep); gap: var(--sp-30); }}
 .et-golink svg,
 .et-cat__arrow svg,
 .dc-rel__go svg,
@@ -372,7 +372,7 @@
 .ct-map__dir svg,
 .ct-route__go svg,
 .ia-link__go svg { transition: transform var(--t-mid) var(--ease); }
-.et-golink:hover svg,
+@media (hover: hover){.et-golink:hover svg,
 .et-cat__arrow:hover svg,
 .dc-rel__go:hover svg,
 .dc-visit__phone:hover svg,
@@ -384,7 +384,7 @@
 .od-close__links:hover svg,
 .ct-map__dir:hover svg,
 .ct-route__go:hover svg,
-.ia-link__go:hover svg { transform: translateX(4px); }
+.ia-link__go:hover svg { transform: translateX(4px); }}
 .surface-dark .et-golink,
 .surface-dark .et-cat__arrow,
 .surface-dark .dc-rel__go,
@@ -398,7 +398,7 @@
 .surface-dark .ct-map__dir,
 .surface-dark .ct-route__go,
 .surface-dark .ia-link__go { color: var(--g-gold-lit); }
-.surface-dark .et-golink:hover,
+@media (hover: hover){.surface-dark .et-golink:hover,
 .surface-dark .et-cat__arrow:hover,
 .surface-dark .dc-rel__go:hover,
 .surface-dark .dc-visit__phone:hover,
@@ -410,7 +410,7 @@
 .surface-dark .od-close__links:hover,
 .surface-dark .ct-map__dir:hover,
 .surface-dark .ct-route__go:hover,
-.surface-dark .ia-link__go:hover { color: var(--c-1); }
+.surface-dark .ia-link__go:hover { color: var(--c-1); }}
 
 /* --------------------------------------------------------- PILLS / CHIPS (8) */
 .et-pill,
@@ -438,7 +438,7 @@
               border-color var(--t-mid) var(--ease),
               background-color var(--t-mid) var(--ease);
 }
-.et-pill:hover,
+@media (hover: hover){.et-pill:hover,
 .et-dot:hover,
 .ethc-plan:hover,
 .ethc-menu__chip:hover,
@@ -449,7 +449,7 @@
   transform: translateY(-2px);
   border-color: color-mix(in srgb, var(--g-teal-lit) 50%, transparent);
   background: color-mix(in srgb, var(--c-1) 84%, transparent);
-}
+}}
 .et-pill svg,
 .et-dot svg,
 .ethc-plan svg,
@@ -497,7 +497,7 @@
               border-color var(--t-mid) var(--ease),
               background-color var(--t-mid) var(--ease);
 }
-.dc-visit__row:hover,
+@media (hover: hover){.dc-visit__row:hover,
 .dc-pill:hover,
 .ha-nap__row:hover,
 .tib-collection__head:hover,
@@ -510,7 +510,7 @@
 .bw-manifesto__value:hover {
   padding-inline-start: 8px;
   border-color: color-mix(in srgb, var(--g-teal-lit) 42%, transparent);
-}
+}}
 .surface-dark .dc-visit__row,
 .surface-dark .dc-pill,
 .surface-dark .ha-nap__row,
@@ -535,12 +535,12 @@
   box-shadow: var(--glass-edge);
   transition: box-shadow var(--t-mid) var(--ease), border-color var(--t-mid) var(--ease);
 }
-.dc-faq__item:hover,
+@media (hover: hover){.dc-faq__item:hover,
 .dc-faq__ic:hover,
 .dc-faq__a:hover {
   border-color: color-mix(in srgb, var(--g-teal-lit) 40%, transparent);
   box-shadow: var(--glass-shadow), var(--glass-edge);
-}
+}}
 
 /* ---------------------------------------------------------------- STATS (9) */
 .dc-proof__k,

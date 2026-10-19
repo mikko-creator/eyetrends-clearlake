@@ -6,6 +6,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { extractSections, sliceBalanced, routeToFile, readJSON, writeFile, ORIGIN } from './lib.mjs';
 import * as NAV from './nav.mjs';
+import { gateHover } from './hover-gate.mjs';
 
 const ROOT = process.cwd();
 const DIST = path.join(ROOT, 'dist');
@@ -47,15 +48,34 @@ const keptCopies = new Map(); // basename -> dist path
 // a revision-5 audit measured 89 contrast failures against a stylesheet that
 // had already been fixed on disk, because the page was still running the old
 // one. The hash also makes the shipped files safely far-future cacheable.
-// Hashes the SOURCE stylesheet, not the copy in dist: pages are rendered before
-// the styles are copied, so reading from dist would hash the previous build's
-// file (or throw on a clean tree). The copy is byte-identical, so the hash is
-// still the hash of what ships.
-function cssHref(name) {
+// Hashes what ships, computed from src/ and not read back from dist: pages are
+// rendered before the styles are written, so reading from dist would hash the
+// previous build's file (or throw on a clean tree).
+// What ships is the source stylesheet with its hover styles limited to devices
+// that hover (tools/hover-gate.mjs, revision 28), so the hash covers the gate's
+// own changes too.
+const shippedCssCache = new Map();
+function shippedCss(name) {
+  if (shippedCssCache.has(name)) return shippedCssCache.get(name);
   const f = path.join(ROOT, 'src', 'styles', name);
   if (!fs.existsSync(f)) throw new Error('stylesheet missing: src/styles/' + name);
-  const h = crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex').slice(0, 10);
+  const css = gateHover(fs.readFileSync(f, 'utf8'));
+  shippedCssCache.set(name, css);
+  return css;
+}
+function cssHref(name) {
+  const h = crypto.createHash('sha256').update(shippedCss(name)).digest('hex').slice(0, 10);
   return '/styles/' + name + '?v=' + h;
+}
+// The scripts get the same hash (revision 28). Without one a page whose markup
+// changed could run the previous site.js for as long as a cache keeps it
+// (GitHub Pages: 600s). The copy is byte-identical, so the source's hash is the
+// hash of what ships.
+function jsHref(name) {
+  const f = path.join(ROOT, 'src', 'scripts', name);
+  if (!fs.existsSync(f)) throw new Error('script missing: src/scripts/' + name);
+  const h = crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex').slice(0, 10);
+  return '/scripts/' + name + '?v=' + h;
 }
 
 const imageMap = new Map();   // source basename -> { href, w, h, generated }
@@ -1445,7 +1465,7 @@ function headerHTML(current) {
   <div class="wrap head-in">
     <a class="brand" href="/">
       <picture>
-        <source media="(max-width: 600px)"
+        <source media="(max-width: 700px)"
           srcset="/assets/img/eye-trends-mobile-lockup-150.webp 150w, /assets/img/eye-trends-mobile-lockup-300.webp 300w, /assets/img/eye-trends-mobile-lockup.webp 644w"
           sizes="139px">
         <img src="${NAV.BRAND.logo}" alt="${NAV.BRAND.logoAlt}"
@@ -1477,20 +1497,62 @@ function headerHTML(current) {
 </div>
 <div class="mobile-nav" id="mobile-nav" hidden>
   <div class="wrap mobile-in">
-    ${NAV.PRIMARY.map((it) => `<a class="mob-link" href="${it.href}">${it.label}</a>`).join('')}
-    <div class="mob-group"><p class="mob-h">Eye Care Services</p>
-      ${NAV.SERVICE_COLUMNS.map((c) => `<a class="mob-sub" href="${c.head.href}">${c.head.label}</a>` + c.links.map((l) => `<a class="mob-sub" href="${l.href}">${l.label}</a>`).join('')).join('')}
-    </div>
-    <div class="mob-group"><p class="mob-h">Eyewear</p>
-      ${NAV.EYEWEAR_CARDS.map((c) => `<a class="mob-sub" href="${c.href}">${c.label}</a>`).join('')}
-    </div>
+    ${mobileNavItems(current)}
     <a class="btn btn-primary mob-cta" href="#book">Book an Eye Exam</a>
   </div>
 </div>`;
 }
 
+// The phone menu (revision 28). It listed every page: the seven main links, then
+// "Eye Care Services" with all 26 service pages and "Eyewear" with its 4, 38
+// links and 2.8 screens at 390px (5.3 in landscape). The UXCam guide: navigation
+// built for a large monitor (mega menus) "usually doesn't translate to mobile",
+// and no third level of navigation should compete for attention. Now the two long
+// groups sit under their own main link, Services and Eyewear, behind a button
+// that shows them (site.js); the menu opens as the seven links and the booking
+// button. Same links, same labels, same order; the current page is marked as the
+// desktop nav marks it.
+function mobileNavItems(current) {
+  const isCur = (h) => (h === current || (h !== '/' && current.startsWith(h + '/')));
+  const subs = {
+    services: NAV.SERVICE_COLUMNS.flatMap((c) => [c.head, ...c.links]),
+    eyewear: NAV.EYEWEAR_CARDS,
+  };
+  const names = { services: 'Eye Care Services', eyewear: 'Eyewear' };
+  return NAV.PRIMARY.map((it) => {
+    // the page itself is "page"; the section a sub-page belongs to is "true"
+    const cur = it.href === current ? ' aria-current="page"' : (isCur(it.href) ? ' aria-current="true"' : '');
+    if (!it.mega) return `<a class="mob-link" href="${it.href}"${cur}>${it.label}</a>`;
+    const id = 'mob-sub-' + it.mega;
+    const links = subs[it.mega].map((l) => `<a class="mob-sub" href="${l.href}"${l.href === current ? ' aria-current="page"' : ''}>${l.label}</a>`).join('');
+    return `<div class="mob-row"><a class="mob-link" href="${it.href}"${cur}>${it.label}</a>`
+      + `<button class="mob-more" type="button" aria-expanded="false" aria-controls="${id}"><span class="sr-only">Show the ${names[it.mega]} pages</span></button></div>`
+      + `<div class="mob-group" id="${id}" hidden>${links}</div>`;
+  }).join('');
+}
+
+// The phone action bar (revision 28). The guide's thumb zone: primary actions in
+// the bottom two-thirds of the screen, where a thumb reaches, and bottom bars over
+// top ones. Measured before at 390x664: 34 of 44 pages had no booking or call
+// button on the first screen (40 at 360x640), and the only call link on a phone
+// was the top strip's, in the corner a thumb reaches worst. Shown up to 700px
+// (chrome.css §15); site.js hides it while the page's own booking or call button,
+// or the booking form, is on screen, so a screen never shows two.
+function actBarHTML() {
+  return `<nav class="act-bar" aria-label="Call or book">
+  <a class="act-bar__call" href="${NAV.TOPBAR.phoneHref}" aria-label="${NAV.TOPBAR.phoneLabel}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8.1 9.6a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2Z"/></svg><span>Call</span></a>
+  <a class="btn btn-primary act-bar__book" href="#book">${NAV.FOOTER_PRECTA.cta}</a>
+</nav>`;
+}
+
 function bookingFormHTML() {
   // Field names, labels and the submit label are the source's own.
+  // Revision 28 (the UXCam guide: "Offer autofill where supported", the right
+  // keyboard per field): name, phone and email say what they hold, so a phone
+  // offers the visitor's own details, and the keyboard's return key reads Next.
+  // The phone field stays type="tel" with no pattern: any format is accepted
+  // ("phone number fields that reject international formats" is on the guide's
+  // list of mistakes). site.js adds the error messages and keeps what was typed.
   return `<section class="book-band" id="book">
   <div class="wrap book-grid">
     <div class="book-copy reveal">
@@ -1501,13 +1563,13 @@ function bookingFormHTML() {
       <p class="book-meta">${NAV.FOOTER_PRECTA.meta}</p>
     </div>
     <form class="book-form reveal" data-sr-unwired="1" data-sr-endpoint="/do_actions/do_form_submit" action="/appointment-request" method="post" novalidate>
-      <div class="fld"><label for="f_name">Your name *</label><input id="f_name" name="name" type="text" required></div>
-      <div class="fld"><label for="f_phone">Phone *</label><input id="f_phone" name="phone" type="tel" required></div>
-      <div class="fld"><label for="f_email">Email</label><input id="f_email" name="email" type="email"></div>
-      <div class="fld"><label for="f_daytime">Preferred day &amp; time</label><input id="f_daytime" name="daytime" type="text"></div>
+      <div class="fld"><label for="f_name">Your name *</label><input id="f_name" name="name" type="text" required autocomplete="name" autocapitalize="words" enterkeyhint="next"></div>
+      <div class="fld"><label for="f_phone">Phone *</label><input id="f_phone" name="phone" type="tel" required autocomplete="tel" enterkeyhint="next"></div>
+      <div class="fld"><label for="f_email">Email</label><input id="f_email" name="email" type="email" autocomplete="email" enterkeyhint="next"></div>
+      <div class="fld"><label for="f_daytime">Preferred day &amp; time</label><input id="f_daytime" name="daytime" type="text" enterkeyhint="next"></div>
       <div class="fld"><label for="f_patient">New or returning patient</label><select id="f_patient" name="patient"><option>New patient</option><option>Returning patient</option></select></div>
       <div class="fld"><label for="f_reason">Reason for visit</label><select id="f_reason" name="reason"><option>Comprehensive eye exam</option><option>Contact lens exam</option><option>Medical / urgent eye care</option><option>Eyewear &amp; frames</option></select></div>
-      <div class="fld"><label for="f_insurance">Insurance carrier (optional)</label><input id="f_insurance" name="insurance" type="text"></div>
+      <div class="fld"><label for="f_insurance">Insurance carrier (optional)</label><input id="f_insurance" name="insurance" type="text" enterkeyhint="next"></div>
       <div class="fld fld--full"><label for="f_notes">Notes (optional)</label><textarea id="f_notes" name="notes" rows="3"></textarea></div>
       <div class="hp" aria-hidden="true"><label for="f_hp">Leave this field empty</label><input id="f_hp" name="hp" type="text" tabindex="-1" autocomplete="off"><label for="f_hpc">Leave this box unchecked</label><input id="f_hpc" name="hpc" type="checkbox" tabindex="-1"></div>
       <button class="btn btn-primary" type="submit">Request an Appointment</button>
@@ -1548,7 +1610,11 @@ const stats = { pages: 0, sections: 0, imgMapped: 0, imgUnmapped: [], linksRewri
   generatedKept: 0, generatedRevertedToOriginal: [], headingDashesRemoved: [],
   heroSwapped: 0, portraitAdded: 0, portraitSwapped: 0, portraitAltsRewritten: 0, portraitWide: 0, kidsSwapped: 0, innerHeroSwapped: 0, innerHeroSplit: 0, marqueesBuilt: 0, marqueeLogos: 0,
   ewHeroSwapped: 0, ewHouses: 0, ewCardsSwapped: 0, ewLooksAdded: 0, aboutHeroWide: 0, aboutBioWide: 0, svcHeroes: { frame: 0, card: 0 },
-  doctorStatsRemoved: [], doctorLinkMoved: 0, srcsetAdded: 0 };
+  doctorStatsRemoved: [], doctorLinkMoved: 0, srcsetAdded: 0, reviewLinkWired: 0, longH1: 0, soloLinks: 0 };
+
+// The practice's Google listing, opened on its reviews: the source's own link
+// (Accessibility, Disclaimer and Visit Us carry it).
+const REVIEWS_URL = 'https://www.google.com/maps/place/Eye+Trends+Vision+%26+Glasses+Center/@29.5517488,-95.1260944,17z/data=!4m8!3m7!1s0x86409c61ddbd9bb5:0x157fe20b3827e300!9m1!1b1';
 
 const pageRecords = [];
 
@@ -1664,6 +1730,46 @@ for (const p of seo.pages) {
     return '<' + tag + attrs + '>' + fixed + '</' + tag + '>';
   });
 
+  // Revision 28, the UXCam guide's "dead clicks" (taps on things that do nothing):
+  // /reviews/ "Leave a review" was a <button> with nothing behind it (the source
+  // ran it through its platform's widget, which this build removed). It now opens
+  // the practice's own Google listing on its reviews, the link the source itself
+  // uses on four pages (Accessibility, Disclaimer, Visit Us). Same words, same
+  // class; a link, because it goes somewhere.
+  {
+    const open = '<button type="button" class="et-golink">Leave a review';
+    const at = body.indexOf(open);
+    if (at !== -1) {
+      const end = body.indexOf('</button>', at);
+      const inner = body.slice(at + '<button type="button" class="et-golink">'.length, end);
+      body = body.slice(0, at) + '<a class="et-golink" href="' + REVIEWS_URL + '" target="_blank" rel="noopener">'
+        + inner + '</a>' + body.slice(end + '</button>'.length);
+      stats.reviewLinkWired++;
+    } else if (/\/reviews$/.test(p.url.replace(/\/$/, ''))) {
+      throw new Error('/reviews/: the "Leave a review" button was not found');
+    }
+  }
+
+  // Revision 28: long page headings (over 80 characters, 20 pages) are marked so
+  // phones can set them smaller (system.css §35): at the reference build's size
+  // they ran to 6 or 7 lines at 360px. The text is untouched.
+  body = body.replace(/<h1\b([^>]*)>([\s\S]*?)<\/h1>/i, (m, attrs, inner) => {
+    const text = inner.replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/gi, 'x').replace(/\s+/g, ' ').trim();
+    if (text.length <= 80) return m;
+    stats.longH1++;
+    return '<h1' + attrs + ' data-long>' + inner + '</h1>';
+  });
+
+  // Revision 28: a link that is all of its paragraph is marked data-solo. On a
+  // phone a link inside running text keeps a hit area no taller than its line,
+  // so it cannot take taps meant for a link on the line above or below (the
+  // review measured a third of "Seniors" opening "macular degeneration"); a
+  // link standing alone in its paragraph keeps a 48px one (chrome.css §15).
+  body = body.replace(/(<p\b[^>]*>\s*)<a\b([^>]*)>((?:(?!<\/a>)[\s\S])*)<\/a>(\s*<\/p>)/g, (m, open, attrs, inner, close) => {
+    stats.soloLinks++;
+    return open + '<a' + attrs + ' data-solo>' + inner + '</a>' + close;
+  });
+
   const route = p.url.replace(ORIGIN, '') || '/';
   const file = routeToFile(route);
   const depth = file.split('/').length - 1;
@@ -1706,7 +1812,8 @@ ${body}
 ${bookingFormHTML()}
 </main>
 ${footerHTML()}
-<script src="/scripts/site.js" defer></script>
+${actBarHTML()}
+<script src="${jsHref('site.js')}" defer></script>
 </body>
 </html>`;
 
@@ -1734,7 +1841,8 @@ ${footerHTML()}
     const from = path.join(S, f);
     if (!fs.existsSync(from)) { imageFailures.push({ base: f, reason: 'src/styles/' + f + ' missing' }); continue; }
     fs.mkdirSync(path.join(DIST, 'styles'), { recursive: true });
-    fs.copyFileSync(from, path.join(DIST, 'styles', f));
+    // the source with its hover styles behind @media (hover: hover): see shippedCss()
+    fs.writeFileSync(path.join(DIST, 'styles', f), shippedCss(f));
   }
 }
 
@@ -1797,8 +1905,9 @@ ${body}
 ${bookingFormHTML()}
 </main>
 ${footerHTML()}
-<script src="/scripts/site.js" defer></script>
-<script src="/scripts/search.js" defer></script>
+${actBarHTML()}
+<script src="${jsHref('site.js')}" defer></script>
+<script src="${jsHref('search.js')}" defer></script>
 </body>
 </html>`;
   writeFile(path.join(DIST, 'search', 'index.html'), doc);

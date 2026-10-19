@@ -597,3 +597,164 @@ body.nav-open { overflow: hidden; }
   .search-form { flex-wrap: nowrap; }
   .search-form input { flex: 1 1 0; min-width: 0; }
 }
+
+/* ----------------------- 14 · PHONES: THE REFERENCE BUILD'S SIZES (system §34) */
+/* Revision 27: the reference build's phone sizes for the chrome, up to 700px
+   (its breakpoint). Values at 390px. */
+@media (max-width: 700px) {
+  /* the top strip 36px tall, its text .74rem */
+  .topbar { font-size: .74rem; }
+  .topbar-in { padding-block: 0; }
+  .topbar .topbar-call { min-height: 36px; }
+
+  /* the header: 8px above and below a 58px bar, 10px between its parts,
+     the logo 132px wide, search 44px; search sits with the menu button.
+     Scrolled, the floating bar is 6px from the top and on the page gutters,
+     its contents 14px from its left end and 6px from its right. */
+  .site-head { padding-block: 8px; }
+  .head-in, .site-head.is-stuck .head-in { min-height: 58px; gap: 10px; }
+  .brand img, .site-head.is-stuck .brand img { width: 132px; height: auto; max-width: none; }
+  .head-search { width: 44px; height: 44px; }
+  .head-ctas { margin-left: auto; }
+  /* the menu button is a 46px circle beside search, as the reference's two
+     header buttons are, in search's own glass */
+  .burger {
+    margin-left: 0;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    align-items: center;
+    border-radius: var(--r-pill);
+    background: color-mix(in srgb, var(--c-1) 55%, transparent);
+    border: 1px solid var(--glass-brd);
+  }
+  .site-head.is-stuck { top: 6px; padding-block: 0; max-width: calc(100% - 2 * var(--gutter)); }
+  .site-head.is-stuck .head-in { padding-inline: 14px 6px; }
+
+  /* the menu opens under the header, which stays as it was, with the menu
+     button (now a close button) on it: 40px down to the first link (at the
+     top of a page the menu starts under the top strip and header; scrolled,
+     it fills the screen under the floating bar, as the reference's does);
+     links 25.4px on 1.05 with 10px above and below, 4px apart; the groups
+     28px down, their heads .95rem with 8px under, their links on a 40px
+     pitch */
+  .mobile-nav { top: calc(36px + 75px); padding-block: 40px; }
+  body.is-scrolled .mobile-nav { top: 0; padding-top: calc(6px + 60px + 40px); }
+  body.is-scrolled.nav-open .site-head { z-index: 80; }
+  .mobile-in { gap: 4px; }
+  .mob-link { padding-block: 10px; font-size: clamp(1.5rem, 1.1rem + 2vw, 1.6375rem); line-height: 1.05; }
+  .mob-group { margin-top: 24px; gap: 0; }
+  .mob-h { font-size: .95rem; margin-bottom: 8px; }
+  .mobile-nav .mob-sub { display: flex; min-height: 40px; padding-block: 0; font-size: inherit; }
+  .mob-cta { margin-top: 24px; }
+  .mobile-nav .btn, .search-panel__form .btn {
+    width: 100%;
+    min-height: 52px;
+    padding: .92em 1.45em;
+    font-size: .95rem;
+    line-height: 1;
+    gap: .6em;
+  }
+
+  /* links in a card or a line: the reference's .92rem with .45em to the
+     arrow, and its spacing, which is the text's own. The reference's line
+     of 1 is for labels that never wrap; some here do, and on 1 their lines
+     touched, so the line is 1.3. The 44px tap area stays, as padding that
+     moves nothing (prose links have it so, §12). Pill links are the
+     reference's small button: 44px, .7em 1.15em, .82rem. Both selectors
+     match §12's tap rule in weight and come after it. */
+  .rw-sec a[class]:not(.btn):not(.et-cat):is(.et-golink, .et-frame__add, .dc-visit__more, .ct-map__dir, .ia-link__go,
+    .ct-route__go, .ethc-herocall, .ha-hero__call, .tib-herocall, .et-hero__call),
+  .rw-sec button.et-golink {
+    min-height: 0;
+    padding-block: 13px;
+    margin-block: -13px;
+    font-size: .92rem;
+    line-height: 1.3;
+    gap: .45em;
+  }
+  .rw-sec :is(.dc-rel__go, .ha-cond__go, .dc-relhub__go) { min-height: 0; font-size: .92rem; line-height: 1.3; gap: .45em; }
+  /* a stack of such links is the reference's link list: at least 40px a
+     link, so tap areas no longer overlap (stacked 4px apart, a tap on one of
+     the About page's closing links landed on the next). One-line links
+     touch, on a 40px pitch; the services page's routes run to two and three
+     lines, so 14px keeps each a separate link. */
+  .rw-sec :is(.od-close__links, .ha-routes__list) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+  .rw-sec .ha-routes__list { gap: 14px; }
+  .rw-sec :is(.od-close__links, .ha-routes__list) > a[class]:not(.btn):not(.et-cat) {
+    min-height: 40px;
+    padding-block: 0;
+    margin-block: 0;
+  }
+  /* a review's "Read on Google" keeps its size; its tap area moves nothing */
+  .rw-sec a[class]:not(.btn):not(.et-cat).et-review__src { min-height: 0; padding-block: 15px; margin-block: -15px; }
+  .rw-sec a[class]:not(.btn):not(.et-cat).et-pill {
+    min-height: 44px;
+    padding: .7em 1.15em;
+    font-size: .82rem;
+    line-height: 1;
+  }
+
+  /* the booking band: the reference's section head, columns 24px apart and
+     18px between blocks; the form padded 18px with 16px between fields, a
+     label .86rem 6px over its field, fields at least 50px, padded 12px 16px
+     with 14px corners, in the running text's size; notes 130px */
+  .book-grid { gap: 24px; }
+  .book-band .eyebrow { display: flex; width: fit-content; max-width: 100%; font-size: .8rem; line-height: 1.3; }
+  .book-band .h2 { font-size: clamp(1.75rem, 1.2rem + 3.2vw, 2.06rem); line-height: .98; }
+  .book-band .lede { font-size: 1rem; line-height: 1.65; }
+  .book-band .book-copy > * { margin-block: 0; }
+  .book-band .book-copy > * + * { margin-top: 18px; }
+  .book-band .book-copy > :is(.eyebrow, .h2) + * { margin-top: 10px; }
+  .book-band .btn {
+    min-height: 52px;
+    padding: .92em 1.45em;
+    font-size: .95rem;
+    line-height: 1;
+    gap: .6em;
+  }
+  .book-form { padding: clamp(18px, 3vw, 30px); gap: 16px; }
+  .fld { gap: 6px; }
+  .fld label { font-size: .86rem; line-height: 1.2; }
+  .fld :is(input, select, textarea) { min-height: 50px; padding: 12px 16px; border-radius: 14px; font-size: inherit; }
+  .fld textarea { min-height: 130px; }
+  /* the search field: a 56px pill, padded 0 20px, 1.1rem, the width of the
+     page with its button under it (beside the button its placeholder was
+     cut short) */
+  .search-form input, .search-panel__form input { min-height: 56px; padding: 0 20px; border-radius: 999px; font-size: 1.1rem; }
+  .search-form, .search-panel__form { flex-wrap: wrap; }
+  .search-form input, .search-panel__form input { flex: 1 1 100%; }
+  .search-form .btn, .search-panel__form .btn { flex: 1 1 100%; }
+
+  /* the footer: columns 26px apart down and 18px across, heads .95rem on a
+     line of 1 with 8px under, text and links in the running text's size and
+     leading, links on a 40px pitch, the hours .94rem; the practice's blurb
+     16px under its name; the legal row 36px under the columns, 22px inside
+     its rule and 28px from the bottom, .88rem, the line over the links 14px
+     apart, links 18px apart and 40px tall. As in the reference, two link
+     columns share a row and the rest take the width: "Eye Care Services"
+     at .95rem is wider than half the row, and the visit block is the
+     reference's contact and hours. */
+  .foot-grid { gap: 26px 18px; }
+  .foot-grid > .foot-col:is(:nth-child(2), .foot-visit) { grid-column: 1 / -1; }
+  .foot-h { font-size: .95rem; line-height: 1; margin-bottom: 8px; }
+  .foot-name { margin-bottom: 16px; }
+  .foot-blurb, .foot-addr { font-size: inherit; line-height: 1.65; }
+  .foot-hours { font-size: .94rem; }
+  .site-foot .foot-col a { min-height: 40px; font-size: inherit; }
+  .foot-legal {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px 24px;
+    margin-top: 36px;
+    padding-block: 22px 28px;
+    font-size: .88rem;
+  }
+  .foot-legal nav { column-gap: 18px; }
+  .site-foot .foot-legal a { min-height: 40px; }
+}

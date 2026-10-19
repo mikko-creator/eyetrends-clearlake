@@ -2948,48 +2948,26 @@ body:not(.pg-home) main > .rw-sec:first-child { padding-top: var(--hero-top, cla
 }
 
 @media (max-width: 640px) {
-  /* B2 · rhythm: 60px above and below every band put 120px between two
-     light blocks on a 390px screen */
-  :root { --flow: 48px; }
-
-  /* B3 · page headings: 36px broke the long ones into 5-7 short lines */
-  .rw-sec :is(.ha-hero__h, .dc-hero__h, .ct-hero__h, .tib-hero__h, .et-hero__h, .bw-founder__h, .et-h1) {
-    font-size: clamp(29px, 7.9vw, 34px);
-    line-height: 1.08;
-  }
+  /* B2 (rhythm) and B3 (page heading sizes) gave way to §34, which takes
+     the reference build's sizes (revision 27) */
   .rw-sec :is(.et-eyebrow, .ha-hero__eyebrow) { text-wrap: balance; }
 
   /* B4 · the dark photo hero runs edge to edge: no card corners at the
      screen's edges and no pale strips above and below it, the text on the
-     page's gutter, the eyebrow close to its heading, the call link on the
-     copy's edge */
+     page's gutter, the call link on the copy's edge (the eyebrow's distance
+     to its heading is §34's) */
   .rw-sec.ha-hero { --hero-top: 0px; padding-bottom: 0; }
   .rw-sec.ha-hero .ha-hero__stage { border: 0; border-radius: 0; }
   .rw-sec.ha-hero .ha-hero__inner { padding-inline: var(--gutter); }
-  .rw-sec.ha-hero .ha-hero__h { margin-top: 0; }
   .rw-sec :is(.ha-hero__call, .tib-herocall, .ethc-herocall, .et-hero__call) { padding-inline: 0; }
 
-  /* B5 · buttons in a stack are one width; the hero proof tiles too */
-  .rw-sec :is(.et-cta-cluster, .ha-hero__cta) > .btn { flex: 1 1 100%; justify-content: center; }
+  /* B5 · the hero proof tiles are one width (the buttons' widths and the
+     chip rows are §34's: the reference's) */
   .rw-sec.dc-hero .dc-proof {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 10px;
   }
-
-  /* B6 · stacks of chips and points that never share a row: one even column
-     instead of a staircase of widths */
-  .rw-sec:is(.surface-dark, .et-band--dark) .et-chips,
-  .rw-sec .ia-trust__stats .et-chips,
-  .rw-sec :is(.dc-cap__list, .tib-creed__chips, .ethc-points, .tib-fit__points) {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 10px;
-  }
-  /* the home page's ten plans: a wrapping row of chips at their own widths,
-     as the plan lists on the other pages are, not ten full-width rows (two
-     columns were tried: "Blue Cross Blue Shield" wrapped and its row grew) */
-  .rw-sec .ethc-plans { display: flex; flex-wrap: wrap; gap: 8px; }
 
   /* B7 · the second section of a service page: icon, eyebrow and heading
      on one edge, the heading near its text */
@@ -2997,20 +2975,11 @@ body:not(.pg-home) main > .rw-sec:first-child { padding-top: var(--hero-top, cla
   .rw-sec .row--split:has(> .col > .dc-sq__aside) { row-gap: 14px; }
 
   /* B8 · related care: cards left-aligned (chrome.css §12 no longer centres
-     them), the hub's text on the same edge as the cards under it (its 24px
-     padding against their 18px put a 6px jog down the stack), its link on
-     that edge */
-  .rw-sec .dc-relhub { row-gap: 14px; padding: clamp(18px, 2vw, 24px); }
+     them), the hub's link on its text's edge (its padding is §34's) */
   .rw-sec .dc-relhub__go { padding-inline: 0; }
 
-  /* B9 · FAQ answers take the card's width (the right padding is the
-     question's +/- column) */
-  .rw-sec .dc-faq__item > .dc-faq__a { padding-right: 0; }
-
-  /* B10 · plain lists inside prose: bullets and numbers inside the gutter
-     (the browser's 40px put them 22px past the paragraphs), items apart */
-  .rw-sec .dc-prose > :is(ul, ol):not([class]) { padding-left: 1.4em; }
-  .rw-sec .dc-prose > :is(ul, ol):not([class]):not([style*="display:grid"]) > li + li { margin-top: 10px; }
+  /* B9 (FAQ answer padding) and B10 (prose list indent and item spacing)
+     gave way to §34 */
   /* one page's step list carries the source's inline 40px indent */
   .rw-sec .dc-prose > ul.dc-steps[style*="padding-left"] { padding-left: 0 !important; }
   /* the patient-forms list sat 38px under the sentence that introduces it */
@@ -3026,12 +2995,12 @@ body:not(.pg-home) main > .rw-sec:first-child { padding-top: var(--hero-top, cla
   /* B13 · doctor sections: the full-bleed portrait opens the band, the
      stats sit under the chips and fill the column */
   .rw-sec.et-doctor:has(.row--split .et-doctor__media) { padding-top: 0; }
-  .rw-sec.et-doctor .et-doctor__stats { margin-top: 24px; padding-top: 0; gap: 12px; }
+  .rw-sec.et-doctor .et-doctor__stats { padding-top: 0; }
   .rw-sec.et-doctor .et-doctor__stats > .et-stat { flex: 1 1 100%; }
   .rw-sec.et-doctor .et-stat__l { max-width: none; }
 
   /* B14 · cards with an icon column: the icon above, the text full width */
-  .rw-sec .ha-cond:has(> .ha-cond__ic) { flex-direction: column; gap: 14px; }
+  .rw-sec .ha-cond:has(> .ha-cond__ic) { flex-direction: column; }
   .rw-sec .ia-heads { flex-direction: column; gap: 12px; }
   .rw-sec .ia-panel__head { gap: 12px; }
 
@@ -3053,14 +3022,12 @@ body:not(.pg-home) main > .rw-sec:first-child { padding-top: var(--hero-top, cla
   /* the eyewear hub cards' foot: the link, then the note under it */
   .rw-sec .et-frame__foot { flex-direction: column; align-items: flex-start; gap: 4px; }
 
-  /* B18 · the product heroes: the eyebrow with its heading */
-  .rw-sec.tib-hero .tib-hero__h { margin-top: 0; }
+  /* B18 (the product heroes' heading margin) gave way to §34 */
 
   /* B19 · the category cards' arrow on the card's padding edge */
   .rw-sec .et-cat__arrow { width: 18px; height: 18px; }
 
-  /* B20 · service cards: the link near its text */
-  .rw-sec .et-svc { gap: 10px; }
+  /* B20 · service cards: the link near its text (the card's gap is §34's) */
   .rw-sec .et-svc__foot { padding-top: 0; }
 
   /* B21 · About page */
@@ -3089,7 +3056,6 @@ body:not(.pg-home) main > .rw-sec:first-child { padding-top: var(--hero-top, cla
      their table of contents on the label's edge */
   .rw-sec .bw-legal p:not(:last-child) { margin-bottom: 20px; }
   .rw-sec .bw-legal h2 { margin-top: 48px; }
-  .rw-sec .bw-legal__callout { padding: 18px; }
   .rw-sec .bw-toc .bw-toc__link { padding-inline: 0; }
 
   /* B24 · search: no empty results row before a search */
@@ -3117,4 +3083,282 @@ body:not(.pg-home) main > .rw-sec:first-child { padding-top: var(--hero-top, cla
    text edge */
 @media (max-width: 768px) {
   .rw-sec .ethc-why__arrow { justify-self: start; }
+}
+
+/* =========================================================================
+   34 · PHONES: THE REFERENCE BUILD'S PADDING AND SIZING
+   =========================================================================
+   Operator, 2026-10-16: "I'm still not happy with how elements presents
+   itself in mobile. Perhaps you can refer to this build
+   https://mikko-creator.github.io/thehighway90-redesign/ and use the exact
+   padding and sizing from that reference build and apply it to eye trends
+   mobile."
+
+   Up to 700px, the reference's own phone breakpoint. Each value was read
+   from the reference's stylesheets (its 700px block and the base rules it
+   keeps there), checked on its pages at 390px, and given to the element
+   here that does the same job. What moves is size and space: type sizes,
+   line heights, padding, margins, gaps, minimum heights, corner radii.
+   Fonts, weights, letter-spacing, colours and the glass stay this site's.
+   Values in the comments are at 390px. chrome.css §14 does the top bar,
+   header, menu, footer, booking form and the links' tap areas.
+
+   §33's phone rules for the same things went: its rhythm, heading sizes,
+   full-width buttons, chip columns, prose list spacing, FAQ answer padding,
+   card padding and gaps. The rest of §33 is layout this section keeps. */
+@media (max-width: 700px) {
+
+  /* C1 · page gutter 16px (clamp(16px, 4vw, 44px)); 60px above and below
+     each section */
+  :root { --gutter: clamp(16px, 4vw, 44px); --flow: 60px; }
+
+  /* C2 · running text 16.14px (clamp(1rem, .96rem + .2vw, 1.0875rem)) on
+     1.65 */
+  body { font-size: clamp(1rem, .96rem + .2vw, 1.0875rem); }
+
+  /* C3 · headings, on the reference's tight leading. The reference's
+     formulas keep growing past phone widths into its own desktop sizes;
+     this site's sizes from 701px are smaller (a 36px page heading, a 27px
+     section heading), so each formula stops growing at its 430px value,
+     the widest phone. From 360 to 430px every size is the reference's; up
+     to 700px they hold, and the step down at 701px is small (the home
+     heading 41.6 to 36, the section headings 33 to 27, the page headings
+     half a pixel). */
+  .rw-sec.ethc-hero .ethc-hero__h {
+    font-size: 2.6rem;      /* 41.6: clamp(2.6rem, 1.4rem + 4.4vw, ...) is at its minimum to 436px */
+    line-height: .96;
+  }
+  /* page headings run to 4-7 lines here (the reference's are short), and on
+     .96 a parenthesis or descender met the next line's ascenders (1px of
+     ink overlap on the pink-eye heading): 1 keeps them apart */
+  .rw-sec :is(.ha-hero__h, .dc-hero__h, .ct-hero__h, .tib-hero__h, .et-hero__h, .bw-founder__h, .et-h1) {
+    font-size: clamp(1.9rem, 1.1rem + 4.4vw, 2.2825rem);          /* 34.76 */
+    line-height: 1;
+  }
+  .rw-sec .et-h2 {
+    font-size: clamp(1.75rem, 1.2rem + 3.2vw, 2.06rem);           /* 31.68 */
+    line-height: .98;
+    margin: 0 0 .5em;
+  }
+  .rw-sec .bw-legal h2 {
+    font-size: 1.7rem;      /* 27.2: clamp(1.7rem, 1.2rem + 1.6vw, ...) is at its minimum to 500px */
+    line-height: .98;
+    margin-bottom: .5em;
+  }
+  .rw-sec :is(.et-h3, .dc-pill__t) {
+    font-size: clamp(1.25rem, 1.05rem + .8vw, 1.265rem);          /* 20 */
+    line-height: 1.04;
+  }
+  /* card titles, headings or not: the reference's post titles (the spans
+     are named with their card, to outweigh §33's A9) */
+  .rw-sec :is(.et-svc__t, .ct-route__t, .ia-link__t, .bw-timeline__h, .bw-team__name, .ew-house__name),
+  .rw-sec :is(.dc-rel, .ha-cond, .dc-relhub, .et-frame) :is(.dc-rel__t, .ha-cond__t, .dc-relhub__t, .et-frame__name) {
+    font-size: 1.25rem;                                             /* 20 */
+    line-height: 1.04;
+    text-wrap: balance;     /* at 20px some titles left one word on a line */
+  }
+
+  /* C4 · eyebrows .8rem, 10px over what they label; the small labels on
+     cards .72rem. An eyebrow is a block of its own width here: as an inline
+     box it sat in a line of the running text's height, 4.8px taller than
+     itself. The reference sets its eyebrows on a line of 1, and they never
+     wrap; many here do (a service and a place), and on 1 their two lines
+     nearly touched, so they get 1.3 (1.9px more above and below a single
+     line). */
+  .rw-sec :is(.et-eyebrow, .ha-hero__eyebrow) {
+    display: flex;
+    width: fit-content;
+    max-width: 100%;
+    font-size: .8rem;                                               /* 12.8 */
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+  .rw-sec :is(.dc-relhub__ey, .et-frame__brand) { font-size: .72rem; line-height: 1.2; }
+
+  /* C5 · section heads: label, heading and intro 10px apart, 22px over
+     what they introduce, the intro 1rem */
+  .rw-sec :is(.et-sec-head:not(.et-sec-head--split), .et-sec-head--split > div, .row--head > .col) > * { margin-block: 0; }
+  .rw-sec :is(.et-sec-head:not(.et-sec-head--split), .et-sec-head--split > div, .row--head > .col) > * + * { margin-top: 10px; }
+  .rw-sec :is(.et-sec-head, .row--head) { margin-bottom: 22px; }
+  .rw-sec .et-sec-head--split { gap: 10px; }
+  .rw-sec .row--head:not(:has(.et-sec-head)) + .row { margin-top: 22px; }
+  /* a head row after a row of cards is their footer (a note, a link or a
+     button under them); its first block's margin, which spaced it from the
+     cards, went with the rest of the head's: 22px, as from a head to its
+     cards */
+  .rw-sec .row + .row--head { margin-top: 22px; }
+  .rw-sec :is(.et-lede, .dc-lead) { font-size: 1rem; line-height: 1.65; }
+
+  /* C6 · heroes, the reference's hero card stack: label 12px over the
+     heading, heading 12px over the intro (the home page's .3em), 18px
+     between the blocks under them; the proof row 18px under the buttons
+     with 14px inside its top edge. The intro clamp(1.02rem, .95rem +
+     .35vw, 1.22rem) on 1.5 (16.57); buttons in a hero fill their row. */
+  .rw-sec div:has(> :is(.ethc-hero__h, .ha-hero__h, .dc-hero__h, .ct-hero__h, .tib-hero__h, .et-hero__h, .et-h1)) > * { margin-block: 0; }
+  .rw-sec div:has(> :is(.ethc-hero__h, .ha-hero__h, .dc-hero__h, .ct-hero__h, .tib-hero__h, .et-hero__h, .et-h1)) > * + * { margin-top: 18px; }
+  .rw-sec div:has(> :is(.ethc-hero__h, .ha-hero__h, .dc-hero__h, .ct-hero__h, .tib-hero__h, .et-hero__h, .et-h1)) > :is(.et-eyebrow, .ha-hero__eyebrow, h1) + * { margin-top: 12px; }
+  .rw-sec.ethc-hero .ethc-hero__copy > .ethc-hero__h { margin-bottom: .3em; }
+  .rw-sec.ethc-hero .ethc-hero__copy > .ethc-hero__h + * { margin-top: 0; }
+  .rw-sec.dc-hero .dc-hero__copy > .dc-hero__sub + p { margin-top: .6em; }
+  .rw-sec div:has(> :is(.ethc-hero__h, .dc-hero__h)) > :is(.ethc-hero__proof, .dc-proof) { margin-top: 18px; padding-top: 14px; }
+  .rw-sec :is(.ethc-hero__sub, .ha-hero__sub, .dc-hero__sub, .ct-hero__sub, .tib-hero__sub, .et-hero__sub, .bw-founder__lede),
+  .rw-sec.dc-hero .dc-hero__copy > .dc-hero__sub + p,
+  .rw-sec div:has(> .et-h1) > .et-lede {
+    font-size: clamp(1.02rem, .95rem + .35vw, 1.22rem);             /* 16.57 */
+    line-height: 1.5;
+  }
+  .rw-sec div:has(> :is(.ethc-hero__h, .ha-hero__h, .dc-hero__h, .ct-hero__h, .tib-hero__h, .et-hero__h)) > :is(.et-cta-cluster, .ha-hero__cta) > .btn {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+  /* the photo hero keeps its label and heading in one block and its intro
+     and buttons in another: the same stack across the two */
+  .rw-sec.ha-hero .ha-hero__side { margin-top: 12px; }
+  .rw-sec.ha-hero .ha-hero__side > * { margin-block: 0; }
+  .rw-sec.ha-hero .ha-hero__side > * + * { margin-top: 18px; }
+  .rw-sec.ha-hero .ha-hero__cta > .btn { flex: 1 1 auto; justify-content: center; }
+  /* a centred head's text is left-aligned on a phone; its buttons were
+     centred by the source's inline style, out of line with the text above
+     (unseen while every button was full width) */
+  .rw-sec .et-sec-head--center > .et-cta-cluster { justify-content: flex-start !important; }
+  /* the topic chips in the guide and reviews heroes: 18px under the intro
+     like the other blocks (24px of empty padding sat over them), their
+     label 10px over them */
+  .rw-sec .tib-toolbar { padding-top: 0; }
+  .rw-sec .tib-toolbar__label { margin-bottom: 10px; }
+  /* the About page's hero is one grid of its copy and portrait: 18px
+     between them, the label 12px over the heading, the buttons filling
+     their row */
+  .rw-sec.od-hero .bw-founder { row-gap: 18px; }
+  .rw-sec.od-hero .bw-founder__copy > * { margin-block: 0; }
+  .rw-sec.od-hero .bw-founder__copy > .bw-founder__h { margin-top: -6px; }
+  .rw-sec.od-hero .bw-founder__copy > .et-cta-cluster > .btn { flex: 1 1 auto; justify-content: center; }
+
+  /* C7 · buttons .95rem on a line of 1, padded .92em 1.45em, at least 52px;
+     a row of them 14px down and 16px across, 18px under the text before it.
+     Outside a hero a button is as wide as its label. */
+  .rw-sec .btn {
+    min-height: 52px;
+    padding: .92em 1.45em;
+    font-size: .95rem;                                              /* 15.2 */
+    line-height: 1;
+    gap: .6em;
+  }
+  /* layout.css keeps the source's 14.28px 26.88px for large buttons with
+     !important, so this padding needs it too */
+  .rw-sec a.btn.btn-lg { padding: .92em 1.45em !important; }
+  .rw-sec :is(.et-cta-cluster, .ha-hero__cta) { gap: 14px 16px; }
+  .rw-sec .et-cta-cluster { margin-top: 18px; }
+
+  /* C8 · chips .76rem, padded .75em at the sides, 22.9px tall on one line,
+     icons 1.2em; rows of them wrap, 8px apart. The reference's .36em above
+     and below on a line of 1 gives 22.9px; its chips are one word or two,
+     and some here wrap to two lines, which on 1 nearly touched. So the line
+     is 1.25 and the padding .2344em: the same 22.9px for one line. */
+  .rw-sec :is(span.et-pill, li.et-pill, .tib-chip, .ethc-point, .tib-point, .ethc-plan, .ethc-menu__chip, .et-frame__tag) {
+    min-height: 0;
+    padding: .2344em .75em;
+    font-size: .76rem;                                              /* 12.16 */
+    line-height: 1.25;
+    gap: 6px;
+  }
+  .rw-sec :is(span.et-pill, li.et-pill, .tib-chip, .ethc-point, .tib-point, .ethc-plan, .ethc-menu__chip, .et-frame__tag) > svg {
+    width: 1.2em;
+    height: 1.2em;
+  }
+  .rw-sec :is(.et-chips, .dc-cap__list, .tib-creed__chips, .ethc-points, .tib-fit__points, .tib-chips, .ethc-plans, .ethc-menu) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* C9 · cards, the reference's 32px glass: an info card 22px all round
+     with 10px between its parts, a bigger panel 22px 20px with 12px;
+     reviews 26px 24px 24px with 14px; a photo card's text 20px 22px 24px
+     with 10px */
+  .rw-sec :is(.dc-rel, .dc-relhub, .ha-cond, .et-svc, .ia-link, .ct-route, .ia-callout, .bw-legal__callout, .bw-toc) {
+    padding: 22px;
+    border-radius: 32px;
+    gap: 10px;
+  }
+  .rw-sec :is(.ia-panel, .dc-visit, .od-close__info) {
+    padding: 22px 20px;
+    border-radius: 32px;
+    gap: 12px;
+  }
+  /* the home page's comparison rows and the About page's timeline entries
+     are cards too (the entry's hover state has its own padding rule) */
+  .rw-sec .ethc-why__row { padding: 22px; border-radius: 32px; }
+  .rw-sec .bw-timeline__entry,
+  .rw-sec .bw-timeline__entry:hover { --tl-pad-x: 22px; padding: 22px var(--tl-pad-x); border-radius: 32px; }
+  .rw-sec .et-review {
+    padding: 26px 24px 24px;
+    border-radius: 32px;
+    gap: 14px;
+  }
+  .rw-sec .et-review__q { font-size: 1.02rem; line-height: 1.6; }
+  .rw-sec .et-review__name { font-size: .98rem; line-height: 1.2; }
+  .rw-sec .et-frame { border-radius: 32px; }
+  .rw-sec .et-frame__body { padding: 20px 22px 24px; gap: 10px; }
+  /* the gap is the space between a card's parts, as in the reference: the
+     parts' own margins go (a heading's .42em, a paragraph's 1.05em, a list's
+     24px, the photo cards' 14px over their link), the visit card stacks
+     its name, rows and map with its gap, and the grouped text in two cards
+     takes the card's 10px */
+  .rw-sec :is(.dc-rel, .dc-relhub, .ha-cond, .et-svc, .ia-link, .ct-route, .ia-panel, .dc-visit, .et-frame__body) > * { margin-block: 0; }
+  .rw-sec .dc-visit { display: flex; flex-direction: column; }
+  .rw-sec :is(.dc-relhub__txt, .ha-cond__body) { gap: 10px; }
+  .rw-sec :is(.dc-relhub__txt, .ha-cond__body) > * { margin-block: 0; }
+  .rw-sec .et-frame__foot { padding-top: 0; }
+
+  /* C10 · tiles (the hero proof, the stats): padded 10px 14px, 14px
+     corners, 4px between a 1.5rem figure and its .75rem label, 10px apart */
+  .rw-sec :is(.dc-proof__i, .et-stat, .ethc-hero__stat, .ia-stat) {
+    display: grid;
+    align-content: start;
+    padding: 10px 14px;
+    border-radius: 14px;
+    gap: 4px;
+  }
+  .rw-sec :is(.dc-proof__k, .et-stat__k, .ethc-hero__k, .ia-stat__k) { font-size: 1.5rem; line-height: 1; }
+  .rw-sec :is(.dc-proof__l, .et-stat__l, .ethc-hero__l, .ia-stat__l) { margin-top: 0; font-size: .75rem; line-height: 1.3; }
+  .rw-sec.ethc-hero .ethc-hero__proof,
+  .rw-sec.et-doctor .et-doctor__stats { gap: 10px; }
+  /* the home hero's three tiles keep §22's equal columns, at these sizes
+     (§22's own are named with the hero, so these are too) */
+  .rw-sec.ethc-hero .ethc-hero__stat { padding: 10px 14px; gap: 4px; }
+  .rw-sec.ethc-hero .ethc-hero__k { font-size: 1.5rem; line-height: 1; }
+  .rw-sec.ethc-hero .ethc-hero__l { font-size: .75rem; line-height: 1.3; }
+  .rw-sec.et-doctor .et-doctor__stats { margin-top: 18px; }
+  /* the caption chips on the hero photos: 8px 12px, 12px corners */
+  .rw-sec :is(.dc-chip, .tib-hero__chip) { padding: 8px 12px; border-radius: 12px; }
+  /* photos inside the gutter take the reference's 32px frame corners, as
+     the framed photos here already do (these were square) */
+  .rw-sec :is(.ha-media, .ha-visit__media, .tib-fit__media, .ethc-trust__photo) { border-radius: 32px; overflow: hidden; }
+  /* the eyewear page's fitting-bench photo carries the source's inline
+     border-radius: var(--ds-r-surface), a token no stylesheet defines */
+  .rw-sec .row--split-media > .col > img { --ds-r-surface: 32px; }
+
+  /* C11 · FAQ: cards 14px apart with 22px corners, the question 20px 22px
+     at clamp(1.02rem, .98rem + .3vw, 1.2rem) on 1.3 with 18px to its 34px
+     +/-, the answer 0 22px 22px */
+  .rw-sec .dc-faq__item { padding: 0; margin: 0; border-radius: 22px; }
+  .rw-sec .dc-faq__item + .dc-faq__item { margin-top: 14px; }
+  .rw-sec .dc-faq__item > summary {
+    padding: 20px 22px;
+    font-size: clamp(1.02rem, .98rem + .3vw, 1.2rem);               /* 16.85 */
+    line-height: 1.3;
+    gap: 18px;
+  }
+  .rw-sec .dc-faq__item > .dc-faq__a { padding: 0 22px 22px; }
+  .rw-sec .dc-faq__ic { width: 34px; height: 34px; }
+
+  /* C12 · rows and lists: a split row's columns 24px apart; prose lists
+     indented 1.3em with .35em around each item; the site's own lists 10px
+     between items; the hairline rows 8px above and below their text */
+  .rw-sec .row--split { row-gap: 24px; }
+  .rw-sec .dc-prose > :is(ul, ol):not([class]) { padding-left: 1.3em; }
+  .rw-sec .dc-prose > :is(ul, ol):not([class]):not([style*="display:grid"]) > li { margin-block: .35em; }
+  .rw-sec :is(.dc-steps, .dc-steplist, .dc-cap__steps, .dc-cap__ul, .dc-worries, .od-facts, .ia-bring) { row-gap: 10px; }
+  .rw-sec :is(.dc-visit__row, .ha-nap__row, .ct-hours__row) { padding-block: 8px; }
 }

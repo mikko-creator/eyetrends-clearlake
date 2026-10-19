@@ -142,8 +142,8 @@ to 1440px nothing changed: all 44 pages lay out identically at 1440, 1280 and 39
 
 **Internal page heroes are short and spread across the width** (revision 20, `system.css` §28). Every internal
 page's first section starts closer to the header (36–64px, was 95–160), and every internal hero heading shares one
-size: 29–34px on phones (30.8 at 390; 36 before revision 26), 36 from 641px, 44.8 at 1280, 50.4 at 1440, 55.4 at
-1920, 62 at 2560. The home hero keeps its own.
+size: on phones the reference build's (revision 27), 33.4–36.5px from 360 to 430px (34.8 at 390) and held to 700px;
+36 from 701px, 44.8 at 1280, 50.4 at 1440, 55.4 at 1920, 62 at 2560. The home hero keeps its own.
 - **The six photo cards** (`/services/` and five service pages): from 1025px the copy is two blocks centred on each
   other, eyebrow and heading on the left (`.ha-hero__lead`), paragraph and buttons on the right (`.ha-hero__side`).
   `tools/build.mjs` (`splitInnerHeroCopy`) adds the two wrappers and stops if the copy is anything but eyebrow,
@@ -202,9 +202,8 @@ and the Book button (201px at 1041px wide).
   replaced. §33 part A draws them again at every width: the custom list dots, the map pin, chip dots, icon tiles,
   review avatars and "See more", plus fixes where two rules met. If you add a component whose source rule has a
   dot, a bullet or an icon tile, check it renders; `layout.css` alone will not draw it.
-- **Phones (below 641px, part B):** 48px section padding (the `--flow` token), 29–34px page headings, one width
-  for stacked buttons, tiles and chip lists, the related-care cards left-aligned, the photo hero edge to edge, the
-  footer's link columns two by two.
+- **Phones (below 641px, part B):** the related-care cards left-aligned, the photo hero edge to edge, one width for
+  the service heroes' proof tiles. Revision 27 replaced part B's sizes and spacing (below).
 - **Up to 1200px** (`chrome.css` §12): a link inside running text is inline, with its hit area from padding, so
   the source's own 44px tap rule no longer stretches its line; prose links get a real 2px underline under the
   glyphs.
@@ -212,6 +211,20 @@ and the Book button (201px at 1041px wide).
   separate blocks: `layout.css` flattens that column with `display: contents`, which ran them into one paragraph.
 - One `!important`, on purpose: a step list on `/services/macular-degeneration/` carries the source's inline 40px
   indent, which only `!important` can override; it is scoped to phones and to that list's attribute.
+
+**Phones take a reference build's padding and sizing** (revision 27, `system.css` §34, `chrome.css` §14; up to
+700px; no markup or text changed). On the operator's request, every phone size comes from
+`mikko-creator.github.io/thehighway90-redesign`: read from its stylesheets, measured on its pages, and given to the
+element here that does the same job (`docs/CHANGE-LOG.md` has the role table). Fonts, colours and the glass stay
+this site's.
+- **Sizes at 390px:** 16px gutter, 60px section padding, 16.14px text, a 41.6px home heading and 34.8px page
+  headings on .96, 31.7px section headings, 12.8px eyebrows, 52px buttons, 22.9px chips, cards with 32px corners
+  padded 22px, a 58px header bar, footer and menu links on a 40px pitch.
+- **Change a size in one place:** §34 and §14 hold all of them; they sit last in their files and outweigh the older
+  phone rules. Two use `!important` on purpose: large buttons' padding (`layout.css` keeps the source's padding with
+  `!important`) and two centred button rows on the visit page (the source's inline style).
+- **In the header** search sits beside the menu button, both circles. The open menu starts under the header and
+  leaves its button visible, as a close button; the menu used to cover it.
 
 **Text is verbatim.** Every phrase on the source site appears in this rebuild character
 for character, with three declared exceptions, all listed in `tools/verify-text.mjs` under
@@ -354,6 +367,9 @@ The home page's **quote section** ("In Dr. Hyder's words") was redesigned in rev
 | **The framed hero's badge covers part of the photo** | On the 21 framed service heroes the badge (`.dc-chip`) sits over the photograph's lower left. Revision 26 drew its two lines as a heading and a small caption (both were 17px body text) and keeps it inside the frame on phones, so it is 61px tall instead of 81–109. Measured on all 21 pages after that: it covers 5–13% of the frame at 1280–1920 (was 8–21%), 2–9% from 600 to 1024px (was 3–14%), 11–25% on phones from 360 to 414px (was 16–47%) and 19–46% at 320 (was 29–67%). Each new photograph keeps its subject in the middle, but the badge still covers part of some; the foreign-body tray was mirrored for this (revision 25). Moving the badge below the photo would show every picture whole |
 | **"Leave a review" does nothing** | On `/reviews/` it is a `<button>` with no handler, in the source too. Revision 26 gave it its neighbours' link style (it had the browser's grey button skin), so it now looks like a working link. Make it a link to the practice's Google review page, or remove it |
 | **Text the source styled that is still body text** | Revision 26 gave back the hierarchy of the cards it fixed (related-care and service cards, stat numbers, eyewear and guide cards, the photo caption chips, the dark bands' NAP links). Other roles the source styled still render as plain 17px text: the doctor's name and role in the doctor sections, NAP and visit-card names, the hero sub-paragraphs, the category cards' "Designer / Frames", the contact-lens collection titles, review names and dates, the About hero's "Our doctor" kicker and its pull quote, among others (64 checks at 390). They read as plain text, not as broken; restyling them changes the desktop, so it is a design decision |
+| **Long headings run to more lines on phones** | Revision 27 gives phones the reference build's heading sizes (34.8px page headings, 31.7px section headings at 390, where they were 30.8 and 27). This site's headings are longer than the reference's, so some now take 4–7 lines at 390 (the myopia and cataract heroes), and compound words break at their hyphens ("co- / management", "follow- / up"), which only the text or the markup can prevent. A build step that keeps hyphenated words together, or a smaller size for headings over a length, would fix it; both go beyond "the reference's sizes" |
+| **Phone sizes run to 700px** | The reference's breakpoint. From 431 to 700px the phone sizes hold their 430px values, and at 701px this site's own sizes take over: the home heading steps from 41.6 to 36px and section headings from 33 to 27px; page headings by half a pixel |
+| **Tap areas follow the reference** | The footer's, menu's and legal row's links are 40px tall, the top strip's call link 36px (they were 46px). Links with an arrow keep a 44px tap area, as padding that moves nothing. WCAG 2.2's minimum (2.5.8) is 24px |
 | **Dividers the source drew** | The source drew a hairline above several blocks (the doctor sections' stats, NAP blocks, review bylines, the About signature, the hero proof row). The redesign draws none of them and keeps their padding on desktop (40px above the doctor stats); on phones revision 26 removes the empty space instead |
 | **The eyewear photos are generated, and the house cards pair real wordmarks with them** | Revision 21. The eight houses are the source's own lists, but the practice should confirm which it carries today. Brands' rules often govern how their marks appear next to other imagery: check them, or swap in a house's official retailer imagery in the same card (`NOTICE.md`, item 2). The line under the cards says the photographs are not the houses' product shots |
 | **The third material card's `sizes`** | On `/products/designer-frames/` the "whole wall" card keeps its slot's measured `sizes` from `audit/image-widths.json`. Revision 21 measured that slot for the two new cards beside it: those values fall short of the painted width between 401 and 600px (by up to 120px) and at 1024. The two new cards carry their own (`EW_SIZES.card`); the third, and the same slot on other pages, were not changed |

@@ -1986,3 +1986,126 @@ indented list, the doctor-band stat numbers at body size, the uneven dark-band N
   sections' links are, after both reviewers of that page read them as paragraph text.
 - Smaller things the reviewers saw and that stay: the contact-lens page's closing button has 76px under it; go-links
   whose label wraps keep their arrow at the far right; one card's link reads just "Dry", as in the source.
+
+---
+
+# Revision 27 — phones: the reference build's padding and sizing
+
+> *"I'm still not happy with how elements presents itself in mobile. Perhaps you can refer to this build
+> https://mikko-creator.github.io/thehighway90-redesign/ and use the exact padding and sizing from that reference build
+> and apply it to eye trends mobile."*
+
+**What was taken.** The reference's phone sizes, read from its stylesheets (its `@media (max-width: 700px)` block and
+the base rules it keeps there) and measured on its pages at 390px. Each value went to the element here that does the
+same job. What moved is size and space: type sizes, line heights, padding, margins, gaps, minimum heights and corner
+radii. Fonts, weights, letter-spacing, colours, the glass and every word stay this site's. It applies up to 700px, the
+reference's own breakpoint. Wider screens are unchanged (measured, below).
+
+**The change.** `system.css` gets a new §34 and `chrome.css` a new §14. §33's phone rules for the same things were
+removed. No markup, text or image changed. Values are at 390px; "before" is revision 26, measured.
+
+| Role | Here | The reference's value (at 390) | Before |
+|---|---|---|---|
+| Page gutter | `.container`, `.wrap` | `clamp(16px, 4vw, 44px)` (16) | 18 |
+| Section padding | bands, booking band | 60 / 60 | 48 / 48 |
+| Running text | body | `clamp(1rem, .96rem + .2vw, 1.0875rem)` on 1.65 (16.14) | 17 |
+| Home heading | `.ethc-hero__h` | 2.6rem on .96 (41.6), .3em under | 36 on 1.06 |
+| Page headings | 6 hero kinds, `.et-h1` | `clamp(1.9rem, 1.1rem + 4.4vw, …)` (34.76) | 30.8 on 1.08 |
+| Section headings | `.et-h2`, booking `.h2` | `clamp(1.75rem, 1.2rem + 3.2vw, …)` on .98 (31.68), .5em under | 27 on 1.06 |
+| Legal headings | `.bw-legal h2` | 1.7rem on .98 (27.2), .5em under | 27, 24px under |
+| Sub-headings | `.et-h3`, numbered rows | `clamp(1.25rem, 1.05rem + .8vw, …)` on 1.04 (20) | 19 |
+| Card titles | 10 kinds | 1.25rem on 1.04 (20), balanced | 18.5 on 1.25 |
+| Eyebrows | `.et-eyebrow` | .8rem (12.8), 10px over a heading, 12px in a hero | 11.5, 18px (42 in a hero) |
+| Section heads | `.row--head`, `.et-sec-head` | label, heading and intro 10px apart; 22px to what follows | 18 / 11 / 28–32 |
+| Intros | `.et-lede`, `.dc-lead` | 1rem on 1.65 | 17 |
+| Hero intros | 7 kinds | `clamp(1.02rem, .95rem + .35vw, 1.22rem)` on 1.5 (16.57); 12px under the heading, 18px between the blocks under it; the proof row 18px plus 14px | 17 on 1.65; 24 / 28 / 40 |
+| Buttons | `.btn` | .95rem on 1, padded .92em 1.45em, at least 52px; rows 14px down and 16px across; in a hero they fill their row, elsewhere they are as wide as their label | 16.5px, 46px; every button full width |
+| Pill links | `a.et-pill` | the small button: 44px, .7em 1.15em, .82rem | 46px, 13.5px |
+| Links with an arrow | go-links, call links | .92rem, .45em to the arrow; the 44px tap area is padding that moves nothing | 15px in a 46px box |
+| Chips | 8 kinds | .76rem, padded .75em at the sides, 22.9px tall; rows wrap 8px apart | 13.5px, 44px tall, some stacks one column |
+| Info cards | 11 kinds | padded 22, 32px corners, 10px between parts (their own margins removed) | 18–20, 24px corners, 6–24px plus margins |
+| Panels | `.ia-panel`, `.dc-visit`, `.od-close__info` | padded 22 / 20, 32px corners, 12px between parts | 18–24 |
+| Reviews | `.et-review` | padded 26 / 24 / 24, 32px corners, 14px; the quote 1.02rem on 1.6 | 22, 24px corners |
+| Photo cards | `.et-frame` | 32px corners; the text padded 20 / 22 / 24, 10px between parts | 24px corners, 24 all round |
+| Photos in the column | 5 kinds | 32px corners | 0 |
+| Tiles | hero proof, stats | padded 10 / 14, 14px corners, 4px between a 1.5rem figure and its .75rem label, 10px apart | 20 / 22, 16px, 30px figures |
+| FAQ | `.dc-faq__item` | 14px apart, 22px corners; the question padded 20 / 22 at `clamp(1.02rem, .98rem + .3vw, 1.2rem)` on 1.3 with 18px to a 34px +/-; the answer 0 / 22 / 22 | 12 apart, 24px, 17.5px, 46px +/- |
+| Form | `.book-form`, `.fld` | padded 18, 16px between fields, labels .86rem 6px over the field, fields at least 50px, padded 12 / 16, 14px corners | 26, 18px, 10px corners |
+| Search field | `.search-form` | a 56px pill, padded 0 20, 1.1rem | 54px, 10px corners |
+| Top strip | `.topbar` | 36px, .74rem | 68px |
+| Header | `.site-head` | 8px above and below a 58px bar, 10px between its parts, the logo 132 wide, search 44; scrolled, the floating bar 6px from the top on the gutters, its contents 14px / 6px in | 79px, logo 139, gap 18 |
+| Menu | `.mobile-nav` | 40px from the header to the first link; links `clamp(1.5rem, 1.1rem + 2vw, …)` on 1.05 (25.4), 10px above and below, 4px apart; groups 28px down, heads .95rem, links on a 40px pitch | 22px links, a 46–47px pitch |
+| Footer | `.site-foot` | columns 26 / 18 apart, heads .95rem on 1 with 8px under, links in the running text's size on a 40px pitch; the legal row 36px under them, 22px inside its rule, 28px from the bottom, .88rem, links 18px apart and 40px tall | 14px links on a 46px pitch, 11.5px heads, gaps 36 / 20 |
+
+**Where the reference's value met this site.**
+- **Labels that wrap.** The reference sets eyebrows, chips and arrow links on a line of 1, and its labels never wrap.
+  Many here do ("GAS-PERMEABLE CONTACT LENSES IN CLEAR LAKE"), and on 1 their two lines nearly touched. Eyebrows and
+  arrow links are on 1.3. Chips are on 1.25 with .2344em above and below, so a one-line chip is still 22.9px tall.
+- **Page headings on 1, not .96.** They run to four to seven lines here; on .96 a parenthesis or a descender met the
+  next line's ascenders (1px of ink overlap on the pink-eye heading).
+- **Growth past phones.** The reference's heading formulas keep growing into its own desktop sizes, and this site's
+  sizes from 701px are smaller (a 36px page heading, a 27px section heading). So each formula stops at its 430px
+  value, the widest phone. From 360 to 430px every size is the reference's, and up to 700px they hold. At 701px the
+  home heading steps from 41.6 to 36px and section headings from 33 to 27px; page headings move by half a pixel.
+- **Tap areas.** Arrow links keep a 44px tap area as padding that moves nothing, as prose links already did, so their
+  spacing is the reference's. The footer's, the menu's and the legal row's links take the reference's 40px. Stacked
+  arrow links (the About page's closing links, the services page's routes) are a list with a link per 40px or more,
+  so their tap areas cannot overlap.
+- **Layout kept from revision 26:** the service heroes' proof tiles in one column, the home hero's tiles in three
+  columns, and the footer in two columns. "Eye Care Services" and "Visit" now take the width: at .95rem the services
+  head is wider than half the row, and the visit block is the reference's contact and hours.
+- **The header.** Search sits beside the menu button, both circles (44 and 46px), as in the reference. The open menu
+  starts under the header, whose menu button stays visible as its close button (the menu used to cover it).
+  Scrolled, the menu fills the screen under the floating bar, as the reference's does.
+- **Search** puts its button under the field: beside it, the field's placeholder was cut short (on the search page
+  and in the header's search panel).
+- **What full-width buttons had hidden.** The visit page's two closing button rows carry the source's inline
+  `justify-content: center`; with buttons at their own width they sat centred under left-aligned text. They now
+  start on the text's edge.
+
+## How it was checked
+
+Six reviewers read the 390px captures of all 44 pages (130 contact sheets), with the reference's captures beside
+them. They reported 91 findings. A refuter per reviewer re-measured each of the 39 medium and high ones on the build
+the reviewers saw: 36 confirmed and 3 refuted (a logo marquee caught mid-scroll, a capture that ended early, a
+heading that was right as it was). Of the 36:
+- **31 are fixed:**
+  - two-line eyebrows, chips and arrow links whose lines nearly touched (18);
+  - the photo-card heroes of five service pages (and `/services/`): their buttons sit in the hero's second block, so
+    they stayed label-width and their spacing stayed revision 26's (5);
+  - notes under card grids that lost their top margin with the head rows' (3);
+  - the visit page's centred buttons (2);
+  - the About page's closing links, 4px apart, where a tap on one landed on the next (1);
+  - the search placeholder (1);
+  - a 42px hole in the guide hero (1).
+- **4 stay:** long headings take more lines at the reference's size, and compound words break at their hyphens
+  (HANDOFF, known gaps).
+- **1 stays:** the home hero's text fades over the light right side of its photo. It did in revision 26 too, and it
+  is a colour change, not a size.
+
+The refuters also found faults the reviewers had missed, and each is fixed:
+- the photo heroes' spacing;
+- two-line stat labels;
+- the header's search panel;
+- the routes list, which a first fix would have run together.
+
+## Re-verified
+
+| check | result |
+|---|---|
+| Conformance | Every instance of 41 roles on all 44 pages against the reference's formula for the width: **5,335 of 5,335 at 360, 390 and 414**. The same check fails 5,050 of them on revision 26 at 390, so it can fire |
+| Fix checks | Revision 26's 20 checks with revision 27's expectations, plus chip rows (21): **1,011 instances at each of 360, 390 and 414, all pass** |
+| Taps | The centre of every line of every link, button and field on all 44 pages hits that element: **2,233–2,280 points at 360, 390 and 414, none taken by a neighbour**. On the reviewed build it caught the About page's closing links |
+| The findings | Re-measured on the build that ships: wrapped eyebrows on a 16.6px pitch (12.8), photo hero buttons 358px wide (200), heading to intro 12px and intro to buttons 18px (24 / 40), notes 22px under their cards (0–8), the visit page's buttons on the text edge (79–83px in), the About links on a 40px pitch (19), the search placeholder fits (216px in 316), the guide hero's label 18px under its intro (42), photos in the gutter with square corners 0 (6) |
+| Layout probe, 360/390/414 | Text off the gutter 178 → 178, mixed alignment in a card 24 → 27, ragged stacks 13 → 41, card padding 93 → 402, touching blocks 900 → 843. No page scrolls sideways (the 132 "edge" hits are the off-screen skip link, as before). The rises are the reference's own values: tiles padded 14px and caption chips 12px, against the probe's 16px threshold (349 hits; 29 more are badges whose centred text sits 1px closer at 360), and chip rows that wrap at their own widths where revision 26 stacked them in one column (27). The FAQ cards' 66 are gone. The 3 new mixed-alignment hits are a chip or a list item that happens to sit centred in its card |
+| Page length at 390 | 44 pages together 519,457 → 488,589px (5.9% shorter), from 9.3% shorter (reviews) to 1.6% longer (search, whose button now sits under the field) |
+| Desktop | Every element's box and computed style compared with revision 26 at 768, 1280 and 1920 on all 44 pages, one tab, the builds loaded one after the other: **no box and no property changed** (59 background-image URLs differ only by the two local servers' ports) |
+| Scope | No markup, text or image changed: the 44 HTML pages differ from revision 26 only in the stylesheet hash, `search-index.json` only in its build time, and only `system.css` and `chrome.css` changed. Refs 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** · two builds of the same source identical apart from the search index's build time |
+
+**Left as they were, on purpose:**
+- **Long headings at the reference's size.** At 34.76px some hero headings take 4–7 lines at 390 (myopia 7, cataract
+  6), and "co-management", "follow-up" and "Same-day" break at their hyphens. Text and markup are unchanged, so only
+  a smaller size, a build step that keeps such words together, or shorter headings would change that.
+- **The doctor sections' caption and eyebrow** sit 24px apart, the reference's column gap. One reviewer read them
+  as close; the other refuter called the gap right.
+- **Wide phones and small tablets** (431–700px) hold the 430px sizes, so a heading steps down at 701px.

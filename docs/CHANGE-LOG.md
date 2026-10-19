@@ -2101,6 +2101,7 @@ The refuters also found faults the reviewers had missed, and each is fixed:
 | Page length at 390 | 44 pages together 519,457 → 488,589px (5.9% shorter), from 9.3% shorter (reviews) to 1.6% longer (search, whose button now sits under the field) |
 | Desktop | Every element's box and computed style compared with revision 26 at 768, 1280 and 1920 on all 44 pages, one tab, the builds loaded one after the other: **no box and no property changed** (59 background-image URLs differ only by the two local servers' ports) |
 | Scope | No markup, text or image changed: the 44 HTML pages differ from revision 26 only in the stylesheet hash, `search-index.json` only in its build time, and only `system.css` and `chrome.css` changed. Refs 0 blockers, 0 majors, 0 orphans · **100.000% verbatim** · two builds of the same source identical apart from the search index's build time |
+| Live preview | gh-pages `72fc25b`, built from `2114895`. Ten files byte-identical to the build: both changed stylesheets and eight pages (home, `/services/`, dry eye, `/products/`, the About page, reviews, the visit page, search); the stylesheets differ from `dist` only by the preview's `/eyetrends-clearlake/` prefix. On the live pages at 390 the conformance check passes on five pages (831 instances) and the tap test on three (179 points) |
 
 **Left as they were, on purpose:**
 - **Long headings at the reference's size.** At 34.76px some hero headings take 4–7 lines at 390 (myopia 7, cataract
